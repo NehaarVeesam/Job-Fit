@@ -1,0 +1,9 @@
+Synthetic Evaluation Candidate heldout_unknown_experience
+Summary
+3 years of professional experience
+Skills
+Python, Anomaly detection, Time series forecasting, Kafka, SQL, Grafana
+Experience
+Delivered production work using the listed skills.
+Education
+B.Tech in Computer Science, 2020

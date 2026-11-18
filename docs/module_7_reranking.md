@@ -252,4 +252,5 @@ observations rather than a controlled model-speed benchmark.
 
 Module 7 is complete as an optional ordering stage. Leave it off by default until
 Module 8's broader suitability evaluation justifies its quality/latency tradeoff.
-Modules 8–9 remain pending; the retrieval/evaluation milestone is not yet complete.
+The subsequent [Module 8 evaluation](module_8_evaluation.md) and
+[Module 9 walkthrough](module_9_portfolio.md) document the completed portfolio scope.

@@ -1,0 +1,813 @@
+{
+  "dataset_id": "synthetic_india_ai_sw_v2",
+  "is_synthetic": true,
+  "corpus_size": 250,
+  "corpus_subset": "all",
+  "status": "matches_found",
+  "applied_preferences": {
+    "target_role": "Generative AI Engineer",
+    "location_city": "Bengaluru",
+    "work_mode": "hybrid",
+    "unknown_metadata_policy": "include_with_warning",
+    "eligibility_facts": {}
+  },
+  "applied_filters": {
+    "min_cosine_similarity": "0.55",
+    "retrieval_mode": "hybrid",
+    "reranking_status": "disabled",
+    "relevance_policy": "cosine_threshold",
+    "min_required_coverage": "50.0",
+    "min_evidenced_required": 2,
+    "unknown_policy": "include_with_warning"
+  },
+  "ranked_candidates": [
+    {
+      "job_id": "syn_job_001",
+      "relevance": {
+        "value": 0.03278688524590164,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_105",
+      "relevance": {
+        "value": 0.031746031746031744,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_028",
+      "relevance": {
+        "value": 0.0315136476426799,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_005",
+      "relevance": {
+        "value": 0.031054405392392875,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_127",
+      "relevance": {
+        "value": 0.030330882352941176,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_033",
+      "relevance": {
+        "value": 0.03007688828584351,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_042",
+      "relevance": {
+        "value": 0.029910714285714284,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_180",
+      "relevance": {
+        "value": 0.02946912242686891,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_218",
+      "relevance": {
+        "value": 0.027972027972027972,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_067",
+      "relevance": {
+        "value": 0.027650648360030512,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_208",
+      "relevance": {
+        "value": 0.02702702702702703,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_129",
+      "relevance": {
+        "value": 0.026838432635534086,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_017",
+      "relevance": {
+        "value": 0.026279628993473032,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_029",
+      "relevance": {
+        "value": 0.026234567901234566,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_023",
+      "relevance": {
+        "value": 0.0261986301369863,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_201",
+      "relevance": {
+        "value": 0.0261986301369863,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_175",
+      "relevance": {
+        "value": 0.025974025974025976,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_076",
+      "relevance": {
+        "value": 0.02594183740912095,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_068",
+      "relevance": {
+        "value": 0.02581612258494337,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_006",
+      "relevance": {
+        "value": 0.02538152610441767,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_199",
+      "relevance": {
+        "value": 0.024444444444444446,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_016",
+      "relevance": {
+        "value": 0.02424331472230385,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_086",
+      "relevance": {
+        "value": 0.024184149184149184,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_244",
+      "relevance": {
+        "value": 0.023128342245989305,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_015",
+      "relevance": {
+        "value": 0.014285714285714285,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_222",
+      "relevance": {
+        "value": 0.013888888888888888,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_117",
+      "relevance": {
+        "value": 0.012658227848101266,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    },
+    {
+      "job_id": "syn_job_085",
+      "relevance": {
+        "value": 0.011904761904761904,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_104",
+      "relevance": {
+        "value": 0.011904761904761904,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "met"
+    },
+    {
+      "job_id": "syn_job_102",
+      "relevance": {
+        "value": 0.011764705882352941,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "eligibility": "not_met"
+    }
+  ],
+  "recommendations": [
+    {
+      "job": {
+        "job_id": "syn_job_001",
+        "title": "Generative AI Engineer",
+        "company": "Tessellate Labs",
+        "domain": "AI/ML",
+        "role_family": "LLM Engineering",
+        "seniority": "Mid",
+        "employment_type": "full_time",
+        "location_city": "Bengaluru",
+        "location_country": "India",
+        "work_mode": "hybrid",
+        "experience_min_years": 2.0,
+        "experience_max_years": 5.0,
+        "education": "B.E./B.Tech in Computer Science, IT or a related field, or equivalent practical experience",
+        "required_skills": [
+          "Python",
+          "LangChain",
+          "RAG",
+          "Vector databases",
+          "Prompt engineering",
+          "FastAPI"
+        ],
+        "preferred_skills": [
+          "Qdrant",
+          "LLM evaluation",
+          "Docker"
+        ],
+        "hard_constraints": [],
+        "description": "Generative AI Engineer\nTessellate Labs\nLocation: Bengaluru, India (Hybrid)\n\nAbout us\nTessellate Labs builds document-intelligence software for banks and insurers.\n\nAbout the role\nYou will build retrieval-augmented assistants that answer questions over loan agreements and KYC documents.\n\nWhat you will do\n- Write and version prompts, and measure their effect with offline evaluation sets.\n- Integrate LLM features into production services within agreed latency and cost budgets.\n- Add guardrails, citation checks and fallbacks so the system fails safely.\n- Own features end to end, from design notes to production monitoring.\n\nWhat we are looking for\n- 2-5 years of relevant experience\n- B.E./B.Tech in Computer Science, IT or a related field, or equivalent practical experience\n- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI\n\nGood to have\n- Qdrant, LLM evaluation, Docker",
+        "source_url": null,
+        "posted_at": "2026-11-13",
+        "dataset_id": "synthetic_india_ai_sw_v2",
+        "is_synthetic": true
+      },
+      "relevance": {
+        "value": 0.03278688524590164,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "required_coverage": {
+        "evidenced_count": 4,
+        "total_count": 6,
+        "percentage": 66.7
+      },
+      "preferred_coverage": {
+        "evidenced_count": 1,
+        "total_count": 3,
+        "percentage": 33.3
+      },
+      "eligibility": "met",
+      "experience_assessment": {
+        "condition": "Minimum professional experience: 2.0 years",
+        "status": "met",
+        "resume_evidence": [
+          {
+            "quote": "Professional experience: 3 years",
+            "page": 1
+          }
+        ],
+        "user_fact_keys": []
+      },
+      "education_assessment": {
+        "condition": "B.E./B.Tech in Computer Science, IT or a related field, or equivalent practical experience",
+        "status": "met",
+        "resume_evidence": [
+          {
+            "quote": "B.Tech in Computer Science, 2022",
+            "page": 1
+          }
+        ],
+        "user_fact_keys": []
+      },
+      "generation_status": "deterministic",
+      "constraints": [],
+      "skills": [
+        {
+          "skill": "Python",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Python, LangChain, RAG, FastAPI, Docker",
+              "page": 1
+            },
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            },
+            {
+              "quote": "Developed Python APIs for a fictional software company.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "LangChain",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Python, LangChain, RAG, FastAPI, Docker",
+              "page": 1
+            },
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "RAG",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Python, LangChain, RAG, FastAPI, Docker",
+              "page": 1
+            },
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "Vector databases",
+          "requirement_type": "required",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "Prompt engineering",
+          "requirement_type": "required",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "FastAPI",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Python, LangChain, RAG, FastAPI, Docker",
+              "page": 1
+            },
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "Qdrant",
+          "requirement_type": "preferred",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Qdrant, LLM evaluation, Docker",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "LLM evaluation",
+          "requirement_type": "preferred",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Qdrant, LLM evaluation, Docker",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "Docker",
+          "requirement_type": "preferred",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Qdrant, LLM evaluation, Docker",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Python, LangChain, RAG, FastAPI, Docker",
+              "page": 1
+            }
+          ]
+        }
+      ],
+      "reasons": [
+        {
+          "explanation": "Your resume mentions Python; this job lists it as a required skill.",
+          "resume_evidence": {
+            "quote": "Python, LangChain, RAG, FastAPI, Docker",
+            "page": 1
+          },
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          }
+        },
+        {
+          "explanation": "Your resume mentions LangChain; this job lists it as a required skill.",
+          "resume_evidence": {
+            "quote": "Python, LangChain, RAG, FastAPI, Docker",
+            "page": 1
+          },
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          }
+        },
+        {
+          "explanation": "Your resume mentions RAG; this job lists it as a required skill.",
+          "resume_evidence": {
+            "quote": "Python, LangChain, RAG, FastAPI, Docker",
+            "page": 1
+          },
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          }
+        }
+      ],
+      "warnings": [
+        "Not evidenced in resume: Vector databases, Prompt engineering, Qdrant, LLM evaluation"
+      ]
+    },
+    {
+      "job": {
+        "job_id": "syn_job_105",
+        "title": "RAG Engineer",
+        "company": "Mitra Talent Cloud",
+        "domain": "AI/ML",
+        "role_family": "LLM Engineering",
+        "seniority": "Mid",
+        "employment_type": "full_time",
+        "location_city": "Bengaluru",
+        "location_country": "India",
+        "work_mode": "hybrid",
+        "experience_min_years": 2.0,
+        "experience_max_years": 5.0,
+        "education": "B.E./B.Tech in Computer Science, IT or a related field, or equivalent practical experience",
+        "required_skills": [
+          "Python",
+          "LangChain",
+          "RAG",
+          "Vector databases",
+          "Hybrid search",
+          "LLM evaluation"
+        ],
+        "preferred_skills": [
+          "BM25",
+          "Cross-encoder reranking",
+          "Qdrant"
+        ],
+        "hard_constraints": [],
+        "description": "RAG Engineer\nMitra Talent Cloud\nLocation: Bengaluru, India (Hybrid)\n\nAbout us\nMitra Talent Cloud builds hiring, assessment and interview software.\n\nAbout the role\nYou will match candidates to roles and explain each match with evidence from both the resume and the job description.\n\nWhat you will do\n- Add guardrails, citation checks and fallbacks so the system fails safely.\n- Work with product and domain experts to turn vague requirements into testable behaviour.\n- Monitor quality in production and feed failure cases back into evaluation datasets.\n- Own features end to end, from design notes to production monitoring.\n\nWhat we are looking for\n- 2-5 years of relevant experience\n- B.E./B.Tech in Computer Science, IT or a related field, or equivalent practical experience\n- Must-have skills: Python, LangChain, RAG, Vector databases, Hybrid search, LLM evaluation\n\nGood to have\n- BM25, Cross-encoder reranking, Qdrant",
+        "source_url": null,
+        "posted_at": "2026-10-13",
+        "dataset_id": "synthetic_india_ai_sw_v2",
+        "is_synthetic": true
+      },
+      "relevance": {
+        "value": 0.031746031746031744,
+        "score_type": "rrf"
+      },
+      "reranker_relevance": null,
+      "required_coverage": {
+        "evidenced_count": 3,
+        "total_count": 6,
+        "percentage": 50.0
+      },
+      "preferred_coverage": {
+        "evidenced_count": 0,
+        "total_count": 3,
+        "percentage": 0.0
+      },
+      "eligibility": "met",
+      "experience_assessment": {
+        "condition": "Minimum professional experience: 2.0 years",
+        "status": "met",
+        "resume_evidence": [
+          {
+            "quote": "Professional experience: 3 years",
+            "page": 1
+          }
+        ],
+        "user_fact_keys": []
+      },
+      "education_assessment": {
+        "condition": "B.E./B.Tech in Computer Science, IT or a related field, or equivalent practical experience",
+        "status": "met",
+        "resume_evidence": [
+          {
+            "quote": "B.Tech in Computer Science, 2022",
+            "page": 1
+          }
+        ],
+        "user_fact_keys": []
+      },
+      "generation_status": "deterministic",
+      "constraints": [],
+      "skills": [
+        {
+          "skill": "Python",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Hybrid search, LLM evaluation",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Python, LangChain, RAG, FastAPI, Docker",
+              "page": 1
+            },
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            },
+            {
+              "quote": "Developed Python APIs for a fictional software company.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "LangChain",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Hybrid search, LLM evaluation",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Python, LangChain, RAG, FastAPI, Docker",
+              "page": 1
+            },
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "RAG",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "RAG Engineer",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Python, LangChain, RAG, FastAPI, Docker",
+              "page": 1
+            },
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "Vector databases",
+          "requirement_type": "required",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Hybrid search, LLM evaluation",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "Hybrid search",
+          "requirement_type": "required",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Hybrid search, LLM evaluation",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "LLM evaluation",
+          "requirement_type": "required",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Hybrid search, LLM evaluation",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "BM25",
+          "requirement_type": "preferred",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- BM25, Cross-encoder reranking, Qdrant",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "Cross-encoder reranking",
+          "requirement_type": "preferred",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- BM25, Cross-encoder reranking, Qdrant",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "Qdrant",
+          "requirement_type": "preferred",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- BM25, Cross-encoder reranking, Qdrant",
+            "section": "description"
+          },
+          "resume_evidence": []
+        }
+      ],
+      "reasons": [
+        {
+          "explanation": "Your resume mentions Python; this job lists it as a required skill.",
+          "resume_evidence": {
+            "quote": "Python, LangChain, RAG, FastAPI, Docker",
+            "page": 1
+          },
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Hybrid search, LLM evaluation",
+            "section": "description"
+          }
+        },
+        {
+          "explanation": "Your resume mentions LangChain; this job lists it as a required skill.",
+          "resume_evidence": {
+            "quote": "Python, LangChain, RAG, FastAPI, Docker",
+            "page": 1
+          },
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Hybrid search, LLM evaluation",
+            "section": "description"
+          }
+        },
+        {
+          "explanation": "Your resume mentions RAG; this job lists it as a required skill.",
+          "resume_evidence": {
+            "quote": "Python, LangChain, RAG, FastAPI, Docker",
+            "page": 1
+          },
+          "job_evidence": {
+            "job_id": "syn_job_105",
+            "quote": "RAG Engineer",
+            "section": "description"
+          }
+        }
+      ],
+      "warnings": [
+        "Not evidenced in resume: Vector databases, Hybrid search, LLM evaluation, BM25, Cross-encoder reranking, Qdrant"
+      ]
+    }
+  ],
+  "warnings": [
+    "Synthetic demo. Acceptance thresholds are development heuristics, not calibrated suitability judgments.",
+    "Coverage measures literal resume evidence, not proficiency or hiring probability."
+  ]
+}

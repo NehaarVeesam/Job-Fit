@@ -1,0 +1,9 @@
+Synthetic Evaluation Candidate heldout_senior
+Summary
+6 years of professional experience
+Skills
+Java, Spring Boot, Microservices, PostgreSQL, Distributed systems, System design, Technical leadership, SQL, Git, Object-oriented programming, Data structures and algorithms, Kafka, AWS
+Experience
+Delivered production work using the listed skills.
+Education
+B.Tech in Computer Science, 2017

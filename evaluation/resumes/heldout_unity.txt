@@ -1,0 +1,9 @@
+Synthetic Evaluation Candidate heldout_unity
+Summary
+6 years of professional experience
+Skills
+Unity, C#, Game architecture, Mobile game optimisation, Performance profiling, Unity Addressables, Git
+Experience
+Delivered production work using the listed skills.
+Education
+B.Sc in Computer Science, 2018

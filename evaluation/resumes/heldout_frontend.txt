@@ -1,0 +1,9 @@
+Synthetic Evaluation Candidate heldout_frontend
+Summary
+3 years of professional experience
+Skills
+MongoDB, Express.js, React, Node.js, JavaScript, REST APIs, TypeScript, AWS
+Experience
+Delivered production work using the listed skills.
+Education
+B.Tech in Computer Science, 2020

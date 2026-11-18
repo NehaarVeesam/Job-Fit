@@ -1,0 +1,499 @@
+{
+  "suite_version": "jobfit-evaluation-v1",
+  "suite_sha256": "9e8bc796f61e462cbd61f09f0728362922e27914eff477821c1dc14eceddf357",
+  "dataset_sha256": "162b6e5e27be9bb2260325de0e16901ffb0b5e5db57b4160cfcf198e65a41143",
+  "scope": "Controlled 17-job panel selected from the unchanged 250-job synthetic corpus; panel metrics do not estimate full-corpus or real-world accuracy.",
+  "annotation_author": "AI assistant; explicit authored suitability judgments, not independent human expert labels",
+  "split_policy": "4 development and 8 held-out-for-this-suite cases fixed before the first Module 8 model run; no tuning on held-out outputs. Synthetic assistant-authored cases are not independently collected test data.",
+  "implementation_sha256": {
+    "app/profile.py": "edc61f337c5f4e0cef32e7adaf9ad9089b9ad7df13a8bdc8e0cc1c38d6c0e742",
+    "app/keyword_search.py": "129f658c01d4a3c85635d681808c1e7b8c2c0700a46fb61070028f9e0d73416d",
+    "app/filters.py": "79e48c9ae8a03af5580bf66fbcd02cb1b2354751f85eeee95d61fe04fa6b5c10",
+    "app/scoring.py": "1a1a088facab4116ff583198622c10b4fbea2d4a0c02696586dcf9bd3cd1a3bf",
+    "app/constraints.py": "b0858312594439c83c2565cbbe73451a6d6d4cd650761b97748eca5700f260b4",
+    "app/documents.py": "2d16358ca9f4271314e8c57e29c9cbc166d693d9314a150aff4f0f44f1bfabcd",
+    "app/generation.py": "a9e50f229d011ab55e3aa8fbde4a36c4a896c73c0f14e1cb3226cc2354da0c09",
+    "app/reranking.py": "6c004e1d603b4fe1a97659712b4e28cf02f778f4768519bedea5d0c522ee9dc5",
+    "app/hybrid_retrieval.py": "506b95cac6c8151f50baa6a35961b7541a2bbc059d6140b4ed30d653127083d7",
+    "app/retrieval.py": "1af4bc309e547878fc2a1b6656e8caff873fc9b2e81fe5fb835a350b8ffd15e7",
+    "app/matching.py": "e51e5cdb7eb31b947b455eeafb62a12326a65c768b496abfd38d17475294e74c",
+    "app/schemas.py": "48b81e18a7e1b145e0bb7659878bf5fee62b14891dce2ac769f998257fc73fca"
+  },
+  "requirements_lock_sha256": "22f3152b35daaa10a93dec350c31198eb3b2c8eefcd0b0120732669bcfffd2c7",
+  "corpus_size": 17,
+  "selected_split": "all",
+  "variants": [
+    "dense",
+    "bm25",
+    "hybrid",
+    "hybrid_reranked"
+  ],
+  "frozen_settings": {
+    "candidate_count": 30,
+    "bm25_candidate_count": 30,
+    "bm25_k1": 1.5,
+    "bm25_b": 0.75,
+    "rrf_constant": 60,
+    "min_cosine_similarity": 0.55,
+    "min_required_coverage": 50,
+    "min_evidenced_required": 2,
+    "max_recommendations": 5,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+    "rerank_model": "BAAI/bge-reranker-v2-m3",
+    "rerank_revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+    "rerank_batch_size": 2,
+    "rerank_max_tokens": 512,
+    "rerank_cpu_threads": 4,
+    "embedding_cpu_threads": 4,
+    "embedding_device": "cpu",
+    "rerank_device": "cpu",
+    "recency_filter_enabled": false,
+    "embedding_batch_size": 4
+  },
+  "model_load_seconds": {
+    "embeddings": 5.276600622000842,
+    "reranker": 0.762707309997495
+  },
+  "index_reused": false,
+  "hardware": {
+    "platform": "Linux-6.8.0-1041-gcp-x86_64-with-glibc2.35",
+    "machine": "x86_64",
+    "cpu_threads": 4
+  },
+  "runtime_versions": {
+    "sentence-transformers": "5.2.0",
+    "torch": "2.9.1+cpu",
+    "langchain-core": "1.2.7",
+    "qdrant-client": "1.16.2"
+  },
+  "qwen_probe": {
+    "status": "qwen_grounded_plan",
+    "calls": 1,
+    "model": "Qwen/Qwen3.8-27B",
+    "error_types": [],
+    "job_id": "syn_job_001",
+    "closed_template_support_checks": 14,
+    "checks_passed": 14,
+    "scope": "One accepted synthetic pair; bounded structured-plan probe, not general LLM faithfulness evaluation."
+  },
+  "network_socket_connections_blocked": false,
+  "checks": {
+    "passed": 829,
+    "total": 829,
+    "scope": "Fixture expectations, arithmetic, literal skill support, closed-template explanations, deterministic edge cases; not general entailment."
+  },
+  "reranker_status_counts": {
+    "applied": 11,
+    "skipped_empty": 1
+  },
+  "metrics": {
+    "dev": {
+      "dense": {
+        "case_count": 4,
+        "macro_precision_at_5": 0.3,
+        "macro_ideal_precision_at_5": 0.3,
+        "precision_at_5_lower": 0.3,
+        "precision_at_5_upper": 0.3,
+        "micro_accepted_precision": 1.0,
+        "accepted_precision_lower": 1.0,
+        "accepted_precision_upper": 1.0,
+        "mean_returned_count": 1.5,
+        "accepted_count": 6,
+        "accepted_unjudged": 0,
+        "judged_top_5_count": 9,
+        "unjudged_top_5_count": 0,
+        "latency_seconds": {
+          "median": 0.2120009209957061,
+          "p95": 0.2908648768030616,
+          "n": 4,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.05174459899717476,
+            "p95": 0.05492847525092657
+          },
+          "retrieval": {
+            "median": 0.15742221849905036,
+            "p95": 0.23346071095020304
+          },
+          "reranking": {
+            "median": 3.4149888961110264e-07,
+            "p95": 4.109002475161105e-07
+          },
+          "assessment": {
+            "median": 0.001409928001521621,
+            "p95": 0.00453686229775485
+          }
+        },
+        "no_match": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 3,
+          "precision": 1.0,
+          "recall": 1.0,
+          "accuracy": 1.0
+        },
+        "mean_recall_at_5": 1.0,
+        "recall_at_5_defined_cases": 3,
+        "mean_ndcg_at_5": 1.0,
+        "ndcg_at_5_defined_cases": 3
+      },
+      "bm25": {
+        "case_count": 4,
+        "macro_precision_at_5": 0.3,
+        "macro_ideal_precision_at_5": 0.3,
+        "precision_at_5_lower": 0.3,
+        "precision_at_5_upper": 0.3,
+        "micro_accepted_precision": 1.0,
+        "accepted_precision_lower": 1.0,
+        "accepted_precision_upper": 1.0,
+        "mean_returned_count": 1.5,
+        "accepted_count": 6,
+        "accepted_unjudged": 0,
+        "judged_top_5_count": 9,
+        "unjudged_top_5_count": 0,
+        "latency_seconds": {
+          "median": 0.05538532750142622,
+          "p95": 0.059626781950282745,
+          "n": 4,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.05174459899717476,
+            "p95": 0.05492847525092657
+          },
+          "retrieval": {
+            "median": 0.000853023499075789,
+            "p95": 0.0028517750009996227
+          },
+          "reranking": {
+            "median": 5.155015969648957e-07,
+            "p95": 5.457977749756537e-07
+          },
+          "assessment": {
+            "median": 0.0013123759999871254,
+            "p95": 0.003979068400803953
+          }
+        },
+        "no_match": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 3,
+          "precision": 1.0,
+          "recall": 1.0,
+          "accuracy": 1.0
+        },
+        "mean_recall_at_5": 1.0,
+        "recall_at_5_defined_cases": 3,
+        "mean_ndcg_at_5": 1.0,
+        "ndcg_at_5_defined_cases": 3
+      },
+      "hybrid": {
+        "case_count": 4,
+        "macro_precision_at_5": 0.3,
+        "macro_ideal_precision_at_5": 0.3,
+        "precision_at_5_lower": 0.3,
+        "precision_at_5_upper": 0.3,
+        "micro_accepted_precision": 1.0,
+        "accepted_precision_lower": 1.0,
+        "accepted_precision_upper": 1.0,
+        "mean_returned_count": 1.5,
+        "accepted_count": 6,
+        "accepted_unjudged": 0,
+        "judged_top_5_count": 9,
+        "unjudged_top_5_count": 0,
+        "latency_seconds": {
+          "median": 0.21537912249732472,
+          "p95": 0.28588070184887326,
+          "n": 4,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.05174459899717476,
+            "p95": 0.05492847525092657
+          },
+          "retrieval": {
+            "median": 0.161115257500569,
+            "p95": 0.22872520714845448
+          },
+          "reranking": {
+            "median": 4.4449916458688676e-07,
+            "p95": 4.6994937292765825e-07
+          },
+          "assessment": {
+            "median": 0.0012162650000391295,
+            "p95": 0.0041183435980201456
+          }
+        },
+        "no_match": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 3,
+          "precision": 1.0,
+          "recall": 1.0,
+          "accuracy": 1.0
+        },
+        "mean_recall_at_5": 1.0,
+        "recall_at_5_defined_cases": 3,
+        "mean_ndcg_at_5": 1.0,
+        "ndcg_at_5_defined_cases": 3
+      },
+      "hybrid_reranked": {
+        "case_count": 4,
+        "macro_precision_at_5": 0.3,
+        "macro_ideal_precision_at_5": 0.3,
+        "precision_at_5_lower": 0.3,
+        "precision_at_5_upper": 0.3,
+        "micro_accepted_precision": 1.0,
+        "accepted_precision_lower": 1.0,
+        "accepted_precision_upper": 1.0,
+        "mean_returned_count": 1.5,
+        "accepted_count": 6,
+        "accepted_unjudged": 0,
+        "judged_top_5_count": 9,
+        "unjudged_top_5_count": 0,
+        "latency_seconds": {
+          "median": 1.9264505994979118,
+          "p95": 12.221507954694967,
+          "n": 4,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.05174459899717476,
+            "p95": 0.05492847525092657
+          },
+          "retrieval": {
+            "median": 0.161115257500569,
+            "p95": 0.22872520714845448
+          },
+          "reranking": {
+            "median": 1.682701993999217,
+            "p95": 11.974591975399195
+          },
+          "assessment": {
+            "median": 0.001481881998188328,
+            "p95": 0.004500125697632028
+          }
+        },
+        "no_match": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 3,
+          "precision": 1.0,
+          "recall": 1.0,
+          "accuracy": 1.0
+        },
+        "mean_recall_at_5": 1.0,
+        "recall_at_5_defined_cases": 3,
+        "mean_ndcg_at_5": 1.0,
+        "ndcg_at_5_defined_cases": 3
+      }
+    },
+    "heldout": {
+      "dense": {
+        "case_count": 8,
+        "macro_precision_at_5": 0.125,
+        "macro_ideal_precision_at_5": 0.125,
+        "precision_at_5_lower": 0.125,
+        "precision_at_5_upper": 0.125,
+        "micro_accepted_precision": 0.5,
+        "accepted_precision_lower": 0.5,
+        "accepted_precision_upper": 0.5,
+        "mean_returned_count": 1.25,
+        "accepted_count": 10,
+        "accepted_unjudged": 0,
+        "judged_top_5_count": 16,
+        "unjudged_top_5_count": 0,
+        "latency_seconds": {
+          "median": 0.21871589199872687,
+          "p95": 0.2769441668979198,
+          "n": 8,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.0535403519988904,
+            "p95": 0.05504885554782959
+          },
+          "retrieval": {
+            "median": 0.16399444749913528,
+            "p95": 0.2201969469006144
+          },
+          "reranking": {
+            "median": 3.1549825507681817e-07,
+            "p95": 3.52600181940943e-07
+          },
+          "assessment": {
+            "median": 0.0008976279987109592,
+            "p95": 0.0026167870004428547
+          }
+        },
+        "no_match": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 7,
+          "precision": 1.0,
+          "recall": 1.0,
+          "accuracy": 1.0
+        },
+        "mean_recall_at_5": 1.0,
+        "recall_at_5_defined_cases": 5,
+        "mean_ndcg_at_5": 0.9654176780097427,
+        "ndcg_at_5_defined_cases": 7
+      },
+      "bm25": {
+        "case_count": 8,
+        "macro_precision_at_5": 0.125,
+        "macro_ideal_precision_at_5": 0.125,
+        "precision_at_5_lower": 0.125,
+        "precision_at_5_upper": 0.125,
+        "micro_accepted_precision": 0.5,
+        "accepted_precision_lower": 0.5,
+        "accepted_precision_upper": 0.5,
+        "mean_returned_count": 1.25,
+        "accepted_count": 10,
+        "accepted_unjudged": 0,
+        "judged_top_5_count": 16,
+        "unjudged_top_5_count": 0,
+        "latency_seconds": {
+          "median": 0.0555007079965435,
+          "p95": 0.057676690301377675,
+          "n": 8,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.0535403519988904,
+            "p95": 0.05504885554782959
+          },
+          "retrieval": {
+            "median": 0.000600792500335956,
+            "p95": 0.0017477392990258515
+          },
+          "reranking": {
+            "median": 4.5700107875745744e-07,
+            "p95": 6.360021870932541e-07
+          },
+          "assessment": {
+            "median": 0.0007316254996112548,
+            "p95": 0.0026333596024414874
+          }
+        },
+        "no_match": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 7,
+          "precision": 1.0,
+          "recall": 1.0,
+          "accuracy": 1.0
+        },
+        "mean_recall_at_5": 1.0,
+        "recall_at_5_defined_cases": 5,
+        "mean_ndcg_at_5": 0.974473387801969,
+        "ndcg_at_5_defined_cases": 7
+      },
+      "hybrid": {
+        "case_count": 8,
+        "macro_precision_at_5": 0.125,
+        "macro_ideal_precision_at_5": 0.125,
+        "precision_at_5_lower": 0.125,
+        "precision_at_5_upper": 0.125,
+        "micro_accepted_precision": 0.5,
+        "accepted_precision_lower": 0.5,
+        "accepted_precision_upper": 0.5,
+        "mean_returned_count": 1.25,
+        "accepted_count": 10,
+        "accepted_unjudged": 0,
+        "judged_top_5_count": 16,
+        "unjudged_top_5_count": 0,
+        "latency_seconds": {
+          "median": 0.22155861299688695,
+          "p95": 0.279065052295482,
+          "n": 8,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.0535403519988904,
+            "p95": 0.05504885554782959
+          },
+          "retrieval": {
+            "median": 0.16763245050060505,
+            "p95": 0.22237665064803874
+          },
+          "reranking": {
+            "median": 4.6100103645585477e-07,
+            "p95": 4.925504981656559e-07
+          },
+          "assessment": {
+            "median": 0.0007420210022246465,
+            "p95": 0.002621513600024627
+          }
+        },
+        "no_match": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 7,
+          "precision": 1.0,
+          "recall": 1.0,
+          "accuracy": 1.0
+        },
+        "mean_recall_at_5": 1.0,
+        "recall_at_5_defined_cases": 5,
+        "mean_ndcg_at_5": 0.9654176780097427,
+        "ndcg_at_5_defined_cases": 7
+      },
+      "hybrid_reranked": {
+        "case_count": 8,
+        "macro_precision_at_5": 0.125,
+        "macro_ideal_precision_at_5": 0.125,
+        "precision_at_5_lower": 0.125,
+        "precision_at_5_upper": 0.125,
+        "micro_accepted_precision": 0.5,
+        "accepted_precision_lower": 0.5,
+        "accepted_precision_upper": 0.5,
+        "mean_returned_count": 1.25,
+        "accepted_count": 10,
+        "accepted_unjudged": 0,
+        "judged_top_5_count": 16,
+        "unjudged_top_5_count": 0,
+        "latency_seconds": {
+          "median": 1.3747612739971373,
+          "p95": 7.3143714464471445,
+          "n": 8,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.0535403519988904,
+            "p95": 0.05504885554782959
+          },
+          "retrieval": {
+            "median": 0.16763245050060505,
+            "p95": 0.22237665064803874
+          },
+          "reranking": {
+            "median": 1.1464011935004237,
+            "p95": 7.065555859049888
+          },
+          "assessment": {
+            "median": 0.0009961784999177326,
+            "p95": 0.0030331656496855428
+          }
+        },
+        "no_match": {
+          "true_positive": 1,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 7,
+          "precision": 1.0,
+          "recall": 1.0,
+          "accuracy": 1.0
+        },
+        "mean_recall_at_5": 1.0,
+        "recall_at_5_defined_cases": 5,
+        "mean_ndcg_at_5": 0.974473387801969,
+        "ndcg_at_5_defined_cases": 7
+      }
+    }
+  },
+  "latency_method": "Warm stage sum; each base retrieval measured once per case and reused for paired reranker comparison. Model load, indexing, persistence and HTTP/PDF parsing excluded.",
+  "input_format": "Public synthetic text resume fixtures; PDF parser quality is outside this benchmark.",
+  "metric_version": "jobfit-evaluation-metrics-v1"
+}

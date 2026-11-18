@@ -1,0 +1,9 @@
+Synthetic Evaluation Candidate dev_java
+Summary
+1 years of professional experience
+Skills
+Java, Spring Boot, SQL, Object-oriented programming, Git, Data structures and algorithms, Docker, REST APIs
+Experience
+Delivered production work using the listed skills.
+Education
+B.Tech in Computer Science, 2026

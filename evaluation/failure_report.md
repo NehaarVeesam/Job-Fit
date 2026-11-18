@@ -1,0 +1,62 @@
+# Evaluation failure analysis
+
+These are disagreements with the authored rubric, plus failed deterministic checks. They are not automatically application bugs.
+
+- case_id=dev_ai | variant=dense | job_id=syn_job_061 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_ai | variant=bm25 | job_id=syn_job_061 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_ai | variant=hybrid | job_id=syn_job_061 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_ai | variant=hybrid_reranked | job_id=syn_job_061 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_java | variant=dense | job_id=syn_job_001 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_java | variant=dense | job_id=syn_job_247 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_java | variant=bm25 | job_id=syn_job_246 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_java | variant=bm25 | job_id=syn_job_213 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_java | variant=hybrid | job_id=syn_job_246 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_java | variant=hybrid | job_id=syn_job_235 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_java | variant=hybrid_reranked | job_id=syn_job_246 | kind=unsuitable_in_retrieval_top_5
+- case_id=dev_java | variant=hybrid_reranked | job_id=syn_job_247 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=dense | job_id=syn_job_198 | kind=accepted_partial | grade=1
+- case_id=heldout_frontend | variant=dense | job_id=syn_job_245 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=dense | job_id=syn_job_246 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=dense | job_id=syn_job_247 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=bm25 | job_id=syn_job_198 | kind=accepted_partial | grade=1
+- case_id=heldout_frontend | variant=bm25 | job_id=syn_job_245 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=bm25 | job_id=syn_job_234 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=bm25 | job_id=syn_job_246 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=hybrid | job_id=syn_job_198 | kind=accepted_partial | grade=1
+- case_id=heldout_frontend | variant=hybrid | job_id=syn_job_245 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=hybrid | job_id=syn_job_246 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=hybrid | job_id=syn_job_234 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=hybrid_reranked | job_id=syn_job_198 | kind=accepted_partial | grade=1
+- case_id=heldout_frontend | variant=hybrid_reranked | job_id=syn_job_245 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=hybrid_reranked | job_id=syn_job_246 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_frontend | variant=hybrid_reranked | job_id=syn_job_234 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_graduation | variant=dense | job_id=syn_job_055 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_graduation | variant=bm25 | job_id=syn_job_055 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_graduation | variant=hybrid | job_id=syn_job_055 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_graduation | variant=hybrid_reranked | job_id=syn_job_055 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_senior | variant=dense | job_id=syn_job_245 | kind=accepted_partial | grade=1
+- case_id=heldout_senior | variant=dense | job_id=syn_job_246 | kind=accepted_partial | grade=1
+- case_id=heldout_senior | variant=bm25 | job_id=syn_job_245 | kind=accepted_partial | grade=1
+- case_id=heldout_senior | variant=bm25 | job_id=syn_job_246 | kind=accepted_partial | grade=1
+- case_id=heldout_senior | variant=hybrid | job_id=syn_job_245 | kind=accepted_partial | grade=1
+- case_id=heldout_senior | variant=hybrid | job_id=syn_job_246 | kind=accepted_partial | grade=1
+- case_id=heldout_senior | variant=hybrid_reranked | job_id=syn_job_245 | kind=accepted_partial | grade=1
+- case_id=heldout_senior | variant=hybrid_reranked | job_id=syn_job_246 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_mode | variant=dense | job_id=syn_job_021 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_mode | variant=bm25 | job_id=syn_job_021 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_mode | variant=hybrid | job_id=syn_job_021 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_mode | variant=hybrid_reranked | job_id=syn_job_021 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_experience | variant=dense | job_id=syn_job_043 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_experience | variant=dense | job_id=syn_job_198 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_unknown_experience | variant=bm25 | job_id=syn_job_043 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_experience | variant=bm25 | job_id=syn_job_198 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_unknown_experience | variant=hybrid | job_id=syn_job_043 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_experience | variant=hybrid | job_id=syn_job_198 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_unknown_experience | variant=hybrid_reranked | job_id=syn_job_043 | kind=accepted_partial | grade=1
+- case_id=heldout_unknown_experience | variant=hybrid_reranked | job_id=syn_job_198 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_unity | variant=dense | job_id=syn_job_235 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_unity | variant=bm25 | job_id=syn_job_235 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_unity | variant=hybrid | job_id=syn_job_235 | kind=unsuitable_in_retrieval_top_5
+- case_id=heldout_unity | variant=hybrid_reranked | job_id=syn_job_235 | kind=unsuitable_in_retrieval_top_5
+
+Do not tune using held-out failures. Collect separate development cases or version a future evaluation split.

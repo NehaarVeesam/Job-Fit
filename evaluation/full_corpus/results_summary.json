@@ -1,0 +1,216 @@
+{
+  "suite_version": "jobfit-evaluation-v1",
+  "suite_sha256": "9e8bc796f61e462cbd61f09f0728362922e27914eff477821c1dc14eceddf357",
+  "dataset_sha256": "162b6e5e27be9bb2260325de0e16901ffb0b5e5db57b4160cfcf198e65a41143",
+  "scope": "Full 250-job retrieval; only panel pairs are labeled. Unjudged outputs have bounds, not assumed negative labels.",
+  "annotation_author": "AI assistant; explicit authored suitability judgments, not independent human expert labels",
+  "split_policy": "4 development and 8 held-out-for-this-suite cases fixed before the first Module 8 model run; no tuning on held-out outputs. Synthetic assistant-authored cases are not independently collected test data.",
+  "implementation_sha256": {
+    "app/profile.py": "edc61f337c5f4e0cef32e7adaf9ad9089b9ad7df13a8bdc8e0cc1c38d6c0e742",
+    "app/keyword_search.py": "129f658c01d4a3c85635d681808c1e7b8c2c0700a46fb61070028f9e0d73416d",
+    "app/filters.py": "79e48c9ae8a03af5580bf66fbcd02cb1b2354751f85eeee95d61fe04fa6b5c10",
+    "app/scoring.py": "1a1a088facab4116ff583198622c10b4fbea2d4a0c02696586dcf9bd3cd1a3bf",
+    "app/constraints.py": "b0858312594439c83c2565cbbe73451a6d6d4cd650761b97748eca5700f260b4",
+    "app/documents.py": "2d16358ca9f4271314e8c57e29c9cbc166d693d9314a150aff4f0f44f1bfabcd",
+    "app/generation.py": "a9e50f229d011ab55e3aa8fbde4a36c4a896c73c0f14e1cb3226cc2354da0c09",
+    "app/reranking.py": "6c004e1d603b4fe1a97659712b4e28cf02f778f4768519bedea5d0c522ee9dc5",
+    "app/hybrid_retrieval.py": "506b95cac6c8151f50baa6a35961b7541a2bbc059d6140b4ed30d653127083d7",
+    "app/retrieval.py": "1af4bc309e547878fc2a1b6656e8caff873fc9b2e81fe5fb835a350b8ffd15e7",
+    "app/matching.py": "e51e5cdb7eb31b947b455eeafb62a12326a65c768b496abfd38d17475294e74c",
+    "app/schemas.py": "48b81e18a7e1b145e0bb7659878bf5fee62b14891dce2ac769f998257fc73fca"
+  },
+  "requirements_lock_sha256": "22f3152b35daaa10a93dec350c31198eb3b2c8eefcd0b0120732669bcfffd2c7",
+  "corpus_size": 250,
+  "selected_split": "heldout",
+  "variants": [
+    "dense",
+    "bm25",
+    "hybrid"
+  ],
+  "frozen_settings": {
+    "candidate_count": 30,
+    "bm25_candidate_count": 30,
+    "bm25_k1": 1.5,
+    "bm25_b": 0.75,
+    "rrf_constant": 60,
+    "min_cosine_similarity": 0.55,
+    "min_required_coverage": 50,
+    "min_evidenced_required": 2,
+    "max_recommendations": 5,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+    "rerank_model": "BAAI/bge-reranker-v2-m3",
+    "rerank_revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+    "rerank_batch_size": 2,
+    "rerank_max_tokens": 512,
+    "rerank_cpu_threads": 4,
+    "embedding_cpu_threads": 4,
+    "embedding_device": "cpu",
+    "rerank_device": "cpu",
+    "recency_filter_enabled": false,
+    "embedding_batch_size": 4
+  },
+  "model_load_seconds": {
+    "embeddings": 5.300721067000268,
+    "reranker": 1.7800011846702546e-06
+  },
+  "index_reused": true,
+  "hardware": {
+    "platform": "Linux-6.8.0-1041-gcp-x86_64-with-glibc2.35",
+    "machine": "x86_64",
+    "cpu_threads": 4
+  },
+  "runtime_versions": {
+    "sentence-transformers": "5.2.0",
+    "torch": "2.9.1+cpu",
+    "langchain-core": "1.2.7",
+    "qdrant-client": "1.16.2"
+  },
+  "qwen_probe": {
+    "status": "not_evaluated",
+    "calls": 0
+  },
+  "network_socket_connections_blocked": true,
+  "checks": {
+    "passed": 660,
+    "total": 660,
+    "scope": "Fixture expectations, arithmetic, literal skill support, closed-template explanations, deterministic edge cases; not general entailment."
+  },
+  "reranker_status_counts": {},
+  "metrics": {
+    "heldout": {
+      "dense": {
+        "case_count": 8,
+        "macro_precision_at_5": null,
+        "macro_ideal_precision_at_5": null,
+        "precision_at_5_lower": 0.125,
+        "precision_at_5_upper": 0.725,
+        "micro_accepted_precision": null,
+        "accepted_precision_lower": 0.29411764705882354,
+        "accepted_precision_upper": 0.7058823529411765,
+        "mean_returned_count": 2.125,
+        "accepted_count": 17,
+        "accepted_unjudged": 7,
+        "judged_top_5_count": 12,
+        "unjudged_top_5_count": 24,
+        "latency_seconds": {
+          "median": 0.280894575500497,
+          "p95": 0.33652779989934056,
+          "n": 8,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.049697346999892034,
+            "p95": 0.05198773894990154
+          },
+          "retrieval": {
+            "median": 0.22211261850134179,
+            "p95": 0.28010542714928305
+          },
+          "reranking": {
+            "median": 2.999986463692039e-07,
+            "p95": 4.0099967009155073e-07
+          },
+          "assessment": {
+            "median": 0.005634383000142407,
+            "p95": 0.011002049750459264
+          }
+        },
+        "no_match": null,
+        "no_match_note": "Panel labels cannot establish no-match ground truth for the full 250-job corpus.",
+        "mean_recall_at_5": null,
+        "recall_at_5_defined_cases": 0,
+        "mean_ndcg_at_5": null,
+        "ndcg_at_5_defined_cases": 0
+      },
+      "bm25": {
+        "case_count": 8,
+        "macro_precision_at_5": null,
+        "macro_ideal_precision_at_5": null,
+        "precision_at_5_lower": 0.125,
+        "precision_at_5_upper": 0.725,
+        "micro_accepted_precision": null,
+        "accepted_precision_lower": 0.2777777777777778,
+        "accepted_precision_upper": 0.7222222222222222,
+        "mean_returned_count": 2.25,
+        "accepted_count": 18,
+        "accepted_unjudged": 8,
+        "judged_top_5_count": 12,
+        "unjudged_top_5_count": 24,
+        "latency_seconds": {
+          "median": 0.05598449649914983,
+          "p95": 0.0760611890511427,
+          "n": 8,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.049697346999892034,
+            "p95": 0.05198773894990154
+          },
+          "retrieval": {
+            "median": 0.0027309569995850325,
+            "p95": 0.017834649900214564
+          },
+          "reranking": {
+            "median": 4.5199885789770633e-07,
+            "p95": 5.136003892403096e-07
+          },
+          "assessment": {
+            "median": 0.0032941775007202523,
+            "p95": 0.00767079000124795
+          }
+        },
+        "no_match": null,
+        "no_match_note": "Panel labels cannot establish no-match ground truth for the full 250-job corpus.",
+        "mean_recall_at_5": null,
+        "recall_at_5_defined_cases": 0,
+        "mean_ndcg_at_5": null,
+        "ndcg_at_5_defined_cases": 0
+      },
+      "hybrid": {
+        "case_count": 8,
+        "macro_precision_at_5": null,
+        "macro_ideal_precision_at_5": null,
+        "precision_at_5_lower": 0.125,
+        "precision_at_5_upper": 0.725,
+        "micro_accepted_precision": null,
+        "accepted_precision_lower": 0.29411764705882354,
+        "accepted_precision_upper": 0.7058823529411765,
+        "mean_returned_count": 2.125,
+        "accepted_count": 17,
+        "accepted_unjudged": 7,
+        "judged_top_5_count": 12,
+        "unjudged_top_5_count": 24,
+        "latency_seconds": {
+          "median": 0.27561962449908606,
+          "p95": 0.3383658735989229,
+          "n": 8,
+          "scope": "One warm observation per distinct case; no concurrency/load testing.",
+          "preparation": {
+            "median": 0.049697346999892034,
+            "p95": 0.05198773894990154
+          },
+          "retrieval": {
+            "median": 0.22352637049880286,
+            "p95": 0.2820891799992751
+          },
+          "reranking": {
+            "median": 4.079993232153356e-07,
+            "p95": 6.949509042897259e-07
+          },
+          "assessment": {
+            "median": 0.0035924575004173676,
+            "p95": 0.007236575749084294
+          }
+        },
+        "no_match": null,
+        "no_match_note": "Panel labels cannot establish no-match ground truth for the full 250-job corpus.",
+        "mean_recall_at_5": null,
+        "recall_at_5_defined_cases": 0,
+        "mean_ndcg_at_5": null,
+        "ndcg_at_5_defined_cases": 0
+      }
+    }
+  },
+  "latency_method": "Warm stage sum; each base retrieval measured once per case and reused for paired reranker comparison. Model load, indexing, persistence and HTTP/PDF parsing excluded.",
+  "input_format": "Public synthetic text resume fixtures; PDF parser quality is outside this benchmark.",
+  "metric_version": "jobfit-evaluation-metrics-v1"
+}

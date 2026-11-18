@@ -24,8 +24,8 @@ they are not hiring probabilities or guarantees of qualification.
 ## 2. Fresh-start status and scope
 
 The previous code, environment, indexes, and tests were removed, preserving
-this plan and the supplied `dataset/` folder. **Fresh Modules 0–7 are now complete;
-Modules 8–9 remain pending. Milestone A (baseline API) is complete.** Earlier implementation claims and test counts do
+this plan and the supplied `dataset/` folder. **Fresh Modules 0–9 are complete for the offline portfolio scope.
+Milestones A, B (scoped synthetic evaluation), and C are complete.** Earlier implementation claims and test counts do
 not apply to this fresh build. See [README.md](README.md) for the current setup.
 
 - Use all **250 supplied jobs** by default. This replaces the previous live-feed
@@ -304,8 +304,8 @@ This is an output-format illustration, not a result already obtained.
 | 5 | Expose upload, matching, and selected-job detail through FastAPI | Complete |
 | 6 | Add BM25 and compare hybrid retrieval | Complete |
 | 7 | Add and evaluate optional cross-encoder reranking | Complete |
-| 8 | Measure retrieval, explanations, constraints, and latency | Pending |
-| 9 | Add an optional UI and reproducible documentation | Pending |
+| 8 | Measure retrieval, explanations, constraints, and latency | Complete (scoped panel) |
+| 9 | Add an optional UI and reproducible documentation | Complete; CLI walkthrough, UI out of scope |
 
 ### Module 0 — Setup and contracts
 
@@ -491,12 +491,26 @@ constraints/no-match behavior, and save failures/configurations.
 
 **Deliverables:** judgments, evaluation runner, comparison table, failure report.
 
-- [ ] Evaluation uses true suitability judgments, not domain labels alone.
-- [ ] Held-out resumes do not tune thresholds, aliases, or retrieval settings.
-- [ ] Synthetic corpus limitations and edge-case outcomes are reported explicitly.
-- [ ] No-match precision is not reported as perfect when nothing is returned.
+- [x] Evaluation uses true suitability judgments, not domain labels alone.
+- [x] Held-out resumes do not tune thresholds, aliases, or retrieval settings.
+- [x] Synthetic corpus limitations and edge-case outcomes are reported explicitly.
+- [x] No-match precision is not reported as perfect when nothing is returned.
 
-**Milestone B is reached after the retrieval comparisons and evaluation.**
+**Implemented:** 12 new synthetic text resumes split before model execution
+(4 dev / 8 held-out-for-this-suite), a 17-job source panel, and 204 explicit
+assistant-authored graded suitability judgments. The suite freezes source,
+resume, pipeline, dependency, model and setting identities. Four retrieval modes
+have saved results, failure analysis, independent evidence/condition checks,
+and warm text-pipeline timing summaries. All 136 main tests and five Python-only
+tests pass. The panel passes 829 evidence/policy checks; an optional one-call
+live Qwen probe passes 14 rendered-support checks. Full 250-job diagnostics
+report coverage/bounds when judgments are missing. Labels are not independent
+human expert validation, and panel scores do not estimate full-corpus accuracy.
+See [Module 8 guide](docs/module_8_evaluation.md),
+[results](evaluation/results.md), and [failures](evaluation/failure_report.md).
+
+**Milestone B is reached for the controlled synthetic evaluation scope. Broader
+independently judged full-corpus suitability remains an extension.**
 
 ### Module 9 — Demo and documentation
 
@@ -506,11 +520,21 @@ measured limits. Optional resume rewrites must preserve facts.
 
 **Deliverables:** reproducible README, demo, and final report.
 
-- [ ] Another person can reproduce the demo from this dataset.
-- [ ] All displayed jobs are clearly fictional and no application links are invented.
-- [ ] Portfolio claims match actual saved evaluation results.
+- [x] Another person can reproduce the demo from this dataset.
+- [x] All displayed jobs are clearly fictional and no application links are invented.
+- [x] Portfolio claims match actual saved evaluation results.
 
-**Milestone C is reached when the demo and documentation are reproducible.**
+**Implemented:** `scripts/run_demo.py` reproduces public synthetic match/no-match
+outputs over all 250 source jobs using cached models and blocking network
+connections by default. Curated typed response snapshots and checksum metadata
+are published under `examples/results/`. README, publication policy, and the
+[Module 9 portfolio walkthrough](docs/module_9_portfolio.md) document setup,
+architecture, scores, evaluation failures, limits, and optional Qwen/reranking.
+The UI and hosted deployment are outside the chosen offline portfolio scope.
+
+**Milestone C and the planned offline portfolio project are complete.** Broader
+human-reviewed evaluation, critical-skill/seniority improvements, OCR, UI, and
+hosting remain optional future extensions, not claims of this completed scope.
 
 ## 10. Evaluation design
 
@@ -530,12 +554,17 @@ unknown metadata, and unresolved constraints.
 5. Record retrieval/reranking and end-to-end median/p95 latency, hardware,
    model versions, source checksum, subset, filters, and warm/cold-start policy.
 
-| Mode | Precision@5 | Accepted precision | Mean returned | Median / p95 latency |
+Held-out results below use the **17-job controlled panel**, eight cases, and
+assistant-authored labels. The average attainable P@5 ceiling is 0.125.
+They are not accuracy figures for the full 250-job corpus. Latencies are
+warm text-stage sums with one observation per case, excluding PDF/Qwen/HTTP.
+
+| Mode | Precision@5 | Accepted precision | Mean returned | Median / p95 seconds |
 |---|---|---|---|---|
-| Dense only | TBD | TBD | TBD | TBD |
-| BM25 only | TBD | TBD | TBD | TBD |
-| Hybrid | TBD | TBD | TBD | TBD |
-| Hybrid + reranker | TBD | TBD | TBD | TBD |
+| Dense only | 0.125 | 0.500 | 1.250 | 0.219 / 0.277 |
+| BM25 only | 0.125 | 0.500 | 1.250 | 0.056 / 0.058 |
+| Hybrid | 0.125 | 0.500 | 1.250 | 0.222 / 0.279 |
+| Hybrid + reranker | 0.125 | 0.500 | 1.250 | 1.375 / 7.314 |
 
 Check the supplied unknowns, stale dates, seniority ladder, city variants,
 related-tool cases, technical tokens, hard constraints, and prompt injection.
@@ -552,10 +581,10 @@ resume layouts. Any future real-data evaluation must be reported separately.
 
 ## 11. Planned repository structure
 
-Modules 0–7 have created preparation, dense/BM25/hybrid retrieval, optional
-reranking, matching/generation, FastAPI, settings/contracts, tests, README,
-benchmark configuration, and module guides. Evaluation and UI files below remain
-proposed and will be created in Modules 8–9:
+Modules 0–8 have created preparation, retrieval, optional reranking, matching,
+FastAPI, frozen evaluation fixtures/judgments, results/failures, tests, and guides.
+The Module 9 CLI walkthrough and curated example outputs are complete. The
+optional UI is outside the chosen completed offline portfolio scope.
 
 ```text
 JobFit/
@@ -594,6 +623,7 @@ JobFit/
     main.py
     api_service.py
     api_schemas.py
+    evaluation/                    # Fixture loader, metrics, audits, runner, export
   scripts/
     download_embeddings.py
     verify_dense.py
@@ -602,14 +632,19 @@ JobFit/
     verify_reranker.py
     verify_api.py
     create_demo_resumes.py
+    run_demo.py
   artifacts/                       # Derived records, reports, indexes; ignored
   examples/                        # Synthetic candidate examples
-  evaluation/                      # Proposed Module 8
+  evaluation/                      # Public synthetic fixtures and scoped results
+    suite.json
     judgments.jsonl
-    run_evaluation.py
+    resumes/
+    results_summary.json
     results.md
+    failure_report.md
+    full_corpus/
   tests/
-  ui/                              # Optional
+  ui/                              # Optional future extension; not implemented
 ```
 
 Keep real resumes, secrets, temporary uploads, vectors, model weights, caches,

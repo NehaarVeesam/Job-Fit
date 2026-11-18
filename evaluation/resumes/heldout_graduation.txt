@@ -1,0 +1,9 @@
+Synthetic Evaluation Candidate heldout_graduation
+Summary
+1 years of professional experience
+Skills
+Java, Data structures and algorithms, SQL, Object-oriented programming, Git, Linux, C++
+Experience
+Delivered production work using the listed skills.
+Education
+B.Tech in Computer Science, 2024

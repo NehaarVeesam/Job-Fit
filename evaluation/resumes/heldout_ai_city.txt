@@ -1,0 +1,9 @@
+Synthetic Evaluation Candidate heldout_ai_city
+Summary
+3 years of professional experience
+Skills
+Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI, Docker, Qdrant
+Experience
+Delivered production work using the listed skills.
+Education
+B.Tech in Computer Science, 2022

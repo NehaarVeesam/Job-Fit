@@ -1,83 +1,85 @@
-# Publishing JobFit to GitHub
+# GitHub publication policy
 
-Run all commands from the project root. These instructions prepare an initial
-repository; they do not publish anything automatically.
+The final portfolio package contains source, public synthetic inputs, curated
+outputs, and reproducible evaluation evidence. Generated raw runtime artifacts
+remain local.
 
-## Files to commit
+## Included in Git
 
-| Path | Reason |
+| Path | Published content |
 |---|---|
-| `app/` | Main implementation, including FastAPI |
-| `python_only/` | Educational retrieval comparison and its tests |
-| `tests/` | Automated module checks |
-| `scripts/` | Reproducible model download, demo creation, verification |
-| `docs/` | Module explanations, results, and publishing guide |
-| `examples/` | Public synthetic text resumes and JSON contracts |
-| `dataset/` | Supplied synthetic JSONL, CSV, and provenance card |
-| `README.md`, `plan.md` | Project overview, setup, scope, and roadmap |
-| `pyproject.toml`, `requirements.lock` | Package definition and pinned dependencies |
-| `.gitignore`, `.env.example` | Exclusions and safe configuration template |
+| `app/`, `python_only/` | Pipeline, API, evaluation tools, and educational comparison |
+| `tests/`, `scripts/` | Automated checks, downloads, repeatable demo, verification |
+| `docs/`, `README.md`, `plan.md` | Architecture, setup, module guides, scope and limits |
+| `dataset/` | Original fictional 250-job JSONL/CSV and dataset card |
+| `examples/resumes/` | Public synthetic text resumes |
+| `examples/*.json` | Hand-authored contract examples |
+| `examples/results/` | Two actual typed synthetic demo responses, metadata/checksums |
+| `evaluation/suite.json`, `judgments.jsonl`, `resumes/` | Frozen settings, 204 assistant-authored labels, 12 synthetic text resumes |
+| `evaluation/results*`, `failure_report.md`, `full_corpus/` | Sanitized scoped summaries, failures, and incomplete-label bounds |
+| `.env.example`, `.gitignore`, `pyproject.toml`, `requirements.lock` | Safe template, exclusions, package and dependency pins |
 
-The CSV and JSONL dataset representations are intentionally both included.
-All generated/prepared datasets and verification responses can be reproduced
-locally and remain ignored under `artifacts/`.
+The CSV and JSONL are two representations of the same 250 jobs. JSONL is the
+application input. Source files remain unchanged. The 17-job evaluation panel is
+a derived selection with explicit IDs, not a replacement for the input dataset.
 
-## Files to keep local
+The published response examples were validated as `MatchResponse`, use only the
+public synthetic resumes/jobs, and contain no private configuration or complete
+resume pages. Evaluation snapshots disclose their assistant-authored labels,
+controlled-panel scope, source/suite hashes, and limits. They are not independent
+human validation or real-world accuracy claims.
 
-- `.env` and other environment files, except `.env.example`.
-- `.venv/`, Python caches, build output, logs, and test coverage files.
-- `artifacts/`, `uploads/`, `models/`, model weights, and database files.
-- Uploaded/real resumes and PDFs. Public demo PDFs are regenerated from synthetic
-  text using `scripts/create_demo_resumes.py`.
-- `.agents/`, `.codex/`, `.aws/`, `.ssh/`, editor settings, and credential files.
+## Excluded from Git
 
-Ignore rules do not remove files already tracked in an existing repository.
-Review the staged file list before every commit. Never force-add a secret or
-publish a real resume merely because a file is accepted by an ignore pattern.
+- `.env`, other environment files except `.env.example`, credentials, key files.
+- `.venv/`, caches, build output, logs, and local editor/agent/cloud settings.
+- All `artifacts/`, including derived corpora, parsed pages/profiles, raw runs,
+  temporary uploads, PDFs, vectors, databases, and downloaded model weights.
+- Real candidate resumes or other private user data in any format.
 
-## Initial commit
+Curated responses in `examples/results/` and summary snapshots in `evaluation/`
+are deliberate reviewed exports. Do not force-add their raw source artifact
+folders. `.gitignore` is an exclusion aid; review new text/JSON files too.
+
+## Recreate reviewed outputs
 
 ```bash
-cd /home/ubuntu/workdir/JF
-git init
-git branch -M main
-git add .gitignore .env.example README.md plan.md pyproject.toml requirements.lock app python_only tests scripts docs examples dataset
+python scripts/run_demo.py
+python -m app.dataset_loader
+python -m app.evaluation.runner
+```
+
+The demo writes to `artifacts/portfolio_demo/`. Only its public synthetic typed
+responses were exported to `examples/results/`. Demo generation is deterministic
+in behavior under the documented defaults; regenerated PDF checksums and measured
+timings can vary. Input text and source dataset checksums identify the fixtures.
+
+To recompute/export an evaluation summary from a saved run:
+
+```bash
+python -m app.evaluation.summarize PATH_TO_RUN_DIRECTORY --export evaluation
+```
+
+The exporter validates suite identity and saved prediction consistency. Full-corpus
+summaries belong under `evaluation/full_corpus/`; they retain missing-judgment
+coverage and undefined point metrics.
+
+## Review an update before committing
+
+This repository already has `main` and `origin` configured. Review an explicit
+file list for the intended change, then inspect:
+
+```bash
 git status --short
 git diff --cached --stat
 git diff --cached --check
 ```
 
-Inspect the file list and staged changes. It should contain only the commit list
-above, with no `.env`, generated artifacts, model weights, or real resume data.
-Then commit:
+Check that no private files, model weights, PDFs or raw artifacts are staged.
+Commit a description of the actual changes and push with `git push origin main`.
+Do not embed authentication tokens in the remote URL, files, or commit message.
+Ignore rules do not remove previously tracked files, so inspect the tracked list
+as well as new additions.
 
-```bash
-git commit -m "Add JobFit baseline: resume matching with LangChain and FastAPI"
-```
-
-If Git requests an identity, set your own author name and email for this repo
-with `git config user.name` and `git config user.email`, then repeat the commit.
-If `git init` reports permission denied for `.git`, run these commands in your
-normal writable local checkout; this workspace may protect its metadata folders.
-
-## Push to GitHub
-
-Create an **empty** repository on GitHub, for example `jobfit`. Leave README,
-license, and `.gitignore` initialization unchecked because the local project
-already has its own files. Choose public or private as you prefer.
-
-Replace `YOUR_USERNAME` and, if needed, the repository name:
-
-```bash
-git remote add origin https://github.com/YOUR_USERNAME/jobfit.git
-git push -u origin main
-```
-
-Authenticate using your configured GitHub credentials when Git prompts.
-Do not embed a token in the remote URL or commit it in a file.
-These commands assume a new repository with no existing `origin` or commits on
-GitHub; inspect an existing setup before changing it, and do not force-push.
-
-No license has been selected automatically. Add an appropriate license if you
-want to grant reuse rights, and check the separate terms of model weights and
-dependencies when distributing those components.
+No project license has been selected automatically. Keep claims about code reuse
+and model/dependency distribution consistent with their applicable licenses.

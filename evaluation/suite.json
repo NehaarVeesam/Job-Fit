@@ -1,0 +1,303 @@
+{
+  "suite_version": "jobfit-evaluation-v1",
+  "annotation_author": "AI assistant; explicit authored suitability judgments, not independent human expert labels",
+  "scope": "Controlled 17-job panel selected from the unchanged 250-job synthetic corpus; panel metrics do not estimate full-corpus or real-world accuracy.",
+  "split_policy": "4 development and 8 held-out-for-this-suite cases fixed before the first Module 8 model run; no tuning on held-out outputs. Synthetic assistant-authored cases are not independently collected test data.",
+  "dataset_sha256": "162b6e5e27be9bb2260325de0e16901ffb0b5e5db57b4160cfcf198e65a41143",
+  "panel_job_ids": [
+    "syn_job_001",
+    "syn_job_021",
+    "syn_job_043",
+    "syn_job_055",
+    "syn_job_061",
+    "syn_job_101",
+    "syn_job_105",
+    "syn_job_109",
+    "syn_job_128",
+    "syn_job_186",
+    "syn_job_198",
+    "syn_job_213",
+    "syn_job_234",
+    "syn_job_235",
+    "syn_job_245",
+    "syn_job_246",
+    "syn_job_247"
+  ],
+  "relevant_grade": 2,
+  "frozen_settings": {
+    "candidate_count": 30,
+    "bm25_candidate_count": 30,
+    "bm25_k1": 1.5,
+    "bm25_b": 0.75,
+    "rrf_constant": 60,
+    "min_cosine_similarity": 0.55,
+    "min_required_coverage": 50,
+    "min_evidenced_required": 2,
+    "max_recommendations": 5,
+    "embedding_model": "BAAI/bge-m3",
+    "embedding_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+    "rerank_model": "BAAI/bge-reranker-v2-m3",
+    "rerank_revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+    "rerank_batch_size": 2,
+    "rerank_max_tokens": 512,
+    "rerank_cpu_threads": 4,
+    "embedding_cpu_threads": 4,
+    "embedding_device": "cpu",
+    "rerank_device": "cpu",
+    "recency_filter_enabled": false,
+    "embedding_batch_size": 4
+  },
+  "rubric": {
+    "2": "Suitable on stated core requirements, experience and explicit preferences/conditions. Missing optional skills alone do not disqualify.",
+    "1": "Partial or conditional: important core gap, unresolved advertised condition, or substantial target-seniority mismatch. Does not count as relevant for strict precision.",
+    "0": "Unsuitable: wrong core stack, failed mandatory condition, insufficient required experience, or explicit preference mismatch."
+  },
+  "cases": [
+    {
+      "case_id": "dev_ai",
+      "split": "dev",
+      "resume_file": "resumes/dev_ai.txt",
+      "resume_sha256": "497e11ac65940f8a203d523ca5c800c78d8fba76eb40abc5fa0ab8708cf6d12e",
+      "preferences": {
+        "target_role": "Generative AI Engineer",
+        "location_city": "Bengaluru",
+        "work_mode": "hybrid"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "dev_java",
+      "split": "dev",
+      "resume_file": "resumes/dev_java.txt",
+      "resume_sha256": "047ebd18cffeb33a1a18e86e94e9ee36125ece4ec3eeec684c9b47f5407e0217",
+      "preferences": {
+        "target_role": "Junior Java Backend Developer",
+        "eligibility_facts": {
+          "graduation_year": 2026
+        }
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "dev_analyst",
+      "split": "dev",
+      "resume_file": "resumes/dev_analyst.txt",
+      "resume_sha256": "2dd9894c13e4211c144a4708f5cc3aef2d5c9c9a78153d4a225d0700cbf3ade5",
+      "preferences": {
+        "target_role": "Data Analyst",
+        "location_city": "Kolkata",
+        "work_mode": "onsite"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "dev_unrelated",
+      "split": "dev",
+      "resume_file": "resumes/dev_unrelated.txt",
+      "resume_sha256": "e10f655f59f9ddaa5cbb86d3ee84c21c298a84a54da11c2298a597eb1bbb5d43",
+      "preferences": {},
+      "expected_no_match": true
+    },
+    {
+      "case_id": "heldout_ai_city",
+      "split": "heldout",
+      "resume_file": "resumes/heldout_ai_city.txt",
+      "resume_sha256": "97476bcdb06004342566730654b845fd8f1dee3a861474d2da42c38d336a8c91",
+      "preferences": {
+        "target_role": "Generative AI Engineer",
+        "location_city": "Hyderabad",
+        "work_mode": "hybrid"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "heldout_frontend",
+      "split": "heldout",
+      "resume_file": "resumes/heldout_frontend.txt",
+      "resume_sha256": "77823da82a41a98c9689a788d185c9ed1bf944a35aede1c0953d5af99760d48c",
+      "preferences": {
+        "target_role": "Full Stack Developer",
+        "work_mode": "hybrid"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "heldout_graduation",
+      "split": "heldout",
+      "resume_file": "resumes/heldout_graduation.txt",
+      "resume_sha256": "9bdfa5259d7f682d1e3ab3b39cc73c7e7523f23a07dc20c1d785c844ec357bd3",
+      "preferences": {
+        "target_role": "Graduate Software Engineer",
+        "location_city": "Chennai",
+        "work_mode": "onsite",
+        "eligibility_facts": {
+          "graduation_year": 2024
+        }
+      },
+      "expected_no_match": true
+    },
+    {
+      "case_id": "heldout_senior",
+      "split": "heldout",
+      "resume_file": "resumes/heldout_senior.txt",
+      "resume_sha256": "1c870b02baca7e8e6b7a0df0dbb85a1607212e938f4133eae7f650d404976a3e",
+      "preferences": {
+        "target_role": "Senior Java Software Engineer",
+        "location_city": "Indore",
+        "work_mode": "hybrid"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "heldout_unknown_mode",
+      "split": "heldout",
+      "resume_file": "resumes/heldout_unknown_mode.txt",
+      "resume_sha256": "5baddff6574f899d4415e9ccc41933c38a8ad506ea4b20461b9d97ecdee1e89b",
+      "preferences": {
+        "target_role": "AI Safety Analyst",
+        "location_city": "Gurugram",
+        "work_mode": "hybrid"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "heldout_unknown_experience",
+      "split": "heldout",
+      "resume_file": "resumes/heldout_unknown_experience.txt",
+      "resume_sha256": "611ac7f9a2d0e6889a565a7fb7b29cecfad18bd9e3087c9e077ee6013c7a4723",
+      "preferences": {
+        "target_role": "Network Anomaly Detection Engineer",
+        "location_city": "Chennai",
+        "work_mode": "hybrid"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "heldout_unity",
+      "split": "heldout",
+      "resume_file": "resumes/heldout_unity.txt",
+      "resume_sha256": "0606cbeeaa2c82d943b5f6267e0a1bb3767adf4a1e59ac4431e4fb2d366bed42",
+      "preferences": {
+        "target_role": "Senior Unity Developer",
+        "location_city": "Pune"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "heldout_android_injection",
+      "split": "heldout",
+      "resume_file": "resumes/heldout_android_injection.txt",
+      "resume_sha256": "f5deb04675e804f95ecff897b8c59fe35bc020cc079149d47b33f82575b60040",
+      "preferences": {
+        "target_role": "Android Developer",
+        "location_city": "Indore",
+        "work_mode": "onsite"
+      },
+      "expected_no_match": false
+    }
+  ],
+  "expectations": [
+    {
+      "case_id": "dev_ai",
+      "job_id": "syn_job_001",
+      "required_evidenced": 6,
+      "required_total": 6,
+      "experience": "met"
+    },
+    {
+      "case_id": "dev_ai",
+      "job_id": "syn_job_105",
+      "required_evidenced": 6,
+      "required_total": 6
+    },
+    {
+      "case_id": "dev_java",
+      "job_id": "syn_job_246",
+      "experience": "not_met"
+    },
+    {
+      "case_id": "dev_java",
+      "job_id": "syn_job_247",
+      "experience": "not_met"
+    },
+    {
+      "case_id": "dev_analyst",
+      "job_id": "syn_job_101",
+      "required_evidenced": 5,
+      "required_total": 5
+    },
+    {
+      "case_id": "heldout_ai_city",
+      "job_id": "syn_job_109",
+      "required_evidenced": 6,
+      "required_total": 6
+    },
+    {
+      "case_id": "heldout_frontend",
+      "job_id": "syn_job_198",
+      "required_evidenced": 4,
+      "required_total": 5
+    },
+    {
+      "case_id": "heldout_graduation",
+      "job_id": "syn_job_055",
+      "required_evidenced": 4,
+      "required_total": 4,
+      "constraint_status": "not_met"
+    },
+    {
+      "case_id": "heldout_senior",
+      "job_id": "syn_job_247",
+      "required_evidenced": 5,
+      "required_total": 5,
+      "experience": "met"
+    },
+    {
+      "case_id": "heldout_unknown_mode",
+      "job_id": "syn_job_021",
+      "required_evidenced": 4,
+      "required_total": 4,
+      "warning_contains": "Work mode is unknown"
+    },
+    {
+      "case_id": "heldout_unknown_experience",
+      "job_id": "syn_job_043",
+      "required_evidenced": 5,
+      "required_total": 5,
+      "experience": "unknown"
+    },
+    {
+      "case_id": "heldout_unity",
+      "job_id": "syn_job_234",
+      "required_evidenced": 5,
+      "required_total": 5
+    },
+    {
+      "case_id": "heldout_unity",
+      "job_id": "syn_job_235",
+      "required_evidenced": 1,
+      "required_total": 5
+    },
+    {
+      "case_id": "heldout_android_injection",
+      "job_id": "syn_job_213",
+      "required_evidenced": 5,
+      "required_total": 5
+    }
+  ],
+  "implementation_sha256": {
+    "app/profile.py": "edc61f337c5f4e0cef32e7adaf9ad9089b9ad7df13a8bdc8e0cc1c38d6c0e742",
+    "app/keyword_search.py": "129f658c01d4a3c85635d681808c1e7b8c2c0700a46fb61070028f9e0d73416d",
+    "app/filters.py": "79e48c9ae8a03af5580bf66fbcd02cb1b2354751f85eeee95d61fe04fa6b5c10",
+    "app/scoring.py": "1a1a088facab4116ff583198622c10b4fbea2d4a0c02696586dcf9bd3cd1a3bf",
+    "app/constraints.py": "b0858312594439c83c2565cbbe73451a6d6d4cd650761b97748eca5700f260b4",
+    "app/documents.py": "2d16358ca9f4271314e8c57e29c9cbc166d693d9314a150aff4f0f44f1bfabcd",
+    "app/generation.py": "a9e50f229d011ab55e3aa8fbde4a36c4a896c73c0f14e1cb3226cc2354da0c09",
+    "app/reranking.py": "6c004e1d603b4fe1a97659712b4e28cf02f778f4768519bedea5d0c522ee9dc5",
+    "app/hybrid_retrieval.py": "506b95cac6c8151f50baa6a35961b7541a2bbc059d6140b4ed30d653127083d7",
+    "app/retrieval.py": "1af4bc309e547878fc2a1b6656e8caff873fc9b2e81fe5fb835a350b8ffd15e7",
+    "app/matching.py": "e51e5cdb7eb31b947b455eeafb62a12326a65c768b496abfd38d17475294e74c",
+    "app/schemas.py": "48b81e18a7e1b145e0bb7659878bf5fee62b14891dce2ac769f998257fc73fca"
+  },
+  "requirements_lock_sha256": "22f3152b35daaa10a93dec350c31198eb3b2c8eefcd0b0120732669bcfffd2c7"
+}

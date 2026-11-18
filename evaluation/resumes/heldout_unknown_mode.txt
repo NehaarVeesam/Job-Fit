@@ -1,0 +1,9 @@
+Synthetic Evaluation Candidate heldout_unknown_mode
+Summary
+3 years of professional experience
+Skills
+Prompt injection testing, LLM evaluation, Python, Technical writing, OWASP Top 10 for LLM Applications, Security testing
+Experience
+Delivered production work using the listed skills.
+Education
+B.Sc in Computer Science, 2021

@@ -1,0 +1,40 @@
+{
+  "dataset_id": "synthetic_india_ai_sw_v2",
+  "is_synthetic": true,
+  "dataset_sha256": "162b6e5e27be9bb2260325de0e16901ffb0b5e5db57b4160cfcf198e65a41143",
+  "corpus_size": 250,
+  "retrieval_mode": "hybrid",
+  "reranking_requested": false,
+  "qwen_requested": false,
+  "model": "BAAI/bge-m3",
+  "model_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+  "cases": [
+    {
+      "profile": "ai",
+      "status": "matches_found",
+      "recommendation_ids": [
+        "syn_job_001",
+        "syn_job_105"
+      ],
+      "generation_calls": 0,
+      "reranking_status": "disabled"
+    },
+    {
+      "profile": "unrelated",
+      "status": "no_suitable_matches",
+      "recommendation_ids": [],
+      "generation_calls": 0,
+      "reranking_status": "disabled"
+    }
+  ],
+  "network_connections_blocked": true,
+  "resume_text_sha256": {
+    "ai": "0402bdc3d07ca25f62d1f9fb5bb02d8564bc35f878c6242fdbd730caf7680bab",
+    "unrelated": "f45cdaf438bb14dfba1cf1eb5c81d135645139af2638060a04047865e5e4df75"
+  },
+  "response_sha256": {
+    "ai_match_response.json": "55a2678550f41891bd72ef39318091d1551003b8649cd8ffa71d737d5b547c8a",
+    "unrelated_no_match_response.json": "b342ae6dd8d36c21bd0e28b5b8ed9db3d4ad5cd3d329a4b6e7cce627a3afb88d"
+  },
+  "scope": "Actual deterministic hybrid-search outputs from public synthetic PDFs over all 250 source jobs; distinct from evaluation panel metrics."
+}

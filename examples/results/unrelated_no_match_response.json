@@ -1,0 +1,29 @@
+{
+  "dataset_id": "synthetic_india_ai_sw_v2",
+  "is_synthetic": true,
+  "corpus_size": 250,
+  "corpus_subset": "all",
+  "status": "no_suitable_matches",
+  "applied_preferences": {
+    "target_role": null,
+    "location_city": null,
+    "work_mode": null,
+    "unknown_metadata_policy": "include_with_warning",
+    "eligibility_facts": {}
+  },
+  "applied_filters": {
+    "min_cosine_similarity": "0.55",
+    "retrieval_mode": "hybrid",
+    "reranking_status": "disabled",
+    "relevance_policy": "cosine_threshold",
+    "min_required_coverage": "50.0",
+    "min_evidenced_required": 2,
+    "unknown_policy": "include_with_warning"
+  },
+  "ranked_candidates": [],
+  "recommendations": [],
+  "warnings": [
+    "Synthetic demo. Acceptance thresholds are development heuristics, not calibrated suitability judgments.",
+    "Coverage measures literal resume evidence, not proficiency or hiring probability."
+  ]
+}
