@@ -54,37 +54,39 @@ class MatchingService:
                                   max_pages=self.settings.max_resume_pages)
         prepared = build_profile(extraction.parsed, skill_vocabulary(self.jobs), preferences)
         prepared.warnings = extraction.warnings + prepared.warnings
-        from app.retrieval import retrieve
-        # No query needs neither an embedding model nor a vector index.
-        if prepared.retrieval_query is None:
-            import hashlib
-            dense = {"applied_preferences": preferences.model_dump(mode="json"),
-                     "query_sha256": hashlib.sha256(b"").hexdigest(), "candidates": [],
-                     "corpus_size": len(self.jobs), "is_synthetic": True}
-        else:
-            embeddings, info = self._embeddings()
-            if time.perf_counter() >= deadline:
-                raise TimeoutError("Processing deadline exceeded")
-            try:
-                dense = retrieve(self.settings, self.jobs, self.provenance, embeddings, info,
-                                 prepared, k=self.settings.candidate_count)
-            except Exception as error:
-                raise ServiceUnavailable("Dense index is unavailable; build Module 3 first") from error
+        from app.hybrid_retrieval import retrieve_candidates
+        # Keyword-only and no-query requests do not need a vector model/index.
+        embeddings, info = ((None, None) if prepared.retrieval_query is None or
+                            self.settings.retrieval_mode == "bm25" else self._embeddings())
+        if time.perf_counter() >= deadline:
+            raise TimeoutError("Processing deadline exceeded")
+        try:
+            retrieval = retrieve_candidates(self.settings, self.jobs, self.provenance, prepared,
+                                            embeddings=embeddings, embedding_info=info)
+        except Exception as error:
+            raise ServiceUnavailable("Retrieval is unavailable; check prepared corpus and selected index") from error
         if time.perf_counter() >= deadline:
             raise TimeoutError("Processing deadline exceeded")
         bounded_settings = self.settings.model_copy(update={
             "llm_timeout": min(self.settings.llm_timeout, max(0.1, deadline - time.perf_counter()))})
         explainer = GroundedExplainer(bounded_settings, deadline=deadline) if use_llm else None
-        response, _ = match_candidates(self.settings, self.jobs, self.provenance, prepared, dense,
+        response, _ = match_candidates(self.settings, self.jobs, self.provenance, prepared, retrieval,
                                        use_llm=use_llm, explainer=explainer)
-        return MatchRun(prepared, dense, response)
+        return MatchRun(prepared, retrieval, response)
 
     def detail(self, run, job_id):
         job = next((job for job in self.jobs if job.job_id == job_id), None)
         if job is None:
             raise KeyError(job_id)
-        score = next((RelevanceScore.model_validate(item["relevance"])
-                      for item in run.retrieval["candidates"] if item["job_id"] == job_id), None)
+        candidate = next((item for item in run.retrieval["candidates"] if item["job_id"] == job_id), None)
+        score = RelevanceScore.model_validate(candidate["relevance"]) if candidate else None
+        dense_score = (RelevanceScore.model_validate(candidate["dense_relevance"])
+                       if candidate and candidate.get("dense_relevance") else None)
+        if score is None and run.prepared.retrieval_query and run.retrieval.get("retrieval_mode") == "bm25":
+            from app.hybrid_retrieval import retrieve_candidates
+            report = retrieve_candidates(self.settings, self.jobs, self.provenance, run.prepared, mode="bm25", k=250)
+            item = next((item for item in report["candidates"] if item["job_id"] == job_id), None)
+            score = RelevanceScore.model_validate(item["relevance"]) if item else RelevanceScore(value=0, score_type="bm25")
         if score is None and run.prepared.retrieval_query:
             from app.filters import qdrant_filter
             from app.vector_index import (collection_name, open_client, prepare_documents,
@@ -108,7 +110,7 @@ class MatchingService:
             finally:
                 client.close()
         assessed = assess_job(job, run.prepared, score)
-        rejected = rejection_reasons(assessed, run.prepared, self.settings)
+        rejected = rejection_reasons(assessed, run.prepared, self.settings, dense_relevance=dense_score)
         reasons = make_match(assessed).reasons if any(s.status == "evidenced" for s in assessed.skills) else []
         return JobDetailResponse(
             job=job, relevance=score, required_coverage=assessed.required,

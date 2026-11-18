@@ -59,6 +59,11 @@ class Settings(BaseSettings):
     ollama_base_url: HttpUrl = HttpUrl("http://127.0.0.1:11434")
     max_recommendations: int = Field(default=5, ge=1, le=5)
     candidate_count: int = Field(default=30, ge=1, le=250)
+    retrieval_mode: Literal["dense", "bm25", "hybrid"] = "dense"
+    bm25_candidate_count: int = Field(default=30, ge=1, le=250)
+    bm25_k1: float = Field(default=1.5, gt=0, allow_inf_nan=False)
+    bm25_b: float = Field(default=0.75, ge=0, le=1, allow_inf_nan=False)
+    rrf_constant: int = Field(default=60, ge=1, le=10000)
     min_cosine_similarity: float = Field(default=0.55, ge=-1, le=1)
     min_required_coverage: float = Field(default=50, ge=0, le=100)
     min_evidenced_required: int = Field(default=2, ge=1)

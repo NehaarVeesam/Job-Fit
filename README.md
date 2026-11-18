@@ -9,7 +9,7 @@ Built with **Python, LangChain, BGE-M3, Qdrant, Qwen, and FastAPI**. A separate
 embedding and search steps without LangChain.
 
 > All jobs and example resumes are fictional. This project does not fetch live
-> vacancies. Modules 0–5 are implemented; hybrid retrieval, reranking, formal
+> vacancies. Modules 0–6 are implemented; optional reranking, formal
 > evaluation, and an optional UI remain on the roadmap.
 
 ## What it does
@@ -36,7 +36,12 @@ flowchart TD
     G --> H[Compact search query]
     H --> I[BGE-M3 query embedding]
     I --> E
-    E --> J[Ranked candidates]
+    E --> J[Dense candidates]
+    C --> O[BM25 over eligible jobs]
+    H --> O
+    O --> P[Optional RRF fusion]
+    J --> P
+    P --> K
     G --> K[Python coverage and constraint checks]
     J --> K
     K --> L[Optional LangChain and Qwen evidence-selection plan]
@@ -151,6 +156,27 @@ in process memory for 30 minutes. Temporary uploads are deleted after processing
 CLI outputs persist locally until you remove them. See the
 [API guide](docs/module_5_api.md) for timeout behavior and errors.
 
+## Compare keyword and hybrid search
+
+Module 6 adds BM25 keyword retrieval and RRF fusion with dense search. Defaults
+use the top 30 candidates per branch and retain 30 fused candidates:
+
+```bash
+python -m app.search_cli --prepared-resume PATH_TO_PREPARED_RESUME.json --mode compare --k 30
+python -m app.match_cli --prepared-resume PATH_TO_PREPARED_RESUME.json --retrieval-mode hybrid --no-llm
+```
+
+For the API, set `JOBFIT_RETRIEVAL_MODE=hybrid` in `.env` and restart it. Dense
+remains the default. Hybrid keeps the existing cosine acceptance check separate
+from its RRF ranking score. BM25-only matching uses positive keyword overlap
+instead of that cosine gate, so recommendation counts are not quality metrics.
+See [Module 6](docs/module_6_hybrid.md) for formulas, token handling, settings,
+rank traces, and the five-profile real-model comparison. Reproduce it with:
+
+```bash
+python scripts/verify_hybrid.py
+```
+
 ## Understanding the results
 
 The AI demo selected two jobs during development verification:
@@ -178,7 +204,7 @@ python_only/         Direct Sentence Transformers/Qdrant retrieval comparison
 dataset/            Original synthetic JSONL, CSV, and dataset card
 examples/            Synthetic text resumes and JSON contract examples
 scripts/             Demo PDF creation, model download, live verification
-tests/              Module 0–5 automated checks
+tests/              Module 0–6 automated checks
 docs/               Detailed module explanations and development results
 plan.md              Scope, architecture decisions, checkpoints, roadmap
 pyproject.toml       Package metadata and direct dependencies
@@ -197,7 +223,7 @@ artifacts/           Generated data, PDFs, weights, indexes, results (ignored)
 | 3 | LangChain Documents, BGE-M3 embeddings, Qdrant search | [Complete](docs/module_3_langchain.md) |
 | 4 | Skill coverage, conditions, grounded Qwen plans | [Complete](docs/module_4_matching.md) |
 | 5 | FastAPI upload, matching, and job detail | [Complete](docs/module_5_api.md) |
-| 6 | BM25 and hybrid retrieval comparisons | Pending |
+| 6 | BM25 and hybrid retrieval comparisons | [Complete](docs/module_6_hybrid.md) |
 | 7 | Optional cross-encoder reranking | Pending |
 | 8 | Judged examples, retrieval/constraint evaluation, latency | Pending |
 | 9 | Optional UI and final reproducible demo | Pending |
@@ -219,7 +245,7 @@ python -m unittest discover -s python_only -v
 python -m pip check
 ```
 
-At the Module 5 checkpoint, **85 main tests and 5 Python-only tests passed**.
+At the Module 6 checkpoint, **101 main tests and 5 Python-only tests passed**.
 Separate development checks exercised real BGE-M3/Qdrant retrieval and actual
 remote Qwen generation over HTTP. These checks do not establish general matching
 accuracy. See [retrieval results](docs/module_3_results.md) and the module guides.
@@ -240,8 +266,8 @@ python scripts/verify_api.py --url http://127.0.0.1:8000
 - Resume preparation is rule-based. It can miss aliases and complex layouts;
   scanned PDFs need OCR, which is not implemented.
 - Skill mentions and matching quotes do not prove proficiency or suitability.
-- Coverage and cosine thresholds are development heuristics. Formal evaluation,
-  hybrid retrieval, and reranking are still pending.
+- Coverage and cosine thresholds are development heuristics. Formal evaluation
+  and optional reranking are still pending.
 - The API is a local demonstration with process-local sessions, not a deployed
   multi-user service.
 

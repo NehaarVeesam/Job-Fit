@@ -63,7 +63,7 @@ def assess_job(job, prepared, relevance=None):
                       experience, education, constraints, eligibility, warnings)
 
 
-def rejection_reasons(assessment, prepared, settings):
+def rejection_reasons(assessment, prepared, settings, *, dense_relevance=None):
     reasons = []
     if not job_passes_preferences(assessment.job, prepared.preferences):
         reasons.append("Explicit preference mismatch")
@@ -72,7 +72,14 @@ def rejection_reasons(assessment, prepared, settings):
     if assessment.eligibility == "unknown" and prepared.preferences.unknown_metadata_policy == "exclude":
         reasons.append("Unresolved eligibility excluded by strict unknown policy")
     score = assessment.relevance
-    if score is None or score.score_type != "cosine" or score.value < settings.min_cosine_similarity:
+    if score is not None and score.score_type == "rrf":
+        if score.value <= 0:
+            reasons.append("No positive fusion score")
+        score = dense_relevance
+    if score is not None and score.score_type == "bm25":
+        if score.value <= 0:
+            reasons.append("No positive BM25 keyword evidence")
+    elif score is None or score.score_type != "cosine" or score.value < settings.min_cosine_similarity:
         reasons.append("Cosine similarity below the baseline threshold or unavailable")
     if assessment.required.percentage is None or assessment.required.percentage < settings.min_required_coverage:
         reasons.append("Required-skill coverage below the baseline threshold or unavailable")

@@ -24,8 +24,8 @@ they are not hiring probabilities or guarantees of qualification.
 ## 2. Fresh-start status and scope
 
 The previous code, environment, indexes, and tests were removed, preserving
-this plan and the supplied `dataset/` folder. **Fresh Modules 0–5 are now complete;
-Modules 6–9 remain pending. Milestone A (baseline API) is complete.** Earlier implementation claims and test counts do
+this plan and the supplied `dataset/` folder. **Fresh Modules 0–6 are now complete;
+Modules 7–9 remain pending. Milestone A (baseline API) is complete.** Earlier implementation claims and test counts do
 not apply to this fresh build. See [README.md](README.md) for the current setup.
 
 - Use all **250 supplied jobs** by default. This replaces the previous live-feed
@@ -136,9 +136,9 @@ Retain and test:
 | LangChain Core | Documents, prompts, runnable composition, model interfaces |
 | `langchain-huggingface` + Sentence Transformers | Local BGE-M3 dense embeddings |
 | Qdrant + `langchain-qdrant` | Persist embeddings and metadata; filtered dense retrieval |
-| Qwen3.8-27B through a remote OpenAI-compatible endpoint | Planned evidence-backed explanations; endpoint and credentials stay in local configuration |
+| Qwen3.8-27B through a remote OpenAI-compatible endpoint | Implemented evidence-backed plans; endpoint and credentials stay in local configuration |
 | FastAPI | Resume upload and result/detail endpoints |
-| BM25 + reciprocal rank fusion | Later keyword/hybrid comparison |
+| BM25 + reciprocal rank fusion | Implemented keyword/hybrid comparison with traceable ranks |
 | Cross-encoder reranker | Optional later refinement, enabled only if evaluation justifies it |
 | Manual judgments + custom metrics | Matching, coverage, constraint, and latency evaluation |
 | RAGAS / simple UI | Optional final additions |
@@ -178,7 +178,7 @@ Provided dataset/jobs_synthetic_250.jsonl
     -> derived canonical jobs + validation report
     -> LangChain Documents
        |-> BGE-M3 -> Qdrant dense index
-       |-> BM25 index                         [later comparison]
+       |-> shared text for eligible-corpus BM25 [Module 6]
 
 PER RESUME
 Resume PDF + explicit preferences/eligibility facts
@@ -186,7 +186,7 @@ Resume PDF + explicit preferences/eligibility facts
     -> build candidate profile with evidence + compact query
     -> evaluate explicit filters and constraints, preserving unknowns
     -> dense retrieval                        [baseline]
-       + BM25 -> rank fusion                  [later]
+       + BM25 -> rank fusion                  [implemented option]
     -> optional cross-encoder reranking       [later]
     -> deterministic skill coverage and eligibility assessment
     -> ranked results + up to five accepted recommendations
@@ -302,7 +302,7 @@ This is an output-format illustration, not a result already obtained.
 | 3 | Embed jobs/query with BGE-M3 and retrieve with Qdrant | Complete |
 | 4 | Calculate coverage/constraints and generate grounded explanations | Complete |
 | 5 | Expose upload, matching, and selected-job detail through FastAPI | Complete |
-| 6 | Add BM25 and compare hybrid retrieval | Pending |
+| 6 | Add BM25 and compare hybrid retrieval | Complete |
 | 7 | Add and evaluate optional cross-encoder reranking | Pending |
 | 8 | Measure retrieval, explanations, constraints, and latency | Pending |
 | 9 | Add an optional UI and reproducible documentation | Pending |
@@ -445,9 +445,18 @@ fusion, and deduplicate by source job ID. Candidate counts are tunable settings.
 
 **Deliverables:** BM25/hybrid modes and reproducible comparison inputs.
 
-- [ ] Dense, BM25, and hybrid use the same source, subset, and filters.
-- [ ] Keyword tests cover symbol-bearing skills and true aliases.
-- [ ] Merged candidates have unique job IDs and traceable ranks.
+- [x] Dense, BM25, and hybrid use the same source, subset, and filters.
+- [x] Keyword tests cover symbol-bearing skills and true aliases.
+- [x] Merged candidates have unique job IDs and traceable ranks.
+
+**Implemented:** technical-token BM25 with explicit aliases and positive IDF;
+rank-based fusion with configurable windows and stable ID deduplication;
+search/comparison CLI; matching/API mode selection. Dense remains the default.
+Hybrid preserves a separate cosine gate; BM25-only uses a labeled keyword gate.
+All 101 main tests and five Python-only tests pass. Actual cached BGE-M3/Qdrant
+comparisons covered five synthetic profiles, with sockets blocked and no Qwen
+calls. Results are development diagnostics, not held-out quality measurements.
+See [Module 6 guide](docs/module_6_hybrid.md).
 
 ### Module 7 — Optional cross-encoder reranking
 
