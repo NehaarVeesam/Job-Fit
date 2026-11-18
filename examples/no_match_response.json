@@ -1,0 +1,20 @@
+{
+  "dataset_id": "synthetic_india_ai_sw_v2",
+  "is_synthetic": true,
+  "corpus_size": 250,
+  "corpus_subset": "all",
+  "status": "no_suitable_matches",
+  "applied_preferences": {
+    "target_role": "Generative AI Engineer",
+    "location_city": "Bengaluru",
+    "work_mode": "hybrid",
+    "unknown_metadata_policy": "include_with_warning",
+    "eligibility_facts": {}
+  },
+  "applied_filters": {},
+  "ranked_candidates": [],
+  "recommendations": [],
+  "warnings": [
+    "Synthetic contract example with no suitable recommendations."
+  ]
+}

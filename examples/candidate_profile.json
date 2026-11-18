@@ -1,0 +1,55 @@
+{
+  "skills": [
+    {
+      "text": "Python",
+      "evidence": [
+        {
+          "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+          "page": 1
+        }
+      ]
+    },
+    {
+      "text": "LangChain",
+      "evidence": [
+        {
+          "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+          "page": 1
+        }
+      ]
+    },
+    {
+      "text": "RAG",
+      "evidence": [
+        {
+          "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+          "page": 1
+        }
+      ]
+    },
+    {
+      "text": "FastAPI",
+      "evidence": [
+        {
+          "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+          "page": 1
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "text": "RAG application project",
+      "evidence": [
+        {
+          "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+          "page": 1
+        }
+      ]
+    }
+  ],
+  "experience": [],
+  "education": [],
+  "experience_years": null,
+  "experience_years_evidence": []
+}

@@ -1,0 +1,18 @@
+Synthetic Candidate AI
+ai.candidate@example.invalid | +91 90000 00000
+Address: Bengaluru, India
+
+Summary
+Professional experience: 3 years
+
+Skills
+Python, LangChain, RAG, FastAPI, Docker
+
+Projects
+Built a RAG application using Python, LangChain, and FastAPI.
+
+Work Experience
+Developed Python APIs for a fictional software company.
+
+Education
+B.Tech in Computer Science, 2022

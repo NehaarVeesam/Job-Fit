@@ -1,0 +1,214 @@
+{
+  "dataset_id": "synthetic_india_ai_sw_v2",
+  "is_synthetic": true,
+  "corpus_size": 250,
+  "corpus_subset": "all",
+  "status": "matches_found",
+  "applied_preferences": {
+    "target_role": "Generative AI Engineer",
+    "location_city": "Bengaluru",
+    "work_mode": "hybrid",
+    "unknown_metadata_policy": "include_with_warning",
+    "eligibility_facts": {}
+  },
+  "applied_filters": {},
+  "ranked_candidates": [
+    {
+      "job_id": "syn_job_001",
+      "relevance": null,
+      "eligibility": "unknown"
+    }
+  ],
+  "recommendations": [
+    {
+      "job": {
+        "job_id": "syn_job_001",
+        "title": "Generative AI Engineer",
+        "company": "Tessellate Labs",
+        "domain": "AI/ML",
+        "role_family": "LLM Engineering",
+        "seniority": "Mid",
+        "employment_type": "full_time",
+        "location_city": "Bengaluru",
+        "location_country": "India",
+        "work_mode": "hybrid",
+        "experience_min_years": 2.0,
+        "experience_max_years": 5.0,
+        "education": "B.E./B.Tech in Computer Science, IT or a related field, or equivalent practical experience",
+        "required_skills": [
+          "Python",
+          "LangChain",
+          "RAG",
+          "Vector databases",
+          "Prompt engineering",
+          "FastAPI"
+        ],
+        "preferred_skills": [
+          "Qdrant",
+          "LLM evaluation",
+          "Docker"
+        ],
+        "hard_constraints": [],
+        "description": "Generative AI Engineer\nTessellate Labs\nLocation: Bengaluru, India (Hybrid)\n\nAbout us\nTessellate Labs builds document-intelligence software for banks and insurers.\n\nAbout the role\nYou will build retrieval-augmented assistants that answer questions over loan agreements and KYC documents.\n\nWhat you will do\n- Write and version prompts, and measure their effect with offline evaluation sets.\n- Integrate LLM features into production services within agreed latency and cost budgets.\n- Add guardrails, citation checks and fallbacks so the system fails safely.\n- Own features end to end, from design notes to production monitoring.\n\nWhat we are looking for\n- 2-5 years of relevant experience\n- B.E./B.Tech in Computer Science, IT or a related field, or equivalent practical experience\n- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI\n\nGood to have\n- Qdrant, LLM evaluation, Docker",
+        "source_url": null,
+        "posted_at": "2026-11-13",
+        "dataset_id": "synthetic_india_ai_sw_v2",
+        "is_synthetic": true
+      },
+      "relevance": null,
+      "required_coverage": {
+        "evidenced_count": 4,
+        "total_count": 6,
+        "percentage": 66.7
+      },
+      "preferred_coverage": {
+        "evidenced_count": 0,
+        "total_count": 3,
+        "percentage": 0.0
+      },
+      "eligibility": "unknown",
+      "constraints": [],
+      "skills": [
+        {
+          "skill": "Python",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "LangChain",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "RAG",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "Vector databases",
+          "requirement_type": "required",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "Prompt engineering",
+          "requirement_type": "required",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "FastAPI",
+          "requirement_type": "required",
+          "status": "evidenced",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          },
+          "resume_evidence": [
+            {
+              "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+              "page": 1
+            }
+          ]
+        },
+        {
+          "skill": "Qdrant",
+          "requirement_type": "preferred",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Qdrant, LLM evaluation, Docker",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "LLM evaluation",
+          "requirement_type": "preferred",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Qdrant, LLM evaluation, Docker",
+            "section": "description"
+          },
+          "resume_evidence": []
+        },
+        {
+          "skill": "Docker",
+          "requirement_type": "preferred",
+          "status": "not_evidenced_in_resume",
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Qdrant, LLM evaluation, Docker",
+            "section": "description"
+          },
+          "resume_evidence": []
+        }
+      ],
+      "reasons": [
+        {
+          "explanation": "The example resume documents Python, LangChain, RAG, and FastAPI, which are required by this synthetic job.",
+          "resume_evidence": {
+            "quote": "Built a RAG application using Python, LangChain, and FastAPI.",
+            "page": 1
+          },
+          "job_evidence": {
+            "job_id": "syn_job_001",
+            "quote": "- Must-have skills: Python, LangChain, RAG, Vector databases, Prompt engineering, FastAPI",
+            "section": "description"
+          }
+        }
+      ],
+      "warnings": [
+        "Professional experience has not been established. This is a hand-authored contract example."
+      ]
+    }
+  ],
+  "warnings": [
+    "Synthetic contract example only; the matching pipeline has not been implemented."
+  ]
+}

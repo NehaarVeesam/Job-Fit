@@ -1,0 +1,17 @@
+Synthetic Candidate Analyst
+analyst.candidate@example.invalid
+
+Summary
+2 years of professional experience
+
+Skills
+SQL, Python, Excel, Power BI
+
+Projects
+Created SQL reports and Power BI dashboards.
+
+Work Experience
+Analyzed monthly sales data using Excel.
+
+Education
+B.Sc in Statistics

@@ -1,0 +1,14 @@
+Synthetic Candidate Fresher
+fresher.candidate@example.invalid
+
+Skills
+Python, SQL, Git
+
+Academic Projects
+Built a Python application during a 2-year college project.
+
+Internships
+Completed a 6-month internship using SQL.
+
+Education
+B.Tech in Computer Science, graduating 2027

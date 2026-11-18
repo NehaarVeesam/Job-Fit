@@ -1,0 +1,17 @@
+Synthetic Candidate Backend
+backend.candidate@example.invalid
+
+Summary
+4 years of professional experience
+
+Technical Skills
+Java, Spring Boot, SQL, Docker, CI/CD, Node.js
+
+Projects
+Built a Java service with Spring Boot and SQL.
+
+Experience
+Maintained backend APIs and CI/CD workflows.
+
+Education
+B.Tech in Information Technology

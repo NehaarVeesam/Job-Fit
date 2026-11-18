@@ -1,0 +1,9 @@
+# Alternative direct dependencies; no LangChain package is required.
+# Run from project root; existing .venv already contains these packages.
+--extra-index-url https://download.pytorch.org/whl/cpu
+pydantic==2.13.0
+pydantic-settings==2.16.3
+sentence-transformers==5.2.0
+transformers==4.57.6
+torch==2.9.1+cpu
+qdrant-client==1.16.2
