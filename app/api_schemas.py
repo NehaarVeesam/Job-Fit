@@ -6,7 +6,7 @@ from pydantic import Field
 
 from app.schemas import (
     AssessmentStatus, ConstraintAssessment, Contract, CoverageScore, JobRecord,
-    MatchReason, MatchResponse, RelevanceScore, SkillAssessment,
+    MatchReason, MatchResponse, RelevanceScore, RerankerScore, SkillAssessment,
 )
 
 
@@ -22,6 +22,7 @@ class JobDetailResponse(Contract):
     is_synthetic: Literal[True] = True
     job: JobRecord
     relevance: RelevanceScore | None
+    reranker_relevance: RerankerScore | None = None
     required_coverage: CoverageScore
     preferred_coverage: CoverageScore
     eligibility: AssessmentStatus

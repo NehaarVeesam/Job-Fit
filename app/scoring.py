@@ -89,7 +89,7 @@ def rejection_reasons(assessment, prepared, settings, *, dense_relevance=None):
     return reasons
 
 
-def make_match(assessment, strength_order=None, generation_status="deterministic", extra_warnings=()):
+def make_match(assessment, strength_order=None, generation_status="deterministic", extra_warnings=(), *, reranker_relevance=None):
     positive = {item.skill: item for item in assessment.skills if item.status == "evidenced"}
     order = strength_order or list(positive)[:3]
     reasons = []
@@ -105,6 +105,7 @@ def make_match(assessment, strength_order=None, generation_status="deterministic
         warnings.append("Not evidenced in resume: " + ", ".join(missing))
     return JobMatch(
         job=assessment.job, relevance=assessment.relevance, required_coverage=assessment.required,
+        reranker_relevance=reranker_relevance,
         preferred_coverage=assessment.preferred, eligibility=assessment.eligibility,
         experience_assessment=assessment.experience, education_assessment=assessment.education,
         constraints=assessment.constraints, skills=assessment.skills, reasons=reasons,

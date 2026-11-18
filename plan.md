@@ -24,8 +24,8 @@ they are not hiring probabilities or guarantees of qualification.
 ## 2. Fresh-start status and scope
 
 The previous code, environment, indexes, and tests were removed, preserving
-this plan and the supplied `dataset/` folder. **Fresh Modules 0–6 are now complete;
-Modules 7–9 remain pending. Milestone A (baseline API) is complete.** Earlier implementation claims and test counts do
+this plan and the supplied `dataset/` folder. **Fresh Modules 0–7 are now complete;
+Modules 8–9 remain pending. Milestone A (baseline API) is complete.** Earlier implementation claims and test counts do
 not apply to this fresh build. See [README.md](README.md) for the current setup.
 
 - Use all **250 supplied jobs** by default. This replaces the previous live-feed
@@ -139,7 +139,7 @@ Retain and test:
 | Qwen3.8-27B through a remote OpenAI-compatible endpoint | Implemented evidence-backed plans; endpoint and credentials stay in local configuration |
 | FastAPI | Resume upload and result/detail endpoints |
 | BM25 + reciprocal rank fusion | Implemented keyword/hybrid comparison with traceable ranks |
-| Cross-encoder reranker | Optional later refinement, enabled only if evaluation justifies it |
+| Cross-encoder reranker | Implemented optional BGE ordering, disabled by default pending broader evaluation |
 | Manual judgments + custom metrics | Matching, coverage, constraint, and latency evaluation |
 | RAGAS / simple UI | Optional final additions |
 
@@ -187,7 +187,7 @@ Resume PDF + explicit preferences/eligibility facts
     -> evaluate explicit filters and constraints, preserving unknowns
     -> dense retrieval                        [baseline]
        + BM25 -> rank fusion                  [implemented option]
-    -> optional cross-encoder reranking       [later]
+    -> optional cross-encoder reranking       [implemented; default off]
     -> deterministic skill coverage and eligibility assessment
     -> ranked results + up to five accepted recommendations
     -> LLM explanations using resume and job evidence
@@ -303,7 +303,7 @@ This is an output-format illustration, not a result already obtained.
 | 4 | Calculate coverage/constraints and generate grounded explanations | Complete |
 | 5 | Expose upload, matching, and selected-job detail through FastAPI | Complete |
 | 6 | Add BM25 and compare hybrid retrieval | Complete |
-| 7 | Add and evaluate optional cross-encoder reranking | Pending |
+| 7 | Add and evaluate optional cross-encoder reranking | Complete |
 | 8 | Measure retrieval, explanations, constraints, and latency | Pending |
 | 9 | Add an optional UI and reproducible documentation | Pending |
 
@@ -461,14 +461,27 @@ See [Module 6 guide](docs/module_6_hybrid.md).
 ### Module 7 — Optional cross-encoder reranking
 
 **Tasks:** choose a reranker that fits the hardware; record its input limits;
-score candidate-profile/job pairs; inspect truncation; tune acceptance on
-separate development examples and measure the latency tradeoff.
+score compact-profile-query/job pairs; inspect truncation; compare on separate
+development cases and measure the latency tradeoff. Keep acceptance unchanged
+until suitability evaluation supports any new score threshold.
 
 **Deliverables:** optional reranker wrapper and benchmark configuration.
 
-- [ ] Reranking preserves job IDs, coverage values, and mandatory constraint outcomes.
-- [ ] Quality and latency are compared with the baseline; improvement is not assumed.
-- [ ] Weak/irrelevant matches can still be rejected.
+- [x] Reranking preserves job IDs, coverage values, and mandatory constraint outcomes.
+- [x] Quality and latency are compared with the baseline; improvement is not assumed.
+- [x] Weak/irrelevant matches can still be rejected.
+
+**Implemented:** pinned local `BAAI/bge-reranker-v2-m3`, complete-pair
+512-token application checks (configurable up to 8,192), separate raw-logit scores, preserved original ranks/scores,
+CLI/API integration, and explicit fallback to original ordering. All 118 main
+tests plus five Python-only tests pass. Five-profile real-model checks preserve
+all coverage/constraint outcomes. Both dense and cross-encoder scoring agree
+with four easy topical development labels (4/4 each); this shows no measured gain
+on those cases. Added warm BGE inference was about 22.7–24.7 seconds per 30-job
+pool in one CPU run (batch size 2). No new acceptance threshold was tuned; reranking stays off by
+default pending Module 8's broader suitability evaluation. See the
+[Module 7 guide](docs/module_7_reranking.md) and
+[benchmark configuration](examples/reranker/benchmark.json).
 
 ### Module 8 — Evaluation
 
@@ -539,9 +552,10 @@ resume layouts. Any future real-data evaluation must be reported separately.
 
 ## 11. Planned repository structure
 
-Modules 0–5 have created preparation, retrieval, matching/generation, FastAPI,
-settings/contracts, tests, README, and module guides. Hybrid retrieval, evaluation,
-and UI files in this tree remain proposed and will be created module by module:
+Modules 0–7 have created preparation, dense/BM25/hybrid retrieval, optional
+reranking, matching/generation, FastAPI, settings/contracts, tests, README,
+benchmark configuration, and module guides. Evaluation and UI files below remain
+proposed and will be created in Modules 8–9:
 
 ```text
 JobFit/
@@ -568,6 +582,9 @@ JobFit/
     vector_index.py
     dense_cli.py
     retrieval.py
+    keyword_search.py
+    hybrid_retrieval.py
+    search_cli.py
     scoring.py
     constraints.py
     generation.py
@@ -580,10 +597,14 @@ JobFit/
   scripts/
     download_embeddings.py
     verify_dense.py
+    verify_hybrid.py
+    download_reranker.py
+    verify_reranker.py
+    verify_api.py
     create_demo_resumes.py
   artifacts/                       # Derived records, reports, indexes; ignored
   examples/                        # Synthetic candidate examples
-  evaluation/
+  evaluation/                      # Proposed Module 8
     judgments.jsonl
     run_evaluation.py
     results.md

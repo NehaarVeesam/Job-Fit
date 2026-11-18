@@ -17,14 +17,17 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prepared-resume", required=True, type=Path)
     parser.add_argument("--corpus-dir", type=Path)
-    parser.add_argument("--retrieval-report", type=Path, help="Reuse a Module 3 result instead of rerunning dense search")
+    parser.add_argument("--retrieval-report", type=Path, help="Reuse an unprocessed base retrieval report; mode and provenance must match")
     parser.add_argument("--no-llm", action="store_true")
     parser.add_argument("--retrieval-mode", choices=("dense", "bm25", "hybrid"))
+    parser.add_argument("--rerank", action=argparse.BooleanOptionalAction, default=None)
     args = parser.parse_args(argv)
     try:
         settings = get_settings()
         if args.retrieval_mode:
             settings = settings.model_copy(update={"retrieval_mode": args.retrieval_mode})
+        if args.rerank is not None:
+            settings = settings.model_copy(update={"rerank_enabled": args.rerank})
         jobs, provenance = load_prepared_jobs(args.corpus_dir or settings.artifacts_dir / "dataset/all")
         prepared = PreparedResume.model_validate_json(args.prepared_resume.read_text(encoding="utf-8"))
         if args.retrieval_report:
@@ -54,12 +57,17 @@ def main(argv=None):
             print(f"Retrieving {settings.retrieval_mode} candidates...", flush=True)
             retrieval = retrieve_candidates(settings, jobs, provenance, prepared,
                                             embeddings=embeddings, embedding_info=info)
+        from app.reranking import rerank_candidates
+        retrieval = rerank_candidates(settings, prepared, retrieval)
+        if settings.rerank_enabled:
+            print('Reranking: ' + retrieval['reranking']['status'], flush=True)
         print("Assessing requirements" + (" and requesting grounded Qwen plans..." if not args.no_llm else " offline..."), flush=True)
         response, report = match_candidates(settings, jobs, provenance, prepared, retrieval, use_llm=not args.no_llm)
         key = hashlib.sha256((prepared.model_dump_json() + json.dumps(report, sort_keys=True)).encode()).hexdigest()
         output = settings.artifacts_dir / "matches" / key
         save_json(output / "response.json", response.model_dump(mode="json"))
         save_json(output / "assessment_report.json", report)
+        save_json(output / "retrieval_report.json", retrieval)
         print(f"{response.status}: {len(response.recommendations)} recommendations from {len(response.ranked_candidates)} candidates.")
         for match in response.recommendations:
             print(f"{match.job.job_id}: coverage={match.required_coverage.percentage}%; "

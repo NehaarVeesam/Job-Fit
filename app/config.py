@@ -64,6 +64,14 @@ class Settings(BaseSettings):
     bm25_k1: float = Field(default=1.5, gt=0, allow_inf_nan=False)
     bm25_b: float = Field(default=0.75, ge=0, le=1, allow_inf_nan=False)
     rrf_constant: int = Field(default=60, ge=1, le=10000)
+    rerank_enabled: bool = False
+    rerank_model: Literal["BAAI/bge-reranker-v2-m3"] = "BAAI/bge-reranker-v2-m3"
+    rerank_revision: str = Field(default="953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e", pattern=r"^[0-9a-f]{40}$")
+    rerank_cache_dir: Path = PROJECT_ROOT / "artifacts/reranker_cache"
+    rerank_device: Literal["cpu", "cuda", "mps"] = "cpu"
+    rerank_batch_size: int = Field(default=2, ge=1, le=64)
+    rerank_max_tokens: int = Field(default=512, ge=16, le=8192)
+    rerank_cpu_threads: int = Field(default=4, ge=1, le=32)
     min_cosine_similarity: float = Field(default=0.55, ge=-1, le=1)
     min_required_coverage: float = Field(default=50, ge=0, le=100)
     min_evidenced_required: int = Field(default=2, ge=1)
@@ -79,7 +87,7 @@ class Settings(BaseSettings):
     def blank_means_server_default(cls, value):
         return None if isinstance(value, str) and not value.strip() else value
 
-    @field_validator("dataset_path", "artifacts_dir", "embedding_cache_dir", "qdrant_path")
+    @field_validator("dataset_path", "artifacts_dir", "embedding_cache_dir", "qdrant_path", "rerank_cache_dir")
     @classmethod
     def resolve_project_path(cls, value: Path) -> Path:
         value = value.expanduser()
@@ -99,7 +107,7 @@ class Settings(BaseSettings):
         source_folder = self.dataset_path.parent
         if self.artifacts_dir == source_folder or source_folder in self.artifacts_dir.parents:
             raise ValueError("Write generated artifacts outside the input dataset folder")
-        for path in (self.embedding_cache_dir, self.qdrant_path):
+        for path in (self.embedding_cache_dir, self.qdrant_path, self.rerank_cache_dir):
             if path == source_folder or source_folder in path.parents:
                 raise ValueError("Model cache and Qdrant data must be outside the input dataset folder")
         if "synthetic" not in self.qdrant_collection.casefold():

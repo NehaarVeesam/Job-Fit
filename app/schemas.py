@@ -170,6 +170,10 @@ class RelevanceScore(Contract):
         return self
 
 
+class RerankerScore(RelevanceScore):
+    score_type: Literal["cross_encoder"] = "cross_encoder"
+
+
 class ConstraintAssessment(Contract):
     condition: Text
     status: AssessmentStatus
@@ -206,6 +210,7 @@ class MatchReason(Contract):
 class JobMatch(Contract):
     job: JobRecord
     relevance: RelevanceScore | None = None
+    reranker_relevance: RerankerScore | None = None
     required_coverage: CoverageScore | None = None
     preferred_coverage: CoverageScore | None = None
     eligibility: AssessmentStatus = "unknown"
@@ -252,6 +257,7 @@ class JobMatch(Contract):
 class RankedCandidate(Contract):
     job_id: Text
     relevance: RelevanceScore | None = None
+    reranker_relevance: RerankerScore | None = None
     eligibility: AssessmentStatus = "unknown"
 
 

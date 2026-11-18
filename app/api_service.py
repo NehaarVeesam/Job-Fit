@@ -28,6 +28,7 @@ class MatchingService:
         self.settings = settings
         self.embeddings = None
         self.embedding_info = None
+        self.reranker = None
         self.jobs, self.provenance = [], None
         try:
             self.jobs, self.provenance = load_prepared_jobs(settings.artifacts_dir / "dataset/all")
@@ -67,12 +68,23 @@ class MatchingService:
             raise ServiceUnavailable("Retrieval is unavailable; check prepared corpus and selected index") from error
         if time.perf_counter() >= deadline:
             raise TimeoutError("Processing deadline exceeded")
+        from app.reranking import rerank_candidates
+        retrieval = rerank_candidates(self.settings, prepared, retrieval,
+                                       reranker_loader=self._reranker, deadline=deadline)
+        if time.perf_counter() >= deadline:
+            raise TimeoutError("Processing deadline exceeded")
         bounded_settings = self.settings.model_copy(update={
             "llm_timeout": min(self.settings.llm_timeout, max(0.1, deadline - time.perf_counter()))})
         explainer = GroundedExplainer(bounded_settings, deadline=deadline) if use_llm else None
         response, _ = match_candidates(self.settings, self.jobs, self.provenance, prepared, retrieval,
                                        use_llm=use_llm, explainer=explainer)
         return MatchRun(prepared, retrieval, response)
+
+    def _reranker(self):
+        if self.reranker is None:
+            from app.reranking import load_reranker
+            self.reranker = load_reranker(self.settings)
+        return self.reranker
 
     def detail(self, run, job_id):
         job = next((job for job in self.jobs if job.job_id == job_id), None)
@@ -114,6 +126,7 @@ class MatchingService:
         reasons = make_match(assessed).reasons if any(s.status == "evidenced" for s in assessed.skills) else []
         return JobDetailResponse(
             job=job, relevance=score, required_coverage=assessed.required,
+            reranker_relevance=candidate.get('reranker_relevance') if candidate else None,
             preferred_coverage=assessed.preferred, eligibility=assessed.eligibility,
             experience_assessment=assessed.experience, education_assessment=assessed.education,
             constraints=assessed.constraints, skills=assessed.skills, reasons=reasons,

@@ -9,8 +9,8 @@ Built with **Python, LangChain, BGE-M3, Qdrant, Qwen, and FastAPI**. A separate
 embedding and search steps without LangChain.
 
 > All jobs and example resumes are fictional. This project does not fetch live
-> vacancies. Modules 0–6 are implemented; optional reranking, formal
-> evaluation, and an optional UI remain on the roadmap.
+> vacancies. Modules 0–7 are implemented; formal
+> evaluation and an optional UI remain on the roadmap.
 
 ## What it does
 
@@ -41,7 +41,8 @@ flowchart TD
     H --> O
     O --> P[Optional RRF fusion]
     J --> P
-    P --> K
+    P --> R[Optional cross-encoder reranking]
+    R --> K
     G --> K[Python coverage and constraint checks]
     J --> K
     K --> L[Optional LangChain and Qwen evidence-selection plan]
@@ -177,6 +178,29 @@ rank traces, and the five-profile real-model comparison. Reproduce it with:
 python scripts/verify_hybrid.py
 ```
 
+## Optional cross-encoder reranking
+
+Module 7 scores each query/job pair together using the local
+`BAAI/bge-reranker-v2-m3` model. It reorders the retrieved candidate
+pool while retaining original scores and all coverage/eligibility checks:
+
+```bash
+python scripts/download_reranker.py
+python -m app.match_cli --prepared-resume PATH_TO_PREPARED_RESUME.json --retrieval-mode hybrid --rerank --no-llm
+```
+
+The API uses it when `JOBFIT_RERANK_ENABLED=true`; restart after changing settings.
+It is **off by default**. The default pair budget is 512 tokens (configurable up
+to 8,192); overflow/model
+failure gives a labeled fallback to the original order. Cross-encoder scores are
+separate raw logits, not probabilities. The local five-profile development run
+added about 22.7–24.7 seconds per 30-job pool on CPU (batch size 2). Both dense and cross-encoder scoring
+agreed with all four easy topical pair labels, showing no gain on that small set.
+
+See [Module 7](docs/module_7_reranking.md) for score contracts, budgets, commands,
+limitations, and the reproducible [benchmark configuration](examples/reranker/benchmark.json).
+Run the real-model comparison with `python scripts/verify_reranker.py`.
+
 ## Understanding the results
 
 The AI demo selected two jobs during development verification:
@@ -204,7 +228,7 @@ python_only/         Direct Sentence Transformers/Qdrant retrieval comparison
 dataset/            Original synthetic JSONL, CSV, and dataset card
 examples/            Synthetic text resumes and JSON contract examples
 scripts/             Demo PDF creation, model download, live verification
-tests/              Module 0–6 automated checks
+tests/              Module 0–7 automated checks
 docs/               Detailed module explanations and development results
 plan.md              Scope, architecture decisions, checkpoints, roadmap
 pyproject.toml       Package metadata and direct dependencies
@@ -224,7 +248,7 @@ artifacts/           Generated data, PDFs, weights, indexes, results (ignored)
 | 4 | Skill coverage, conditions, grounded Qwen plans | [Complete](docs/module_4_matching.md) |
 | 5 | FastAPI upload, matching, and job detail | [Complete](docs/module_5_api.md) |
 | 6 | BM25 and hybrid retrieval comparisons | [Complete](docs/module_6_hybrid.md) |
-| 7 | Optional cross-encoder reranking | Pending |
+| 7 | Optional cross-encoder reranking | [Complete](docs/module_7_reranking.md) |
 | 8 | Judged examples, retrieval/constraint evaluation, latency | Pending |
 | 9 | Optional UI and final reproducible demo | Pending |
 
@@ -245,7 +269,7 @@ python -m unittest discover -s python_only -v
 python -m pip check
 ```
 
-At the Module 6 checkpoint, **101 main tests and 5 Python-only tests passed**.
+At the Module 7 checkpoint, **118 main tests and 5 Python-only tests passed**.
 Separate development checks exercised real BGE-M3/Qdrant retrieval and actual
 remote Qwen generation over HTTP. These checks do not establish general matching
 accuracy. See [retrieval results](docs/module_3_results.md) and the module guides.
@@ -266,8 +290,8 @@ python scripts/verify_api.py --url http://127.0.0.1:8000
 - Resume preparation is rule-based. It can miss aliases and complex layouts;
   scanned PDFs need OCR, which is not implemented.
 - Skill mentions and matching quotes do not prove proficiency or suitability.
-- Coverage and cosine thresholds are development heuristics. Formal evaluation
-  and optional reranking are still pending.
+- Coverage and cosine thresholds are development heuristics. Formal suitability
+  evaluation is pending; optional reranking is implemented but disabled by default.
 - The API is a local demonstration with process-local sessions, not a deployed
   multi-user service.
 

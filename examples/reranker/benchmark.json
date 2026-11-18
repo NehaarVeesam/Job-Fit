@@ -1,0 +1,45 @@
+{
+  "scope": "Small manually authored development checks of topical query-job relevance, not full resume-job suitability or held-out evaluation.",
+  "rubric": "Prefer the job explicitly centered on the stated role and technologies over the contrasting role. These pair labels do not assess eligibility, proficiency, or hiring likelihood.",
+  "settings": {
+    "retrieval_mode": "hybrid",
+    "candidate_count": 30,
+    "bm25_candidate_count": 30,
+    "rerank_model": "BAAI/bge-reranker-v2-m3",
+    "rerank_revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+    "rerank_device": "cpu",
+    "rerank_batch_size": 2,
+    "rerank_max_tokens": 512,
+    "rerank_cpu_threads": 4
+  },
+  "pairwise_development_cases": [
+    {
+      "id": "rag_vs_unity",
+      "query": "Generative AI engineer Python LangChain RAG FastAPI",
+      "preferred_job_id": "syn_job_001",
+      "other_job_id": "syn_job_234",
+      "reason": "The query explicitly asks for RAG application development rather than Unity game development."
+    },
+    {
+      "id": "backend_vs_speech",
+      "query": "Backend developer Python FastAPI PostgreSQL Docker REST APIs",
+      "preferred_job_id": "syn_job_186",
+      "other_job_id": "syn_job_127",
+      "reason": "The requested API backend technologies are central to the backend role rather than speech generation."
+    },
+    {
+      "id": "analyst_vs_unity",
+      "query": "Data analyst SQL Excel Power BI dashboards reporting",
+      "preferred_job_id": "syn_job_010",
+      "other_job_id": "syn_job_234",
+      "reason": "The query asks for analytics and reporting rather than game development."
+    },
+    {
+      "id": "rag_vs_golang",
+      "query": "RAG engineer LangChain vector databases hybrid search LLM evaluation",
+      "preferred_job_id": "syn_job_105",
+      "other_job_id": "syn_job_180",
+      "reason": "The query explicitly describes a RAG pipeline rather than a general Golang backend."
+    }
+  ]
+}

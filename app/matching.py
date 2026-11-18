@@ -3,7 +3,7 @@
 import hashlib
 
 from app.generation import GroundedExplainer
-from app.schemas import MatchResponse, RankedCandidate, RelevanceScore
+from app.schemas import MatchResponse, RankedCandidate, RelevanceScore, RerankerScore
 from app.scoring import assess_job, make_match, rejection_reasons
 
 
@@ -31,6 +31,10 @@ def match_candidates(settings, jobs, provenance, prepared, retrieval, *, use_llm
         if candidate.get("job") != job.model_dump(mode="json"):
             raise ValueError("Candidate source record differs from the prepared corpus")
         relevance = RelevanceScore.model_validate(candidate["relevance"])
+        reranker_relevance = (RerankerScore.model_validate(candidate['reranker_relevance'])
+                              if candidate.get('reranker_relevance') is not None else None)
+        if reranker_relevance is not None and retrieval.get('reranking', {}).get('status') != 'applied':
+            raise ValueError('Reranker score requires applied reranking metadata')
         dense_relevance = (RelevanceScore.model_validate(candidate["dense_relevance"])
                            if candidate.get("dense_relevance") is not None else None)
         mode = retrieval.get("retrieval_mode", "dense")
@@ -40,11 +44,14 @@ def match_candidates(settings, jobs, provenance, prepared, retrieval, *, use_llm
         if mode == "hybrid" and (dense_relevance is None or dense_relevance.score_type != "cosine"):
             raise ValueError("Hybrid candidates require a separate cosine score for acceptance")
         assessment = assess_job(job, prepared, relevance)
-        ranked.append(RankedCandidate(job_id=job_id, relevance=relevance, eligibility=assessment.eligibility))
+        ranked.append(RankedCandidate(job_id=job_id, relevance=relevance, eligibility=assessment.eligibility,
+                                     reranker_relevance=reranker_relevance))
         rejected = rejection_reasons(assessment, prepared, settings, dense_relevance=dense_relevance)
         selected = not rejected and len(recommendations) < settings.max_recommendations
         audit.append({"job_id": job_id, "selected": selected, "rejection_reasons": rejected,
                       "retrieval_relevance": relevance.model_dump(mode="json"),
+                      "reranker_relevance": reranker_relevance.model_dump(mode="json") if reranker_relevance else None,
+                      "original_rank": candidate.get('original_rank', candidate.get('rank')),
                       "acceptance_cosine": dense_relevance.model_dump(mode="json") if dense_relevance else None,
                       "selection_limit_reached": not rejected and not selected,
                       "required_coverage": assessment.required.model_dump(mode="json"),
@@ -64,7 +71,7 @@ def match_candidates(settings, jobs, provenance, prepared, retrieval, *, use_llm
             else:
                 status = "fallback"
                 warnings.append("Qwen generation unavailable or invalid after bounded attempts; deterministic evidence explanations used.")
-        recommendations.append(make_match(assessment, order, status, warnings))
+        recommendations.append(make_match(assessment, order, status, warnings, reranker_relevance=reranker_relevance))
     response = MatchResponse(
         corpus_size=len(jobs), corpus_subset=provenance["configuration"]["subset"],
         status="matches_found" if recommendations else "no_suitable_matches",
@@ -72,6 +79,7 @@ def match_candidates(settings, jobs, provenance, prepared, retrieval, *, use_llm
         applied_filters={"min_cosine_similarity": ("not_applied" if retrieval.get("retrieval_mode") == "bm25"
                                                   else str(settings.min_cosine_similarity)),
                          "retrieval_mode": retrieval.get("retrieval_mode", "dense"),
+                         "reranking_status": retrieval.get('reranking', {}).get('status', 'disabled'),
                          "relevance_policy": "positive_keyword_score" if retrieval.get("retrieval_mode") == "bm25" else "cosine_threshold",
                          "min_required_coverage": str(settings.min_required_coverage),
                          "min_evidenced_required": settings.min_evidenced_required,
@@ -79,6 +87,8 @@ def match_candidates(settings, jobs, provenance, prepared, retrieval, *, use_llm
         ranked_candidates=ranked, recommendations=recommendations,
         warnings=["Synthetic demo. Acceptance thresholds are development heuristics, not calibrated suitability judgments.",
                   "Coverage measures literal resume evidence, not proficiency or hiring probability."]
+        + (["Optional cross-encoder failed or exceeded its input budget; original retrieval order retained."]
+           if retrieval.get('reranking', {}).get('status') == 'fallback' else [])
         + (["BM25-only comparison uses positive keyword overlap instead of the cosine gate; recommendation counts are not directly comparable to dense/hybrid quality."]
            if retrieval.get("retrieval_mode") == "bm25" else [])
         + (["Some recommendations have unresolved requirements; inspect their eligibility and warnings."]
@@ -86,6 +96,7 @@ def match_candidates(settings, jobs, provenance, prepared, retrieval, *, use_llm
     )
     report = {"policy_version": "jobfit-acceptance-v2", "corpus": provenance,
               "retrieval_mode": retrieval.get("retrieval_mode", "dense"),
+              "reranking": retrieval.get('reranking', {'status': 'disabled'}),
               "retrieval_index_id": retrieval.get("index_id"), "assessments": audit,
               "generation_requested": use_llm, "generation_calls": explainer.calls if explainer else 0,
               "generation_error_types": explainer.failures if explainer else [],
