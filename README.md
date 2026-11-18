@@ -108,6 +108,22 @@ The unrelated pastry-chef resume produces `no_suitable_matches` with an empty
 recommendation list. A 66.7% coverage value is **not** a hiring probability or
 proof of proficiency. Retrieval scores, coverage, and eligibility are separate.
 
+### Use your own resume PDF and retain run logs
+
+```bash
+python scripts/check_artifacts.py
+python scripts/run_resume.py "/absolute/path/to/your_resume.pdf"
+```
+
+The PDF command extracts page text and a structured profile, embeds its compact
+query with BGE-M3, builds/reuses job vectors, and runs hybrid matching locally.
+Each run saves the actual query embedding, stage logs, retrieval/assessment
+reports, final response and checksums in `artifacts/resume_runs/<timestamp>_<id>/`.
+Real resumes and generated personal data remain ignored by Git. Historical runs
+have reports but may lack persistent console logs. See the
+[real PDF guide](docs/run_real_resume.md) for optional reranking/Qwen, output files,
+limits and regeneration commands.
+
 ### Optional reranking and Qwen
 
 ```bash
@@ -230,9 +246,11 @@ python -m unittest discover -s python_only -v
 python -m pip check
 ```
 
-**136 main tests and five Python-only tests pass**, including in a clean source
-copy with template configuration, no runtime artifacts, and the existing pinned
-dependency environment. Fast checks use test doubles
+**140 main tests and five Python-only tests pass**. The original 136 main
+tests and five Python-only tests also passed in a clean source copy with template
+configuration, no runtime artifacts, and the existing pinned dependency environment.
+The four additional checks cover PDF-run logging, exact query-vector capture,
+checksums, and failure artifacts. Fast checks use test doubles
 without model downloads or live Qwen calls. Separate cached-model checks cover
 BGE-M3, Qdrant, BGE reranking, the match/no-match demo, and scoped evaluation.
 See the module guides for reproduction commands and evidence boundaries.
