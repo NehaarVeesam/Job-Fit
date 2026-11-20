@@ -109,8 +109,7 @@ No download or new environment is needed in this workspace.
 .venv/bin/python -m unittest discover -s python_only -v
 ```
 
-Replace `PATH_TO_PREPARED_RESUME.json` with a real path. Use `--corpus-dir` in both
-index/search commands to select an alternative prepared Module 1 corpus.
+Replace `PATH_TO_PREPARED_RESUME.json` with a real path. Both commands use the prepared 250-job dataset.
 
 To run in an environment without LangChain installed, create a separate virtual
 environment and install `python_only/requirements.txt` from the project root.

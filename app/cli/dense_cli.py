@@ -1,4 +1,4 @@
-"""Build/search a BGE-M3 Qdrant index: python -m app.dense_cli --help."""
+"""Build/search a BGE-M3 Qdrant index: python -m app.cli.dense_cli --help."""
 
 import argparse
 import hashlib
@@ -18,7 +18,6 @@ from app.retrieval.vector_index import build_index, manifest_path, save_json
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=("index", "search"))
-    parser.add_argument("--corpus-dir", type=Path)
     parser.add_argument("--prepared-resume", type=Path)
     parser.add_argument("--k", type=int, default=5)
     args = parser.parse_args(argv)
@@ -26,7 +25,7 @@ def main(argv=None):
         parser.error("search requires --prepared-resume")
     try:
         settings = get_settings()
-        directory = args.corpus_dir or settings.artifacts_dir / "dataset" / "all"
+        directory = settings.artifacts_dir / "dataset" / "all"
         jobs, provenance = load_prepared_jobs(directory)
         prepared = None
         if args.command == "search":

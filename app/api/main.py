@@ -1,4 +1,4 @@
-"""Local FastAPI application: uvicorn app.main:app --host 127.0.0.1 --workers 1."""
+"""Local FastAPI application: uvicorn app.api.main:app --host 127.0.0.1 --workers 1."""
 
 import asyncio
 import tempfile

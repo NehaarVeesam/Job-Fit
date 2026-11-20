@@ -49,8 +49,10 @@ source .venv/bin/activate
 python -m pip install -r requirements.lock
 python -m pip install --no-deps --no-build-isolation -e .
 if [ ! -f .env ]; then cp .env.example .env; fi
-python -m app.check_setup
+python -m app.cli.check_setup
 ```
+
+If you already have a local `.env` from an older checkout, remove the retired keys `JOBFIT_CORPUS_SUBSET`, `JOBFIT_RECENCY_FILTER_ENABLED`, `JOBFIT_REFERENCE_DATE`, and `JOBFIT_RECENCY_WINDOW_DAYS`. Keep your other settings.
 
 ### Match a resume PDF
 
@@ -71,12 +73,12 @@ The command prints the path to `response.json`. The run directory under `artifac
 
 ### Run the local API
 
-After downloading BGE-M3, prepare the job dataset, build the vector index, and start FastAPI.
+After downloading BGE-M3, prepare all 250 jobs, build the vector index, and start FastAPI. The app always uses the bundled dataset.
 
 ```bash
-python -m app.dataset_loader
-python -m app.dense_cli index
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 1
+python -m app.dataset.dataset_loader
+python -m app.cli.dense_cli index
+python -m uvicorn app.api.main:app --host 127.0.0.1 --port 8000 --workers 1
 ```
 
 In the interactive API, select `POST /match` and upload your PDF. Set `use_llm` to `false` to run the match locally without calling Qwen. [Interactive API](http://127.0.0.1:8000/docs)
@@ -87,7 +89,7 @@ Keep the original benchmark files and their LF line endings. Once BGE-M3 is cach
 
 ```bash
 python -m app.cli.download_models reranker
-python -m app.dataset_loader
+python -m app.dataset.dataset_loader
 python -m app.evaluation.runner --split heldout
 ```
 

@@ -1,4 +1,4 @@
-"""CLI: python -m app.prepare_resume resume.pdf [--preferences preferences.json]."""
+"""CLI: python -m app.cli.prepare_resume resume.pdf [--preferences preferences.json]."""
 
 import argparse
 import hashlib
@@ -20,11 +20,10 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("resume", type=Path)
     parser.add_argument("--preferences", type=Path)
-    parser.add_argument("--corpus-dir", type=Path, help="Prepared Module 1 directory; defaults to artifacts/dataset/all")
     args = parser.parse_args(argv)
     try:
         settings = get_settings()
-        directory = args.corpus_dir or settings.artifacts_dir / "dataset" / "all"
+        directory = settings.artifacts_dir / "dataset" / "all"
         jobs, provenance = load_prepared_jobs(directory)
         vocabulary = skill_vocabulary(jobs)
         preferences = (Preferences.model_validate_json(args.preferences.read_text(encoding="utf-8"))

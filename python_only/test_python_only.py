@@ -8,7 +8,7 @@ from pathlib import Path
 
 from app.config import PROJECT_ROOT, Settings
 from app.resumes.profile import load_prepared_jobs
-from app.corpus.dataset_loader import prepare_corpus, write_corpus
+from app.dataset.dataset_loader import prepare_dataset, write_dataset
 from app.schemas import CandidateProfile, ParsedResume, Preferences, PreparedResume
 from python_only.engine import JobIndex, check_vectors, prepare_job
 
@@ -45,7 +45,7 @@ class PythonOnlyTests(unittest.TestCase):
         root = Path(self.temp.name)
         source = PROJECT_ROOT / "dataset/jobs_synthetic_250.jsonl"
         corpus = root / "prepared"
-        write_corpus(prepare_corpus(source), corpus, source)
+        write_dataset(prepare_dataset(source), corpus, source)
         jobs, provenance = load_prepared_jobs(corpus)
         self.jobs = [jobs[0], jobs[20], jobs[74], jobs[108]]
         self.settings = Settings(_env_file=None, llm_provider="ollama", artifacts_dir=root / "artifacts")

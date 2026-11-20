@@ -16,7 +16,6 @@ from app.retrieval.vector_index import save_json
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prepared-resume", required=True, type=Path)
-    parser.add_argument("--corpus-dir", type=Path)
     parser.add_argument("--retrieval-report", type=Path, help="Reuse an unprocessed base retrieval report; mode and provenance must match")
     parser.add_argument("--no-llm", action="store_true")
     parser.add_argument("--retrieval-mode", choices=("dense", "bm25", "hybrid"))
@@ -28,7 +27,7 @@ def main(argv=None):
             settings = settings.model_copy(update={"retrieval_mode": args.retrieval_mode})
         if args.rerank is not None:
             settings = settings.model_copy(update={"rerank_enabled": args.rerank})
-        jobs, provenance = load_prepared_jobs(args.corpus_dir or settings.artifacts_dir / "dataset/all")
+        jobs, provenance = load_prepared_jobs(settings.artifacts_dir / "dataset/all")
         prepared = PreparedResume.model_validate_json(args.prepared_resume.read_text(encoding="utf-8"))
         if args.retrieval_report:
             retrieval = json.loads(args.retrieval_report.read_text(encoding="utf-8"))

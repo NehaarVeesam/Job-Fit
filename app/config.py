@@ -1,6 +1,5 @@
 """Load local configuration explicitly; no model/database calls on import."""
 
-from datetime import date
 from pathlib import Path
 from typing import Literal
 
@@ -8,6 +7,8 @@ from pydantic import AliasChoices, Field, HttpUrl, SecretStr, field_validator, m
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DATASET_PATH = PROJECT_ROOT / "dataset" / "jobs_synthetic_250.jsonl"
+DATASET_JOB_IDS = frozenset(f"syn_job_{number:03d}" for number in range(1, 251))
 
 
 class Settings(BaseSettings):
@@ -17,13 +18,9 @@ class Settings(BaseSettings):
         populate_by_name=True,
     )
 
-    dataset_path: Path = PROJECT_ROOT / "dataset" / "jobs_synthetic_250.jsonl"
+    dataset_path: Path = DATASET_PATH
     dataset_id: Literal["synthetic_india_ai_sw_v2"] = "synthetic_india_ai_sw_v2"
     artifacts_dir: Path = PROJECT_ROOT / "artifacts"
-    corpus_subset: Literal["all", "first_100"] = "all"
-    recency_filter_enabled: bool = False
-    reference_date: date = date(2026, 11, 18)
-    recency_window_days: int = Field(default=90, ge=1)
 
     embedding_model: Literal["BAAI/bge-m3"] = "BAAI/bge-m3"
     embedding_dimension: int = Field(default=1024, ge=1024, le=1024)
@@ -104,6 +101,8 @@ class Settings(BaseSettings):
     def protect_input_folder(self):
         if self.llm_provider == "openai_compatible" and self.llm_base_url is None:
             raise ValueError("Set QWEN_BASE_URL for the OpenAI-compatible model server")
+        if self.dataset_path != DATASET_PATH.resolve():
+            raise ValueError("JobFit uses dataset/jobs_synthetic_250.jsonl only")
         source_folder = self.dataset_path.parent
         if self.artifacts_dir == source_folder or source_folder in self.artifacts_dir.parents:
             raise ValueError("Write generated artifacts outside the input dataset folder")

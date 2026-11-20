@@ -49,3 +49,6 @@ htmlcov/
 *.tmp
 *.bak
 *~
+
+# Local learning notes
+learn/

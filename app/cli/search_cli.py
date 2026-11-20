@@ -1,4 +1,4 @@
-"""Compare retrieval modes: python -m app.search_cli --help."""
+"""Compare retrieval modes: python -m app.cli.search_cli --help."""
 
 import argparse
 import hashlib
@@ -15,7 +15,6 @@ from app.retrieval.vector_index import save_json
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prepared-resume", type=Path, required=True)
-    parser.add_argument("--corpus-dir", type=Path)
     parser.add_argument("--mode", choices=(*MODES, "compare"), default="compare")
     parser.add_argument("--k", type=int, default=30)
     parser.add_argument("--rerank", action=argparse.BooleanOptionalAction, default=None)
@@ -26,7 +25,7 @@ def main(argv=None):
         settings = get_settings()
         if args.rerank is not None:
             settings = settings.model_copy(update={'rerank_enabled': args.rerank})
-        jobs, provenance = load_prepared_jobs(args.corpus_dir or settings.artifacts_dir / "dataset/all")
+        jobs, provenance = load_prepared_jobs(settings.artifacts_dir / "dataset/all")
         prepared = PreparedResume.model_validate_json(args.prepared_resume.read_text(encoding="utf-8"))
         embeddings, info = None, None
         if args.mode != "bm25" and prepared.retrieval_query is not None:

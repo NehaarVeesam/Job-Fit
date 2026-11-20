@@ -2,10 +2,9 @@
 
 import json
 import re
-from datetime import date
 
 from app.matching.constraints import hard_constraint
-from app.corpus.dataset_loader import CorpusOptions, prepare_corpus
+from app.config import DATASET_JOB_IDS
 from app.matching.generation import GroundedExplainer
 from app.schemas import RelevanceScore
 from app.matching.scoring import assess_job
@@ -91,12 +90,8 @@ def edge_audit(settings, full_jobs, prepared_by_case):
         checks.append({'check': 'generation_prompt_contains_only_allowlisted_skill_data',
                        'passed': plan is not None and set(capture.data) == {'job_id','allowed_strengths','allowed_gaps','requirements'}
                        and 'description' not in capture.data and 'resume' not in capture.data})
-    recent = prepare_corpus(settings.dataset_path, CorpusOptions(recency_enabled=True,
-                                                               reference_date=date(2026,11,18), recency_window_days=90))
-    kept = {job.job_id for job in recent.jobs}
-    checks.append({'check': 'fixed_date_recency_excludes_four_deliberately_stale_jobs',
-                   'passed': all(key not in kept for key in ('syn_job_128','syn_job_157','syn_job_196','syn_job_238'))
-                   and len(kept) == 246})
+    checks.append({'check': 'full_dataset_keeps_all_250_synthetic_jobs',
+                   'passed': len(full_jobs) == len(DATASET_JOB_IDS) and set(by_id) == DATASET_JOB_IDS})
     condition = 'Open to 2025 and 2026 graduates only'
     checks.append({'check': 'unanswered_mandatory_condition_remains_unknown',
                    'passed': hard_constraint(condition, {}).status == 'unknown'})

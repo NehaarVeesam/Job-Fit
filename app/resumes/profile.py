@@ -5,6 +5,7 @@ import json
 import re
 from pathlib import Path
 
+from app.config import DATASET_JOB_IDS
 from app.schemas import (
     CandidateFact, CandidateProfile, JobRecord, ParsedResume, Preferences,
     PreparedResume, ResumeEvidence,
@@ -52,8 +53,9 @@ def load_prepared_jobs(directory: Path) -> tuple[list[JobRecord], dict]:
             raise ValueError("Prepared corpus checksum mismatch; rerun Module 1")
     jobs = [JobRecord.model_validate_json(line) for line in
             (directory / "jobs.jsonl").read_text(encoding="utf-8").splitlines()]
-    if not jobs or len(jobs) != report["counts"]["output"] or len({job.job_id for job in jobs}) != len(jobs):
-        raise ValueError("Prepared corpus is empty or inconsistent; rerun Module 1")
+    if (len(jobs) != len(DATASET_JOB_IDS) or len(jobs) != report["counts"]["output"]
+            or {job.job_id for job in jobs} != DATASET_JOB_IDS):
+        raise ValueError("Prepared dataset must contain all 250 synthetic jobs; rerun dataset preparation")
     return jobs, {
         "source": report["source"], "configuration": report["configuration"],
         "jobs_sha256": report["outputs"]["jobs.jsonl"]["sha256"],

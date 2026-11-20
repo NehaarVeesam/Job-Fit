@@ -1,6 +1,6 @@
-"""Prepare the supplied JSONL corpus without changing input or calling services.
+"""Validate and prepare the 250-job synthetic dataset locally.
 
-Run: python -m app.dataset_loader
+Run: python -m app.dataset.dataset_loader
 """
 
 import argparse
@@ -11,33 +11,18 @@ import sys
 import tempfile
 from collections import Counter
 from dataclasses import dataclass
-from datetime import date, timedelta
 from pathlib import Path
-from typing import Literal
 
 from pydantic import ValidationError
 
+from app.config import DATASET_JOB_IDS
 from app.schemas import JobRecord
 
-VALIDATION_VERSION = "jobfit-dataset-v1"
-
-
-@dataclass(frozen=True)
-class CorpusOptions:
-    subset: Literal["all", "first_100"] = "all"
-    recency_enabled: bool = False
-    reference_date: date = date(2026, 11, 18)
-    recency_window_days: int = 90
-
-    def __post_init__(self):
-        if self.subset not in ("all", "first_100"):
-            raise ValueError("Subset must be all or first_100")
-        if self.recency_window_days < 1:
-            raise ValueError("Recency window must be positive")
+VALIDATION_VERSION = "jobfit-dataset-v2"
 
 
 @dataclass
-class PreparedCorpus:
+class PreparedDataset:
     jobs: list[JobRecord]
     evidence: list[dict]
     report: dict
@@ -109,13 +94,12 @@ def _skill_evidence(job: JobRecord, source_line: int) -> dict:
     return result
 
 
-def prepare_corpus(source: Path, options: CorpusOptions | None = None) -> PreparedCorpus:
-    """Validate every physical input line, then apply optional corpus filters.
+def prepare_dataset(source: Path) -> PreparedDataset:
+    """Validate every input line and require the complete synthetic dataset.
 
     A repeated ID is rejected; the first valid occurrence wins. Identical content
     under different IDs is flagged and retained for explicit review.
     """
-    options = options or CorpusOptions()
     source = source.resolve()
     raw = source.read_bytes()
     lines = raw.splitlines()
@@ -156,62 +140,40 @@ def prepare_corpus(source: Path, options: CorpusOptions | None = None) -> Prepar
         accepted[job.job_id] = (job, number)
 
     # Source IDs have fixed-width numeric suffixes, so lexical order is stable.
-    valid = [accepted[key][0] for key in sorted(accepted)]
-    cutoff = options.reference_date - timedelta(days=options.recency_window_days)
-    stale = [job.job_id for job in valid if job.posted_at < cutoff]
-    future = [job.job_id for job in valid if job.posted_at > options.reference_date]
-    jobs, excluded = [], []
-    for job in valid:
-        if options.subset == "first_100" and not 1 <= int(job.job_id.removeprefix("syn_job_")) <= 100:
-            reason = "outside_first_100_ids"
-        elif options.recency_enabled and job.posted_at < cutoff:
-            reason = "older_than_recency_window"
-        elif options.recency_enabled and job.posted_at > options.reference_date:
-            reason = "after_reference_date"
-        else:
-            jobs.append(job)
-            continue
-        excluded.append({"job_id": job.job_id, "reason": reason})
-
+    jobs = [accepted[key][0] for key in sorted(accepted)]
     issues = [] if lines else ["Input file is empty"]
+    if set(accepted) != DATASET_JOB_IDS:
+        issues.append("Expected exactly syn_job_001 through syn_job_250")
     report = {
         "validation_version": VALIDATION_VERSION,
         "dataset_id": "synthetic_india_ai_sw_v2", "is_synthetic": True,
         "source": {"filename": source.name, "sha256": hashlib.sha256(raw).hexdigest(),
                    "bytes": len(raw)},
-        "configuration": {
-            "subset": options.subset, "recency_enabled": options.recency_enabled,
-            "reference_date": options.reference_date.isoformat(),
-            "recency_window_days": options.recency_window_days,
-            "recency_cutoff_inclusive": cutoff.isoformat(),
-        },
+        "configuration": {"subset": "all"},
         "status": "requires_review" if rejected or suspicious or issues else "ok",
-        "counts": {"input_lines": len(lines), "rejected": len(rejected),
-                   "valid_unique": len(valid), "excluded": len(excluded), "output": len(jobs)},
-        "rejected_records": rejected, "excluded_records": excluded,
-        "suspicious_records": suspicious, "issues": issues,
-        "date_flags": {"older_than_window": stale, "after_reference_date": future},
-        "validated_summary": _summary(valid), "output_summary": _summary(jobs),
+        "counts": {"input_lines": len(lines), "rejected": len(rejected), "output": len(jobs)},
+        "rejected_records": rejected, "suspicious_records": suspicious, "issues": issues,
+        "output_summary": _summary(jobs),
         "warnings": [
             "Fictional jobs: dates do not establish live vacancies.",
             "Descriptions are untrusted source data; embedded instructions are preserved, never executed.",
         ],
     }
     evidence = [_skill_evidence(job, accepted[job.job_id][1]) for job in jobs]
-    return PreparedCorpus(jobs, evidence, report)
+    return PreparedDataset(jobs, evidence, report)
 
 
-def write_corpus(corpus: PreparedCorpus, output_dir: Path, source: Path) -> None:
+def write_dataset(dataset: PreparedDataset, output_dir: Path, source: Path) -> None:
     """Write reproducible artifacts, replacing each file atomically."""
     output_dir, source = output_dir.resolve(), source.resolve()
     if output_dir == source.parent or source.parent in output_dir.parents:
         raise ValueError("Write derived output outside the input dataset folder")
     output_dir.mkdir(parents=True, exist_ok=True)
     outputs = {
-        "jobs.jsonl": "".join(_json(job.model_dump(mode="json")) + "\n" for job in corpus.jobs),
-        "skill_evidence.jsonl": "".join(_json(item) + "\n" for item in corpus.evidence),
+        "jobs.jsonl": "".join(_json(job.model_dump(mode="json")) + "\n" for job in dataset.jobs),
+        "skill_evidence.jsonl": "".join(_json(item) + "\n" for item in dataset.evidence),
     }
-    report = dict(corpus.report)
+    report = dict(dataset.report)
     report["outputs"] = {name: {"sha256": hashlib.sha256(content.encode("utf-8")).hexdigest()}
                          for name, content in outputs.items()}
     outputs["validation_report.json"] = json.dumps(report, ensure_ascii=False, sort_keys=True,
@@ -238,25 +200,12 @@ def main(argv=None) -> int:
     from app.config import get_settings
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--subset", choices=("all", "first_100"))
-    parser.add_argument("--recency", action=argparse.BooleanOptionalAction, default=None)
-    parser.add_argument("--reference-date", type=date.fromisoformat)
-    parser.add_argument("--window-days", type=int)
-    args = parser.parse_args(argv)
+    parser.parse_args(argv)
     try:
         settings = get_settings()
-        options = CorpusOptions(
-            subset=args.subset or settings.corpus_subset,
-            recency_enabled=settings.recency_filter_enabled if args.recency is None else args.recency,
-            reference_date=args.reference_date or settings.reference_date,
-            recency_window_days=(settings.recency_window_days if args.window_days is None else args.window_days),
-        )
-        corpus = prepare_corpus(settings.dataset_path, options)
-        mode = options.subset
-        if options.recency_enabled:
-            mode += f"_recent_{options.reference_date.isoformat()}_{options.recency_window_days}d"
-        output = settings.artifacts_dir / "dataset" / mode
-        write_corpus(corpus, output, settings.dataset_path)
+        dataset = prepare_dataset(settings.dataset_path)
+        output = settings.artifacts_dir / "dataset" / "all"
+        write_dataset(dataset, output, settings.dataset_path)
     except ValidationError as exc:
         fields = sorted({".".join(map(str, error["loc"])) for error in exc.errors()})
         print("Configuration validation failed. Check fields: " + ", ".join(fields), file=sys.stderr)
@@ -264,11 +213,11 @@ def main(argv=None) -> int:
     except (OSError, ValueError) as exc:
         print(f"Dataset preparation failed: {exc}", file=sys.stderr)
         return 1
-    counts = corpus.report["counts"]
-    print(f"Synthetic corpus: {counts['input_lines']} input lines; {counts['valid_unique']} valid unique; "
-          f"{counts['rejected']} rejected; {counts['excluded']} excluded; {counts['output']} output.")
-    print(f"Status: {corpus.report['status']}. Artifacts: {output}")
-    return 0 if corpus.report["status"] == "ok" else 1
+    counts = dataset.report["counts"]
+    print(f"Synthetic dataset: {counts['input_lines']} input lines, "
+          f"{counts['rejected']} rejected, {counts['output']} prepared jobs.")
+    print(f"Status: {dataset.report['status']}. Artifacts: {output}")
+    return 0 if dataset.report["status"] == "ok" else 1
 
 
 if __name__ == "__main__":

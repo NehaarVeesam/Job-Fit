@@ -16,9 +16,12 @@ def rebuild(output, *, fixtures=PROJECT_ROOT/'evaluation', export=None):
     summary=json.loads((output/'summary.json').read_text())
     suite,cases,judgments,suite_hash=load_suite(fixtures,PROJECT_ROOT/'dataset/jobs_synthetic_250.jsonl')
     compatible_suite_hashes = {suite_hash}
-    # The package refactor changed only the implementation paths and hashes in this suite.
-    if suite_hash == 'dbee9a0509848b082fdf0cbf8348f13792031dc911cdac8bde2685f9b074d564':
-        compatible_suite_hashes.add('9e8bc796f61e462cbd61f09f0728362922e27914eff477821c1dc14eceddf357')
+    # These revisions changed implementation metadata but share the same cases and judgments.
+    if suite_hash == 'a86f006e3be8f0a140432b4485d23bda1dcd667ddbd0ff4ee4326d782ce67077':
+        compatible_suite_hashes.update((
+            'dbee9a0509848b082fdf0cbf8348f13792031dc911cdac8bde2685f9b074d564',
+            '9e8bc796f61e462cbd61f09f0728362922e27914eff477821c1dc14eceddf357',
+        ))
     if summary['suite_sha256'] not in compatible_suite_hashes:
         raise ValueError('Saved run and frozen judgments differ')
     panel=summary['corpus_size']==len(suite['panel_job_ids'])

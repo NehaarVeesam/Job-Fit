@@ -16,7 +16,6 @@ from python_only.engine import Encoder, JobIndex
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=("index", "search"))
-    parser.add_argument("--corpus-dir", type=Path)
     parser.add_argument("--prepared-resume", type=Path)
     parser.add_argument("--k", type=int, default=5)
     args = parser.parse_args(argv)
@@ -25,7 +24,7 @@ def main(argv=None):
     index = None
     try:
         settings = get_settings()
-        jobs, provenance = load_prepared_jobs(args.corpus_dir or settings.artifacts_dir / "dataset/all")
+        jobs, provenance = load_prepared_jobs(settings.artifacts_dir / "dataset/all")
         prepared = (PreparedResume.model_validate_json(args.prepared_resume.read_text(encoding="utf-8"))
                     if args.command == "search" else None)
         print("Loading cached BGE-M3 with Sentence Transformers directly...", flush=True)

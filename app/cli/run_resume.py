@@ -13,7 +13,7 @@ from uuid import uuid4
 
 from langchain_core.embeddings import Embeddings
 from app.config import get_settings
-from app.corpus.dataset_loader import CorpusOptions, prepare_corpus, write_corpus
+from app.dataset.dataset_loader import prepare_dataset, write_dataset
 from app.retrieval.embeddings import load_embeddings
 from app.retrieval.hybrid import retrieve_candidates
 from app.matching.matcher import match_candidates
@@ -87,7 +87,7 @@ def write_manifest(output, **details):
 def run(args, settings, output, log):
     with log.stage('dataset'):
         corpus = output / 'dataset'
-        write_corpus(prepare_corpus(settings.dataset_path, CorpusOptions()), corpus, settings.dataset_path)
+        write_dataset(prepare_dataset(settings.dataset_path), corpus, settings.dataset_path)
         jobs, provenance = load_prepared_jobs(corpus)
     with log.stage('pdf_extraction'):
         extraction = parse_resume(args.resume.expanduser(), max_upload_mb=settings.max_upload_mb,

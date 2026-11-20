@@ -31,7 +31,7 @@ FROZEN_KEYS = {'candidate_count', 'bm25_candidate_count', 'bm25_k1', 'bm25_b', '
                'min_cosine_similarity', 'min_required_coverage', 'min_evidenced_required',
                'max_recommendations', 'embedding_model', 'embedding_revision', 'rerank_model',
                'rerank_revision', 'rerank_batch_size', 'rerank_max_tokens', 'rerank_cpu_threads',
-               'embedding_cpu_threads', 'embedding_batch_size', 'embedding_device', 'rerank_device', 'recency_filter_enabled'}
+               'embedding_cpu_threads', 'embedding_batch_size', 'embedding_device', 'rerank_device'}
 
 
 def panel_corpus(jobs, provenance, panel_ids):

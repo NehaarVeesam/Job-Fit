@@ -44,7 +44,6 @@
     "embedding_cpu_threads": 4,
     "embedding_device": "cpu",
     "rerank_device": "cpu",
-    "recency_filter_enabled": false,
     "embedding_batch_size": 4
   },
   "rubric": {
@@ -286,7 +285,7 @@
     }
   ],
   "implementation_sha256": {
-    "app/resumes/profile.py": "edc61f337c5f4e0cef32e7adaf9ad9089b9ad7df13a8bdc8e0cc1c38d6c0e742",
+    "app/resumes/profile.py": "fafd6fce26cf341fc3ce2c8b7d4ccddbf2bc96230f78e508b93e835cd92884c2",
     "app/retrieval/keyword_search.py": "129f658c01d4a3c85635d681808c1e7b8c2c0700a46fb61070028f9e0d73416d",
     "app/retrieval/filters.py": "79e48c9ae8a03af5580bf66fbcd02cb1b2354751f85eeee95d61fe04fa6b5c10",
     "app/matching/scoring.py": "99df9b8d74157d104f9d0d9daf72a8af26b61cf4bf193364bb87b2ea126d236a",
