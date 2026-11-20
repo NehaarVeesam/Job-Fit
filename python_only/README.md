@@ -15,8 +15,8 @@ The examples deliberately reuse the completed framework-independent code:
 
 - `app/config.py`: settings, including model cache and revision.
 - `app/schemas.py`: Pydantic job/resume contracts.
-- `app/profile.py::load_prepared_jobs`: validated Module 1 corpus and checksums.
-- `app/filters.py`: identical city/work-mode/unknown policies.
+- `app/resumes/profile.py::load_prepared_jobs`: validated Module 1 corpus and checksums.
+- `app/retrieval/filters.py`: identical city/work-mode/unknown policies.
 
 These imports do not bring in LangChain. The implementation has its own text
 container, embedding calls, Qdrant point construction, upsert, and query logic.
@@ -117,7 +117,7 @@ environment and install `python_only/requirements.txt` from the project root.
 Run modules from the project root so shared `app` modules are importable. This
 file lists direct dependency pins; the main project's lock records the fully
 tested installed environment. Model files must first be downloaded with the
-existing framework-independent `scripts/download_embeddings.py`.
+existing framework-independent `python -m app.cli.download_models embeddings`.
 
 ## Isolation and limits
 
@@ -152,7 +152,7 @@ module guide for the fuller CLI/reporting layer.
   **0.0** for this run. This is one development comparison, not a quality benchmark.
 - Cached index reuse and search succeeded with socket connections blocked.
 - No LangChain or LangSmith modules were imported during that real run.
-- Five tests in this folder and the main 85 tests pass.
+- This folder includes five tests for the direct retrieval implementation.
 - Original dataset file checksums remain unchanged.
 
 Evidence: `artifacts/python_only/reports/comparison.json`. The AI search report

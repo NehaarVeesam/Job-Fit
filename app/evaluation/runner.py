@@ -14,17 +14,17 @@ from pathlib import Path
 from unittest.mock import patch
 
 from app.config import PROJECT_ROOT, Settings, get_settings
-from app.embeddings import load_embeddings
+from app.retrieval.embeddings import load_embeddings
 from app.evaluation.audits import edge_audit, evidence_audit, expectation_audit
 from app.evaluation.fixtures import load_suite
 from app.evaluation.metrics import aggregate, ranking_metrics
 from app.evaluation.reporting import render_failures, render_summary
-from app.hybrid_retrieval import retrieve_candidates
-from app.matching import match_candidates
-from app.profile import build_profile, load_prepared_jobs, skill_vocabulary
-from app.reranking import load_reranker, rerank_candidates
+from app.retrieval.hybrid import retrieve_candidates
+from app.matching.matcher import match_candidates
+from app.resumes.profile import build_profile, load_prepared_jobs, skill_vocabulary
+from app.retrieval.reranking import load_reranker, rerank_candidates
 from app.schemas import ParsedResume, Preferences
-from app.vector_index import build_index, save_json
+from app.retrieval.vector_index import build_index, save_json
 
 VARIANTS = ('dense', 'bm25', 'hybrid', 'hybrid_reranked')
 FROZEN_KEYS = {'candidate_count', 'bm25_candidate_count', 'bm25_k1', 'bm25_b', 'rrf_constant',
@@ -48,8 +48,8 @@ def panel_corpus(jobs, provenance, panel_ids):
 
 
 def qwen_probe(settings, prepared, response):
-    from app.generation import GroundedExplainer
-    from app.scoring import assess_job, make_match
+    from app.matching.generation import GroundedExplainer
+    from app.matching.scoring import assess_job, make_match
     if not response.recommendations:
         return {'status': 'skipped_no_accepted_jobs', 'calls': 0}
     original = response.recommendations[0]

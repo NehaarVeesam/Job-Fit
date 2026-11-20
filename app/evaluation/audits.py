@@ -4,11 +4,11 @@ import json
 import re
 from datetime import date
 
-from app.constraints import hard_constraint
-from app.dataset_loader import CorpusOptions, prepare_corpus
-from app.generation import GroundedExplainer
+from app.matching.constraints import hard_constraint
+from app.corpus.dataset_loader import CorpusOptions, prepare_corpus
+from app.matching.generation import GroundedExplainer
 from app.schemas import RelevanceScore
-from app.scoring import assess_job
+from app.matching.scoring import assess_job
 
 
 def expectation_audit(suite, prepared_by_case, jobs):
@@ -100,7 +100,7 @@ def edge_audit(settings, full_jobs, prepared_by_case):
     condition = 'Open to 2025 and 2026 graduates only'
     checks.append({'check': 'unanswered_mandatory_condition_remains_unknown',
                    'passed': hard_constraint(condition, {}).status == 'unknown'})
-    from app.filters import job_passes_preferences
+    from app.retrieval.filters import job_passes_preferences
     from app.schemas import Preferences
     checks.append({'check': 'strict_unknown_work_mode_excluded',
                    'passed': not job_passes_preferences(by_id['syn_job_021'], Preferences(work_mode='hybrid', unknown_metadata_policy='exclude'))})

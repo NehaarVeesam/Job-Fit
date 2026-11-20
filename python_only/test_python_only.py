@@ -7,8 +7,8 @@ import unittest
 from pathlib import Path
 
 from app.config import PROJECT_ROOT, Settings
-from app.profile import load_prepared_jobs
-from app.dataset_loader import prepare_corpus, write_corpus
+from app.resumes.profile import load_prepared_jobs
+from app.corpus.dataset_loader import prepare_corpus, write_corpus
 from app.schemas import CandidateProfile, ParsedResume, Preferences, PreparedResume
 from python_only.engine import JobIndex, check_vectors, prepare_job
 

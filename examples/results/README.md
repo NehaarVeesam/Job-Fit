@@ -1,6 +1,6 @@
 # Actual synthetic demo outputs
 
-These files were exported from a successful `python scripts/run_demo.py` run:
+These files are published outputs from a synthetic demo run:
 
 - [AI match response](ai_match_response.json): two accepted jobs from all 250
   source jobs, with 66.7% and 50% required-skill coverage.
@@ -18,10 +18,7 @@ acceptance threshold was checked separately; an RRF value is not a cosine value,
 a skill-coverage percentage, or a hiring probability. Missing evidence is listed
 in `skills` with `status = not_evidenced_in_resume`, separated by requirement type.
 
-Run the demo locally to regenerate outputs under ignored
-`artifacts/portfolio_demo/`. Generated PDFs, profiles, full retrieval reports,
-vector indexes, and model weights are excluded from publication. PDF hashes can
-change when regenerated; the text-source checksums here identify the fixed inputs.
+The metadata records the original inputs and settings. The local resume CLI is documented in the [project README](../../README.md#run-locally).
 
 These demonstration outputs are distinct from the frozen 17-job evaluation panel
 and from the older hand-authored contract examples directly inside `examples/`.

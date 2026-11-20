@@ -17,8 +17,20 @@ def load_suite(directory, source_path):
     suite_path, judgments_path = directory / 'suite.json', directory / 'judgments.jsonl'
     suite = json.loads(suite_path.read_text())
     from app.config import PROJECT_ROOT
-    expected_files = {f'app/{name}.py' for name in ('profile','keyword_search','filters','scoring','constraints',
-                                                   'documents','generation','reranking','hybrid_retrieval','retrieval','matching','schemas')}
+    expected_files = {
+        'app/matching/constraints.py',
+        'app/matching/generation.py',
+        'app/matching/matcher.py',
+        'app/matching/scoring.py',
+        'app/resumes/profile.py',
+        'app/retrieval/dense.py',
+        'app/retrieval/documents.py',
+        'app/retrieval/filters.py',
+        'app/retrieval/hybrid.py',
+        'app/retrieval/keyword_search.py',
+        'app/retrieval/reranking.py',
+        'app/schemas.py',
+    }
     if set(suite.get('implementation_sha256', {})) != expected_files:
         raise ValueError('Frozen pipeline fingerprints are incomplete')
     if any(digest(PROJECT_ROOT / name) != value for name, value in suite['implementation_sha256'].items()):

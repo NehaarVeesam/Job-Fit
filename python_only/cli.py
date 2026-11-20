@@ -8,7 +8,7 @@ import time
 from pathlib import Path
 
 from app.config import get_settings
-from app.profile import load_prepared_jobs
+from app.resumes.profile import load_prepared_jobs
 from app.schemas import PreparedResume
 from python_only.engine import Encoder, JobIndex
 

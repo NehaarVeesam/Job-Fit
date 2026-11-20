@@ -12,7 +12,7 @@ from uuid import NAMESPACE_URL, uuid5
 
 from qdrant_client import QdrantClient, models
 
-from app.filters import eligible_ids, preference_warnings, qdrant_filter
+from app.retrieval.filters import eligible_ids, preference_warnings, qdrant_filter
 
 
 @dataclass

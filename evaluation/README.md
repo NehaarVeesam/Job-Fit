@@ -14,7 +14,6 @@ matching/retrieval settings were adjusted after inspecting outputs.
 - [Panel failure analysis](failure_report.md).
 - [Full 250-job diagnostics](full_corpus/results.md): incomplete judgment coverage,
   precision bounds, and undefined point metrics instead of fabricated negatives.
-- [Complete Module 8 guide](../docs/module_8_evaluation.md).
 
 Run `python -m app.evaluation.runner` from the project root after dataset/model
 preparation. It uses cached models, blocks network calls by default, and prints
