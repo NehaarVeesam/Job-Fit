@@ -4,7 +4,7 @@ JobFit is a step-by-step Python project for matching a PDF resume to a catalog o
 
 ## Current status
 
-Module 01 implements application settings, Pydantic models for jobs and candidate profiles, and a setup check. The next module will validate the full job catalog and write the prepared dataset and validation report.
+Module 01 provides application settings, Pydantic models for jobs and candidate profiles, and a setup check. Module 02 validates the full job catalog, detects duplicate job IDs, extracts skill evidence from job descriptions, and saves the prepared dataset. Module 03 will extract text and candidate evidence from PDF resumes.
 
 ## Setup on Windows
 
@@ -44,6 +44,36 @@ Sample resume skill: FastAPI | page 1
 Setup check passed.
 ```
 
+## Prepare the job catalog
+
+From the repository root with the virtual environment active, run:
+
+```powershell
+python -m app.dataset.dataset_loader
+```
+
+The loader uses Python’s standard library for file handling, duplicate detection, and skill text processing. Pydantic validates job records and serializes them to JSON. The loader keeps the first valid record for each job ID and records invalid and duplicate rows with their source line numbers.
+
+The default output directory is `artifacts/prepared/`. The loader stages all three files before moving them into that directory. Git ignores the generated outputs, so regenerate them after cloning the repository.
+
+| Output | Contents |
+| --- | --- |
+| `jobs.jsonl` | One validated job record per line. |
+| `skill_evidence.jsonl` | One record per listed required or preferred skill, with the job ID and an exact quote from the description. |
+| `validation_report.json` | Input, accepted, and rejected counts, the evidence count, and details of any rejected rows. |
+
+With the supplied dataset, expect:
+
+```text
+Total rows: 250
+Accepted jobs: 250
+Rejected rows: 0
+Skill evidence records: 1787
+Prepared dataset: artifacts\prepared
+```
+
+The evidence count is across job postings. A skill required by two jobs contributes two records.
+
 ## Project files
 
 | Path | Purpose |
@@ -51,6 +81,7 @@ Setup check passed.
 | [`app/config.py`](app/config.py) | Application settings and derived output paths. |
 | [`app/schemas.py`](app/schemas.py) | Validates job records, candidate facts, and resume evidence. |
 | [`app/cli/check.py`](app/cli/check.py) | Runs the Module 01 setup check. |
+| [`app/dataset/dataset_loader.py`](app/dataset/dataset_loader.py) | Validates the catalog, extracts skill evidence, and writes the prepared outputs. |
 | [`dataset/jobs_synthetic_250.jsonl`](dataset/jobs_synthetic_250.jsonl) | The 250 fictional AI/ML and software postings used for development. |
 | [`dataset/DATASET_CARD.md`](dataset/DATASET_CARD.md) | Describes the dataset, built-in test cases, and limitations. |
 

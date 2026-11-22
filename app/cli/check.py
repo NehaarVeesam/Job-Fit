@@ -1,7 +1,11 @@
+"""Run a smoke check for settings, the job dataset, and the resume models."""
+
 from app.config import Settings
 from app.schemas import CandidateProfile, JobRecord
 
-def main():
+
+def main() -> None:
+    """Validate the first dataset row and a sample profile, then print a summary."""
     settings = Settings()
 
     with settings.raw_jobs_path.open(encoding="utf-8") as dataset:
@@ -11,6 +15,7 @@ def main():
         raise SystemExit(f"Job dataset is empty: {settings.raw_jobs_path}")
 
     job = JobRecord.model_validate_json(first_line)
+    # Use sample evidence so this check can run before PDF parsing is available.
     profile = CandidateProfile.model_validate(
         {
             "skills": [
