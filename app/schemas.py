@@ -94,3 +94,70 @@ class CandidateProfile(BaseModel):
         if self.experience_years is not None and not self.experience_years_evidence:
             raise ValueError("Experience years require resume evidence")
         return self
+
+
+class ResumePage(BaseModel):
+    """Extracted text from one page of a resume."""
+
+    page: int = Field(ge=1)
+    text: str
+
+
+class ParsedResume(BaseModel):
+    """The original pages in order, including any blank pages."""
+
+    pages: list[ResumePage] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_pages(self) -> "ParsedResume":
+        """Check page numbering and require some extractable text."""
+        for expected_number, page in enumerate(self.pages, start=1):
+            if page.page != expected_number:
+                raise ValueError("Resume pages must be numbered consecutively from 1")
+
+        if not any(page.text.strip() for page in self.pages):
+            raise ValueError("The resume contains no extractable text")
+
+        return self
+
+
+class Preferences(BaseModel):
+    """Optional job preferences supplied by the candidate."""
+
+    target_role: str | None = None
+    location_city: str | None = None
+    work_mode: Literal["hybrid", "onsite", "remote"] | None = None
+
+
+class PreparedResume(BaseModel):
+    """Bundle the resume, its extracted facts, and the candidate's preferences.
+
+    PreparedResume
+    ├── parsed_resume       → page numbers and extracted text
+    ├── candidate_profile   → facts found in that text, with evidence
+    ├── preferences         → choices supplied by the candidate
+    └── retrieval_query     → search text
+    """
+
+    parsed_resume: ParsedResume
+    candidate_profile: CandidateProfile
+    preferences: Preferences = Field(default_factory=Preferences)
+    retrieval_query: str | None = None
+
+    @model_validator(mode="after")
+    def validate_evidence_quotes(self) -> "PreparedResume":
+        """Check that each evidence quote appears on its cited page."""
+        page_text = {page.page: page.text for page in self.parsed_resume.pages}
+        profile = self.candidate_profile
+
+        facts = profile.skills + profile.projects + profile.experience + profile.education
+        citations = list(profile.experience_years_evidence)
+        for fact in facts:
+            citations.extend(fact.evidence)
+
+        for evidence in citations:
+            text = page_text.get(evidence.page)
+            if text is None or evidence.quote not in text:
+                raise ValueError(f"Evidence quote was not found on page {evidence.page}")
+
+        return self

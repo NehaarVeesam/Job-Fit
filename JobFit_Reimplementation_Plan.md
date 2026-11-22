@@ -13,7 +13,7 @@ The CLI and FastAPI expose the same matching pipeline. BM25 can run against the 
 
 ## Current checkpoint
 
-The workspace contains the virtual environment, the synthetic dataset, [app/config.py](app/config.py), and [app/schemas.py](app/schemas.py) with the first version of `JobRecord`. We’re in Module 01. The next lesson introduces nested resume evidence and candidate profile models. We’ll add final match response models in Module 07, when we know which decisions and evidence they need to represent.
+Modules 01–03 are complete. The setup check validates the configuration and example models. The dataset loader prepares the catalog and its skill evidence. The resume CLI creates a `PreparedResume` with page text, a candidate profile, preferences, and a retrieval query. Next up is Module 04, where we’ll turn the validated jobs into searchable vectors. We’ll add final match response models in Module 07.
 
 ## 01. Configuration and data contracts
 

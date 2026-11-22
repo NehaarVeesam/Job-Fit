@@ -3,3 +3,6 @@
 __pycache__/
 *.pyc
 /artifacts/
+
+# Local resume PDFs placed in the project root.
+/*.pdf

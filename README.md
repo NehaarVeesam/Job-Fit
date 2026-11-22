@@ -4,7 +4,7 @@ JobFit is a step-by-step Python project for matching a PDF resume to a catalog o
 
 ## Current status
 
-Module 01 provides application settings, Pydantic models for jobs and candidate profiles, and a setup check. Module 02 validates the full job catalog, detects duplicate job IDs, extracts skill evidence from job descriptions, and saves the prepared dataset. Module 03 will extract text and candidate evidence from PDF resumes.
+Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 will build the dense job index.
 
 ## Setup on Windows
 
@@ -13,7 +13,7 @@ Run these commands in PowerShell from the repository root. Use Python 3.11 and r
 ```powershell
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install "pydantic-settings>=2,<3"
+python -m pip install "pydantic-settings>=2,<3" pymupdf
 ```
 
 The default configuration works with the supplied dataset. To configure local values, copy [`.env.example`](.env.example) to `.env` if you haven't created it yet.
@@ -74,6 +74,26 @@ Prepared dataset: artifacts\prepared
 
 The evidence count is across job postings. A skill required by two jobs contributes two records.
 
+## Prepare a resume
+
+Run the catalog preparation command first to generate the skill vocabulary. Then run the resume CLI with the path to a text-based PDF. Replace the example path and preferences with your own values.
+
+```powershell
+python -m app.cli.prepare_resume ".\path\to\resume.pdf" --target-role "Backend Engineer" --location-city "Bengaluru" --work-mode hybrid --output ".\artifacts\resume\prepared_resume.json"
+```
+
+The output contains the extracted pages, the candidate profile, the supplied preferences, and the retrieval query. JobFit checks every evidence quote against its cited page. The query combines the target role and extracted skills. Location and work mode stay available as search filters.
+
+You can inspect the query and profile in PowerShell:
+
+```powershell
+$prepared = Get-Content -Raw -Encoding UTF8 ".\artifacts\resume\prepared_resume.json" | ConvertFrom-Json
+$prepared.retrieval_query
+$prepared.candidate_profile.skills | Select-Object -ExpandProperty text
+```
+
+Omit `--output` to print the JSON in the terminal. Saved output includes the extracted resume text, so keep it under the Git-ignored `artifacts/` directory.
+
 ## Project files
 
 | Path | Purpose |
@@ -82,6 +102,9 @@ The evidence count is across job postings. A skill required by two jobs contribu
 | [`app/schemas.py`](app/schemas.py) | Validates job records, candidate facts, and resume evidence. |
 | [`app/cli/check.py`](app/cli/check.py) | Runs the Module 01 setup check. |
 | [`app/dataset/dataset_loader.py`](app/dataset/dataset_loader.py) | Validates the catalog, extracts skill evidence, and writes the prepared outputs. |
+| [`app/resumes/resume_parser.py`](app/resumes/resume_parser.py) | Extracts PDF text with its original page numbers. |
+| [`app/resumes/profile.py`](app/resumes/profile.py) | Builds the candidate profile and retrieval query. |
+| [`app/cli/prepare_resume.py`](app/cli/prepare_resume.py) | Runs resume preparation and returns the result as JSON. |
 | [`dataset/jobs_synthetic_250.jsonl`](dataset/jobs_synthetic_250.jsonl) | The 250 fictional AI/ML and software postings used for development. |
 | [`dataset/DATASET_CARD.md`](dataset/DATASET_CARD.md) | Describes the dataset, built-in test cases, and limitations. |
 
