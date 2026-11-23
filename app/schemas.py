@@ -127,16 +127,24 @@ class Preferences(BaseModel):
     target_role: str | None = None
     location_city: str | None = None
     work_mode: Literal["hybrid", "onsite", "remote"] | None = None
-
+    eligibility_answers: dict[str, StrictBool] = Field(default_factory=dict)
 
 class PreparedResume(BaseModel):
     """Bundle the resume, its extracted facts, and the candidate's preferences.
 
     PreparedResume
-    ├── parsed_resume       → page numbers and extracted text
-    ├── candidate_profile   → facts found in that text, with evidence
-    ├── preferences         → choices supplied by the candidate
-    └── retrieval_query     → search text
+    ├── parsed_resume → ParsedResume
+    │   └── pages
+    │       └── ResumePage
+    │           ├── page = 1
+    │           └── text = "Built RAG applications using Python, LangChain, and FastAPI."
+    ├── candidate_profile → CandidateProfile with extracted facts and evidence
+    ├── preferences → Preferences
+    │   ├── target_role = "Generative AI Engineer"
+    │   ├── location_city = "Bengaluru"
+    │   ├── work_mode = "hybrid"
+    │   └── eligibility_answers = {}
+    └── retrieval_query = "Generative AI Engineer Python LangChain RAG FastAPI"
     """
 
     parsed_resume: ParsedResume
@@ -161,3 +169,108 @@ class PreparedResume(BaseModel):
                 raise ValueError(f"Evidence quote was not found on page {evidence.page}")
 
         return self
+
+
+AssessmentStatus = Literal["met", "not_met", "unknown"]
+
+class ConstraintAssessment(BaseModel):
+    """The result of checking one job requirement against candidate evidence."""
+
+    requirement: str
+    status: AssessmentStatus
+    reason: str
+    resume_evidence: list[ResumeEvidence] = Field(default_factory=list)
+    candidate_answer: bool | None = None
+
+
+
+class SkillAssessment(BaseModel):
+    """One job skill and the evidence available on each side."""
+
+    skill: str
+    requirement_type: Literal["required", "preferred"]
+    matched: bool
+    job_quote: str
+    resume_evidence: list[ResumeEvidence] = Field(default_factory=list)
+
+
+class SkillCoverage(BaseModel):
+    """How many skills in one requirement group the resume supports."""
+
+    matched_count: int
+    total_count: int
+    percentage: float | None
+
+
+class JobSkillScore(BaseModel):
+    """The skill assessment for one job.
+
+    JobSkillScore
+    ├── required → SkillCoverage
+    │   ├── matched_count = 4
+    │   ├── total_count = 6
+    │   └── percentage = 66.7
+    ├── preferred → SkillCoverage
+    │   ├── matched_count = 0
+    │   ├── total_count = 3
+    │   └── percentage = 0.0
+    └── assessments
+        └── SkillAssessment (one example)
+            ├── skill = "FastAPI"
+            ├── requirement_type = "required"
+            ├── matched = True
+            ├── job_quote → the original job description line listing FastAPI
+            └── resume_evidence
+                └── ResumeEvidence
+                    ├── quote = "Built RAG applications using Python, LangChain, and FastAPI."
+                    └── page = 1
+    """
+
+    required: SkillCoverage
+    preferred: SkillCoverage
+    assessments: list[SkillAssessment]
+
+
+class JobAssessment(BaseModel):
+    """The requirements, skill coverage, and decision reasons for one job.
+
+    JobAssessment
+    ├── job → JobRecord with the description and requirements
+    ├── eligibility = "met"
+    ├── experience → ConstraintAssessment for the minimum years
+    ├── education → ConstraintAssessment for the degree requirement
+    ├── hard_constraints = []
+    ├── skill_score → JobSkillScore with required and preferred coverage
+    ├── rejection_reasons = []
+    └── warnings = []
+    """
+
+    job: JobRecord
+    eligibility: AssessmentStatus
+    experience: ConstraintAssessment | None
+    education: ConstraintAssessment
+    hard_constraints: list[ConstraintAssessment]
+    skill_score: JobSkillScore
+    rejection_reasons: list[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
+
+
+class MatchResponse(BaseModel):
+    """Recommendations and excluded jobs from one shortlist.
+
+    MatchResponse
+    ├── status = "matches_found"
+    ├── recommendations
+    │   └── JobAssessment
+    │       ├── job.job_id = "syn_job_001"
+    │       └── rejection_reasons = []
+    └── excluded
+        └── JobAssessment
+            ├── job.job_id = "syn_job_006"
+            └── rejection_reasons
+                └── "Hard requirement needs confirmation: Must be able to join within 60 days"
+    """
+
+    status: Literal["matches_found", "no_suitable_matches"]
+    recommendations: list[JobAssessment]
+    excluded: list[JobAssessment]
