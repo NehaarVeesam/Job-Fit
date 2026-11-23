@@ -13,7 +13,7 @@ The CLI and FastAPI expose the same matching pipeline. BM25 can run against the 
 
 ## Current checkpoint
 
-Modules 01–06 are complete. JobFit prepares the job catalog, extracts a candidate profile and query from a PDF resume, retrieves jobs with preference filters, and can rerank the shortlist with a cross-encoder. Next up is Module 07, where we’ll assess eligibility and use candidate evidence to score job fit.
+Modules 01–08 are complete. JobFit prepares the catalog, builds a candidate profile, retrieves and optionally reranks jobs, and applies eligibility and skill coverage rules. Recommended jobs can be explained using validated evidence, with optional Qwen selection and a template fallback. Qwen can also suggest resume citations for uncovered required skills. Next up is Module 09, where we’ll connect the workflow through a CLI and API.
 
 ## 01. Configuration and data contracts
 
@@ -71,13 +71,13 @@ Modules 01–06 are complete. JobFit prepares the job catalog, extracts a candid
 
 **Checkpoint.** Trace an eligible job, a job with a failed requirement, and a job with insufficient evidence. Verify the response when no job qualifies.
 
-## 08. Optional Qwen explanations
+## 08. Qwen explanations and semantic evidence review
 
-**What we’ll build.** Add a LangChain prompt and structured output model for Qwen. Generate a readable explanation from the strengths and gaps already recorded by the matcher. Validate the output against the evidence and use a deterministic explanation if generation is disabled or fails.
+**What we’ll build.** Add a LangChain prompt and structured output model for Qwen. Generate a readable explanation from the strengths and gaps already recorded by the matcher. Validate the output against the evidence and use a deterministic explanation if generation is disabled or fails. Ask Qwen to suggest resume lines for required skills missed by exact matching.
 
-**Why it matters.** Candidates get readable feedback grounded in the same evidence the matcher used. Acceptance remains a decision made by the matching rules.
+**Why it matters.** Candidates get readable feedback grounded in the same evidence the matcher used. Suggested resume lines can reveal skills described in different words. The matcher applies its own coverage and eligibility rules.
 
-**Checkpoint.** Compare explanations for the same match with generation on and off. Check that unsupported generated content triggers the fallback.
+**Checkpoint.** Compare explanations for the same match with generation on and off. Check that invalid evidence IDs trigger the fallback. Test semantic review with both a clear paraphrase and a partial or unrelated claim, and keep any classification failures visible.
 
 ## 09. CLI and FastAPI
 

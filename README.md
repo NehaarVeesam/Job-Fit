@@ -4,7 +4,7 @@ JobFit is a step-by-step Python project for matching a PDF resume to a catalog o
 
 ## Current status
 
-Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 adds BM25 and hybrid retrieval with city and work-mode filters. Module 06 reranks the shortlist with a cross-encoder. Module 07 will evaluate job requirements and candidate evidence.
+Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 adds BM25 and hybrid retrieval with city and work-mode filters. Module 06 reranks the shortlist with a cross-encoder. Module 07 assesses requirements and skill coverage. Module 08 explains recommendations and can suggest resume evidence with a local Qwen model. Module 09 will connect the full workflow.
 
 ## Setup on Windows
 
@@ -156,6 +156,28 @@ python -m app.cli.rerank_cli "Backend Engineer Python FastAPI" --mode hybrid --t
 
 The first reranker load downloads `BAAI/bge-reranker-v2-m3`. The command prints the order from retrieval, then scores each query and job description together and prints the new order. A movement like `3 -> 1` means a job moved from third to first. Both lists contain the same job IDs. The original rank and score are available on each reranked hit.
 
+## Match and explain a shortlist
+
+The matcher checks experience, education, and explicit hard requirements. It summarizes required and preferred skill coverage separately. The starting policy recommends jobs with at least 60% required skill coverage and excludes jobs with a failed requirement or an unanswered hard requirement.
+
+Install the explanation dependencies:
+
+```powershell
+python -m pip install langchain-openai
+```
+
+Given a job in `response.recommendations`, call `explain_recommendation(job_assessment)` to get a template explanation with the original job and resume quotes. To let Qwen choose the evidence to highlight, start Ollama and download the model. [Ollama on Windows](https://docs.ollama.com/windows)
+
+```powershell
+ollama pull qwen2.5:3b
+```
+
+Call `explain_recommendation(job_assessment, use_qwen=True)` to enable Qwen. It selects evidence IDs, and JobFit checks the IDs and renders the explanation. If Ollama is unavailable or the plan is invalid, the function uses the template.
+
+### Review suggested resume evidence
+
+Call `review_required_skill_gaps(job_assessment, prepared_resume)` to ask Qwen about required skills that exact matching missed. Each suggestion includes a status and, where available, the original resume quote and page number. The evidence review is advisory. JobFit checks that the cited line exists, and a person can review whether the quote supports the skill. Coverage and recommendations come from the matcher’s existing rules.
+
 ## Project files
 
 | Path | Purpose |
@@ -177,6 +199,11 @@ The first reranker load downloads `BAAI/bge-reranker-v2-m3`. The command prints 
 | [`app/retrieval/hybrid.py`](app/retrieval/hybrid.py) | Exposes all three search modes and combines rankings with RRF. |
 | [`app/retrieval/reranking.py`](app/retrieval/reranking.py) | Scores query–job pairs and preserves their original retrieval ranks and scores. |
 | [`app/cli/rerank_cli.py`](app/cli/rerank_cli.py) | Prints the shortlist before and after reranking. |
+| [`app/matching/constraints.py`](app/matching/constraints.py) | Checks experience, education, and hard requirements. |
+| [`app/matching/scoring.py`](app/matching/scoring.py) | Measures required and preferred skill coverage. |
+| [`app/matching/matcher.py`](app/matching/matcher.py) | Applies the recommendation policy and records decision reasons. |
+| [`app/matching/generation.py`](app/matching/generation.py) | Renders explanations from validated evidence selections. |
+| [`app/matching/semantic_evidence.py`](app/matching/semantic_evidence.py) | Suggests resume citations for uncovered required skills. |
 | [`dataset/jobs_synthetic_250.jsonl`](dataset/jobs_synthetic_250.jsonl) | The 250 fictional AI/ML and software postings used for development. |
 | [`dataset/DATASET_CARD.md`](dataset/DATASET_CARD.md) | Describes the dataset, built-in test cases, and limitations. |
 

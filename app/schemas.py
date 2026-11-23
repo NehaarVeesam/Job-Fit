@@ -274,3 +274,94 @@ class MatchResponse(BaseModel):
     status: Literal["matches_found", "no_suitable_matches"]
     recommendations: list[JobAssessment]
     excluded: list[JobAssessment]
+
+
+class ExplanationItem(BaseModel):
+    """An ID that lets the explanation refer to one skill assessment."""
+
+    evidence_id: str
+    assessment: SkillAssessment
+
+
+class ExplanationEvidence(BaseModel):
+    """The skill findings available for explaining one recommendation.
+
+    ExplanationEvidence
+    ├── job_id = "syn_job_001"
+    ├── job_title = "Generative AI Engineer"
+    ├── strengths
+    │   └── ExplanationItem
+    │       ├── evidence_id = "skill_1"
+    │       └── assessment → SkillAssessment for Python with resume evidence
+    └── gaps
+        └── ExplanationItem
+            ├── evidence_id = "skill_4"
+            └── assessment → SkillAssessment for Vector databases
+    """
+
+    job_id: str
+    job_title: str
+    strengths: list[ExplanationItem]
+    gaps: list[ExplanationItem]
+
+
+class ExplanationPlan(BaseModel):
+    """The evidence IDs Qwen selects for one job explanation."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    strength_ids: list[str] = Field(max_length=2)
+    gap_ids: list[str] = Field(max_length=2)
+
+
+class JobExplanation(BaseModel):
+    """A readable explanation and the plan used to create it.
+
+    JobExplanation
+    ├── source = "qwen_plan" or "template"
+    ├── plan → ExplanationPlan with the selected evidence IDs
+    └── text → Explanation with quotes and resume page numbers
+    """
+
+    source: Literal["qwen_plan", "template"]
+    plan: ExplanationPlan
+    text: str
+
+
+SemanticStatus = Literal["supported", "related", "unclear"]
+
+
+class SemanticEvidenceChoice(BaseModel):
+    """One model decision for the skill JobFit asked it to review."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    choice: str
+
+
+class SemanticSkillFinding(BaseModel):
+    """A skill finding with its IDs resolved to original resume quotes."""
+
+    skill: str
+    status: SemanticStatus
+    resume_evidence: list[ResumeEvidence]
+
+
+class SemanticEvidenceReport(BaseModel):
+    """The supplemental review of required skills for one job.
+
+    SemanticEvidenceReport
+    ├── job_id = "syn_job_008"
+    ├── status = "reviewed"
+    ├── findings
+    │   └── SemanticSkillFinding
+    │       ├── skill = "CI/CD"
+    │       ├── status = "supported"
+    │       └── resume_evidence → original quotes and page numbers
+    └── warning = None
+    """
+
+    job_id: str
+    status: Literal["reviewed", "partial", "not_needed", "unavailable"]
+    findings: list[SemanticSkillFinding] = Field(default_factory=list)
+    warning: str | None = None
