@@ -13,7 +13,7 @@ The CLI and FastAPI expose the same matching pipeline. BM25 can run against the 
 
 ## Current checkpoint
 
-Modules 01–04 are complete. JobFit prepares the job catalog, extracts a candidate profile and query from a PDF resume, and searches a persistent Qdrant collection built with BGE-M3. Next up is Module 05, where we’ll compare dense and BM25 retrieval, combine their rankings, and apply preference filters.
+Modules 01–05 are complete. JobFit prepares the job catalog, extracts a candidate profile and query from a PDF resume, and retrieves a shortlist using dense, BM25, or hybrid search with preference filters. Next up is Module 06, where we’ll rerank the shortlisted jobs with a cross-encoder.
 
 ## 01. Configuration and data contracts
 

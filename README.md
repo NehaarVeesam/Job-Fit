@@ -4,7 +4,7 @@ JobFit is a step-by-step Python project for matching a PDF resume to a catalog o
 
 ## Current status
 
-Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 will add keyword and hybrid search.
+Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 adds BM25 and hybrid retrieval with city and work-mode filters. Module 06 will rerank the shortlist.
 
 ## Setup on Windows
 
@@ -113,6 +113,39 @@ The first model load downloads BGE-M3. The build embeds each prepared job descri
 
 The search command embeds the query with the same model and prints ranked jobs with cosine similarity scores. You can pass the `retrieval_query` from your prepared resume as the search text.
 
+## Compare BM25, dense, and hybrid retrieval
+
+Install BM25 support and prepare the catalog:
+
+```powershell
+python -m pip install rank-bm25
+python -m app.dataset.dataset_loader
+```
+
+Dense and hybrid searches also use the Qdrant index. Rebuild it after changing the prepared job catalog.
+
+```powershell
+@'
+from app.config import Settings
+from app.retrieval.hybrid import retrieve_candidates
+from app.schemas import Preferences
+
+count, hits = retrieve_candidates(
+    "Backend Engineer Python FastAPI",
+    3,
+    Settings().prepared_jobs_path,
+    mode="hybrid",
+    preferences=Preferences(location_city="Bengaluru", work_mode="hybrid"),
+)
+
+print(f"Catalog jobs: {count}")
+for document, score in hits:
+    print(document.metadata["job_id"], document.metadata["title"], round(score, 5))
+'@ | python -
+```
+
+Use `mode="bm25"` for keyword scores or `mode="dense"` for cosine similarity scores. Hybrid mode combines the two rankings using Reciprocal Rank Fusion. Both searches apply the city and work-mode filters before taking their final results.
+
 ## Project files
 
 | Path | Purpose |
@@ -128,6 +161,10 @@ The search command embeds the query with the same model and prints ranked jobs w
 | [`app/retrieval/embeddings.py`](app/retrieval/embeddings.py) | Configures BGE-M3 for job and query embeddings. |
 | [`app/retrieval/vector_index.py`](app/retrieval/vector_index.py) | Builds and verifies the local Qdrant collection. |
 | [`app/cli/dense_cli.py`](app/cli/dense_cli.py) | Runs a dense search and prints ranked jobs with similarity scores. |
+| [`app/retrieval/dense.py`](app/retrieval/dense.py) | Searches the persistent Qdrant index. |
+| [`app/retrieval/keyword_search.py`](app/retrieval/keyword_search.py) | Tokenizes job text and ranks keyword matches with BM25. |
+| [`app/retrieval/filters.py`](app/retrieval/filters.py) | Applies city and work-mode preferences to job metadata. |
+| [`app/retrieval/hybrid.py`](app/retrieval/hybrid.py) | Exposes all three search modes and combines rankings with RRF. |
 | [`dataset/jobs_synthetic_250.jsonl`](dataset/jobs_synthetic_250.jsonl) | The 250 fictional AI/ML and software postings used for development. |
 | [`dataset/DATASET_CARD.md`](dataset/DATASET_CARD.md) | Describes the dataset, built-in test cases, and limitations. |
 
