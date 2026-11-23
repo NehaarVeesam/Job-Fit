@@ -4,7 +4,7 @@ JobFit is a step-by-step Python project for matching a PDF resume to a catalog o
 
 ## Current status
 
-Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 will build the dense job index.
+Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 will add keyword and hybrid search.
 
 ## Setup on Windows
 
@@ -94,6 +94,25 @@ $prepared.candidate_profile.skills | Select-Object -ExpandProperty text
 
 Omit `--output` to print the JSON in the terminal. Saved output includes the extracted resume text, so keep it under the Git-ignored `artifacts/` directory.
 
+## Build and search the vector index
+
+Prepare the job catalog first, then install the dependencies for dense search:
+
+```powershell
+python -m pip install langchain-core langchain-huggingface sentence-transformers langchain-qdrant
+```
+
+Build the index and run a sample search:
+
+```powershell
+python -m app.retrieval.vector_index
+python -m app.cli.dense_cli "Backend Engineer Python FastAPI" --top-k 3
+```
+
+The first model load downloads BGE-M3. The build embeds each prepared job description as a 1,024-dimensional vector and saves it with the job metadata in the local `jobfit_jobs` collection under `artifacts/qdrant/`. The supplied catalog produces 250 points. Rebuilding updates points by their stable job IDs.
+
+The search command embeds the query with the same model and prints ranked jobs with cosine similarity scores. You can pass the `retrieval_query` from your prepared resume as the search text.
+
 ## Project files
 
 | Path | Purpose |
@@ -105,6 +124,10 @@ Omit `--output` to print the JSON in the terminal. Saved output includes the ext
 | [`app/resumes/resume_parser.py`](app/resumes/resume_parser.py) | Extracts PDF text with its original page numbers. |
 | [`app/resumes/profile.py`](app/resumes/profile.py) | Builds the candidate profile and retrieval query. |
 | [`app/cli/prepare_resume.py`](app/cli/prepare_resume.py) | Runs resume preparation and returns the result as JSON. |
+| [`app/retrieval/documents.py`](app/retrieval/documents.py) | Converts validated job records to LangChain documents. |
+| [`app/retrieval/embeddings.py`](app/retrieval/embeddings.py) | Configures BGE-M3 for job and query embeddings. |
+| [`app/retrieval/vector_index.py`](app/retrieval/vector_index.py) | Builds and verifies the local Qdrant collection. |
+| [`app/cli/dense_cli.py`](app/cli/dense_cli.py) | Runs a dense search and prints ranked jobs with similarity scores. |
 | [`dataset/jobs_synthetic_250.jsonl`](dataset/jobs_synthetic_250.jsonl) | The 250 fictional AI/ML and software postings used for development. |
 | [`dataset/DATASET_CARD.md`](dataset/DATASET_CARD.md) | Describes the dataset, built-in test cases, and limitations. |
 

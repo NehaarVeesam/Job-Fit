@@ -13,7 +13,7 @@ The CLI and FastAPI expose the same matching pipeline. BM25 can run against the 
 
 ## Current checkpoint
 
-Modules 01–03 are complete. The setup check validates the configuration and example models. The dataset loader prepares the catalog and its skill evidence. The resume CLI creates a `PreparedResume` with page text, a candidate profile, preferences, and a retrieval query. Next up is Module 04, where we’ll turn the validated jobs into searchable vectors. We’ll add final match response models in Module 07.
+Modules 01–04 are complete. JobFit prepares the job catalog, extracts a candidate profile and query from a PDF resume, and searches a persistent Qdrant collection built with BGE-M3. Next up is Module 05, where we’ll compare dense and BM25 retrieval, combine their rankings, and apply preference filters.
 
 ## 01. Configuration and data contracts
 
