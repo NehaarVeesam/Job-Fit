@@ -4,7 +4,7 @@ JobFit is a step-by-step Python project for matching a PDF resume to a catalog o
 
 ## Current status
 
-Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 adds BM25 and hybrid retrieval with city and work-mode filters. Module 06 will rerank the shortlist.
+Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 adds BM25 and hybrid retrieval with city and work-mode filters. Module 06 reranks the shortlist with a cross-encoder. Module 07 will evaluate job requirements and candidate evidence.
 
 ## Setup on Windows
 
@@ -146,6 +146,16 @@ for document, score in hits:
 
 Use `mode="bm25"` for keyword scores or `mode="dense"` for cosine similarity scores. Hybrid mode combines the two rankings using Reciprocal Rank Fusion. Both searches apply the city and work-mode filters before taking their final results.
 
+## Rerank a shortlist
+
+Run this after preparing the catalog and building the dense index:
+
+```powershell
+python -m app.cli.rerank_cli "Backend Engineer Python FastAPI" --mode hybrid --top-k 3 --location-city "Bengaluru" --work-mode hybrid
+```
+
+The first reranker load downloads `BAAI/bge-reranker-v2-m3`. The command prints the order from retrieval, then scores each query and job description together and prints the new order. A movement like `3 -> 1` means a job moved from third to first. Both lists contain the same job IDs. The original rank and score are available on each reranked hit.
+
 ## Project files
 
 | Path | Purpose |
@@ -165,6 +175,8 @@ Use `mode="bm25"` for keyword scores or `mode="dense"` for cosine similarity sco
 | [`app/retrieval/keyword_search.py`](app/retrieval/keyword_search.py) | Tokenizes job text and ranks keyword matches with BM25. |
 | [`app/retrieval/filters.py`](app/retrieval/filters.py) | Applies city and work-mode preferences to job metadata. |
 | [`app/retrieval/hybrid.py`](app/retrieval/hybrid.py) | Exposes all three search modes and combines rankings with RRF. |
+| [`app/retrieval/reranking.py`](app/retrieval/reranking.py) | Scores query–job pairs and preserves their original retrieval ranks and scores. |
+| [`app/cli/rerank_cli.py`](app/cli/rerank_cli.py) | Prints the shortlist before and after reranking. |
 | [`dataset/jobs_synthetic_250.jsonl`](dataset/jobs_synthetic_250.jsonl) | The 250 fictional AI/ML and software postings used for development. |
 | [`dataset/DATASET_CARD.md`](dataset/DATASET_CARD.md) | Describes the dataset, built-in test cases, and limitations. |
 
