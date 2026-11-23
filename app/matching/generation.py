@@ -78,13 +78,33 @@ def plan_explanation(evidence: ExplanationEvidence) -> ExplanationPlan:
         ]
     ).partial(format_instructions=output_parser.get_format_instructions())
 
+    schema = ExplanationPlan.model_json_schema()
+    properties = schema["properties"]
+
+    # Restrict each list to the evidence available for this job.
+
+    for field_name, items in (
+        ("strength_ids", evidence.strengths),
+        ("gap_ids", evidence.gaps),
+    ):
+        allowed_ids = [item.evidence_id for item in items]
+
+        if not allowed_ids:
+            properties[field_name] = {"const": []}
+            continue
+
+        field = properties[field_name]
+        field["items"]["enum"] = allowed_ids
+        field["minItems"] = 1
+        field["maxItems"] = min(field["maxItems"], len(allowed_ids))
+
     model = create_qwen_model().bind(
-        # Give Ollama the list limits before it generates the response.
+        # Give Ollama the allowed IDs and list limits before it generates the response.
         response_format={
             "type": "json_schema",
             "json_schema": {
                 "name": "explanation_plan",
-                "schema": ExplanationPlan.model_json_schema(),
+                "schema": schema,
             },
         },
     )

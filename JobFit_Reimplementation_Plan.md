@@ -13,7 +13,7 @@ The CLI and FastAPI expose the same matching pipeline. BM25 can run against the 
 
 ## Current checkpoint
 
-Modules 01–08 are complete. JobFit prepares the catalog, builds a candidate profile, retrieves and optionally reranks jobs, and applies eligibility and skill coverage rules. Recommended jobs can be explained using validated evidence, with optional Qwen selection and a template fallback. Qwen can also suggest resume citations for uncovered required skills. Next up is Module 09, where we’ll connect the workflow through a CLI and API.
+Modules 01–08 are complete. Module 09 connects the PDF-to-recommendations workflow through a CLI and FastAPI. A successful BM25 API response matched the saved CLI response. The remaining Module 09 checks cover no matches and an invalid PDF upload. Module 10 will measure retrieval and recommendation quality on labeled cases.
 
 ## 01. Configuration and data contracts
 

@@ -365,3 +365,25 @@ class SemanticEvidenceReport(BaseModel):
     status: Literal["reviewed", "partial", "not_needed", "unavailable"]
     findings: list[SemanticSkillFinding] = Field(default_factory=list)
     warning: str | None = None
+
+
+class ResumeMatchResult(BaseModel):
+    """The output of one PDF-to-recommendations run.
+
+    ResumeMatchResult
+    ├── retrieval_query → text used to search for jobs
+    ├── catalog_size → number of prepared jobs
+    ├── ranked_job_ids → shortlist in the order sent to the matcher
+    ├── match_response → recommended and excluded jobs with reasons
+    ├── explanations → readable explanations keyed by job ID
+    ├── semantic_reviews → advisory evidence findings keyed by job ID
+    └── warnings → issues affecting the run, such as an empty search query
+    """
+
+    retrieval_query: str | None
+    catalog_size: int
+    ranked_job_ids: list[str]
+    match_response: MatchResponse
+    explanations: dict[str, JobExplanation] = Field(default_factory=dict)
+    semantic_reviews: dict[str, SemanticEvidenceReport] = Field(default_factory=dict)
+    warnings: list[str] = Field(default_factory=list)

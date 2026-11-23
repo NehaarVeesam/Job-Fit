@@ -4,7 +4,7 @@ JobFit is a step-by-step Python project for matching a PDF resume to a catalog o
 
 ## Current status
 
-Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 adds BM25 and hybrid retrieval with city and work-mode filters. Module 06 reranks the shortlist with a cross-encoder. Module 07 assesses requirements and skill coverage. Module 08 explains recommendations and can suggest resume evidence with a local Qwen model. Module 09 will connect the full workflow.
+Module 01 provides application settings, data models, and a setup check. Module 02 validates the job catalog and saves the prepared jobs and skill evidence. Module 03 parses PDF resumes, builds evidence-backed candidate profiles, and creates a search query. Module 04 builds and searches the local dense job index with BGE-M3 and Qdrant. Module 05 adds BM25 and hybrid retrieval with city and work-mode filters. Module 06 reranks the shortlist with a cross-encoder. Module 07 assesses requirements and skill coverage. Module 08 explains recommendations and can suggest resume evidence with a local Qwen model. Module 09 runs the full workflow through a CLI and FastAPI. Module 10 will evaluate retrieval and matching quality.
 
 ## Setup on Windows
 
@@ -178,6 +178,31 @@ Call `explain_recommendation(job_assessment, use_qwen=True)` to enable Qwen. It 
 
 Call `review_required_skill_gaps(job_assessment, prepared_resume)` to ask Qwen about required skills that exact matching missed. Each suggestion includes a status and, where available, the original resume quote and page number. The evidence review is advisory. JobFit checks that the cited line exists, and a person can review whether the quote supports the skill. Coverage and recommendations come from the matcher’s existing rules.
 
+## Run the full matching workflow
+
+After preparing the catalog, run the CLI with the path to a text-based PDF:
+
+```powershell
+python -m app.cli.run_resume ".\path\to\resume.pdf" --mode bm25 --top-k 3 --output ".\artifacts\match\result.json"
+```
+
+The CLI builds the query from resume skills. Pass `--target-role` to add a role, or `--location-city` and `--work-mode` to filter the shortlist. Use a new filename for each saved result, or omit `--output` to print JSON. Dense and hybrid modes use the local Qdrant index. The `--rerank`, `--use-qwen`, and `--review-semantic-evidence` flags enable the optional model steps.
+
+To run the same pipeline through FastAPI:
+
+```powershell
+python -m pip install fastapi uvicorn python-multipart
+python -m uvicorn app.api.main:app --host 127.0.0.1 --port 8000 --workers 1
+```
+
+Open `http://127.0.0.1:8000/docs`, select `POST /match`, and upload the PDF in the `resume` field. For a BM25 run, use this JSON in `match_request`:
+
+```json
+{"options": {"mode": "bm25", "top_k": 3}}
+```
+
+`GET /health` confirms that the server is responding. `GET /ready?mode=bm25` checks for the files needed by that mode. A successful match request returns the shortlist, recommendations, exclusions, and explanations. A valid request with no matching jobs returns HTTP 200 with `no_suitable_matches`. An unreadable PDF returns HTTP 422.
+
 ## Project files
 
 | Path | Purpose |
@@ -204,6 +229,9 @@ Call `review_required_skill_gaps(job_assessment, prepared_resume)` to ask Qwen a
 | [`app/matching/matcher.py`](app/matching/matcher.py) | Applies the recommendation policy and records decision reasons. |
 | [`app/matching/generation.py`](app/matching/generation.py) | Renders explanations from validated evidence selections. |
 | [`app/matching/semantic_evidence.py`](app/matching/semantic_evidence.py) | Suggests resume citations for uncovered required skills. |
+| [`app/matching/pipeline.py`](app/matching/pipeline.py) | Runs the shared PDF-to-recommendations workflow. |
+| [`app/cli/run_resume.py`](app/cli/run_resume.py) | Runs matching from the terminal and returns JSON. |
+| [`app/api/main.py`](app/api/main.py) | Accepts PDF uploads and reports health and readiness. |
 | [`dataset/jobs_synthetic_250.jsonl`](dataset/jobs_synthetic_250.jsonl) | The 250 fictional AI/ML and software postings used for development. |
 | [`dataset/DATASET_CARD.md`](dataset/DATASET_CARD.md) | Describes the dataset, built-in test cases, and limitations. |
 
