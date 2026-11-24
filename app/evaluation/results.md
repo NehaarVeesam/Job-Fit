@@ -21,7 +21,7 @@ The starter suite uses two synthetic resumes, five manual job judgments, and a s
 | Dense | 2/3 | 1.000 | 0.500 | 1.000 | 2 |
 | Hybrid | 3/3 | 1.000 | 0.750 | 1.000 | 3 |
 
-BM25 and hybrid retrieved all three jobs labeled suitable. Known relevant recall was 0.750 because the answer key also included one adjacent MLOps role, giving four known relevant jobs in total. Dense returned two known relevant jobs and one unjudged job. Judged precision and nDCG describe only the labeled portion of the shortlist.
+BM25 and hybrid retrieved all three jobs labeled suitable. Known relevant recall was 0.750 because the ground truth also included one adjacent MLOps role, giving four known relevant jobs in total. Dense returned two known relevant jobs and one unjudged job. Judged precision and nDCG describe only the labeled portion of the shortlist.
 
 ## No-match behavior
 
@@ -39,33 +39,62 @@ All six runs produced the expected match or no-match outcome. No job labeled uns
 
 To reproduce the retrieval and matching results, run `python -m app.evaluation.runner --mode all` from the project root after preparing the catalog and building the local Qdrant index.
 
-## Held-out benchmark
+## Full-catalog benchmark
 
-The benchmark uses 12 synthetic resumes and a panel of 17 jobs drawn from the 250-job catalog. Each of the 204 resume–job pairs has an assistant-authored suitability grade. Four resumes form the development split and eight form the held-out split. All four variants use the same matching rules after retrieval.
+Six [synthetic resumes](../../evaluation/full_catalog_resumes.json) cover RAG, MLOps, FastAPI, Spark data engineering, Playwright QA, and Android. Each resume ran through JobFit as a PDF with all four retrieval variants. All 24 runs searched 250 jobs and assessed the top five with the same matching rules and template explanations.
 
-| Retrieval variant | Mean nDCG@5 | Strict accepted precision | Expected match outcomes |
-| --- | ---: | ---: | ---: |
-| BM25 | 1.000 | 72.7% | 8/8 |
-| Dense | 0.872 | 70.0% | 7/8 |
-| Hybrid | 0.962 | 72.7% | 8/8 |
-| Hybrid + reranker | 1.000 | 72.7% | 8/8 |
+The top-five outputs contained 54 unique resume–job pairs after counting repeated jobs for the same resume once. The [ground truth](../../evaluation/full_catalog_judgments.json) records one assistant-authored grade and evidence rationale per pair. Grade 2 means suitable, 1 means partial, and 0 means unsuitable. Each variant is scored against the same ground truth. Unreturned jobs are outside the scope of the judgments.
 
-Reranking improved hybrid's top-five ordering and tied BM25 on this panel. Mean nDCG@5 measures ranking quality over cases with at least one job graded partial or fully suitable. Strict accepted precision counts only recommendations labeled fully suitable. All four variants recommended some partial matches. Dense retrieval also left the fully suitable `syn_job_141` outside the `junior_mlops` shortlist.
+| Variant | nDCG@5 | Known suitable retrieved | Strict recommendation precision | Citation errors |
+| --- | ---: | ---: | ---: | ---: |
+| BM25 | 0.959 | 7/7 | 7/13 | 0 |
+| Dense | 0.683 | 6/7 | 6/7 | 0 |
+| Hybrid | 0.894 | 7/7 | 7/11 | 0 |
+| Hybrid + reranker | 0.934 | 7/7 | 7/11 | 0 |
 
-## Development benchmark
+- **nDCG@5** rewards higher positions for suitable and partial jobs. The ideal order comes from the judged results for that resume across all four variants.
+- **Known suitable retrieved** counts how many of the seven grade-2 pairs each variant retrieved.
+- **Strict recommendation precision** counts grade-2 jobs among the final recommendations.
+- **Citation errors** counts matching evidence quotes that could not be found in their cited sources.
 
-| Retrieval variant | Mean nDCG@5 | Strict accepted precision | Expected match outcomes |
-| --- | ---: | ---: | ---: |
-| BM25 | 1.000 | 50.0% | 4/4 |
-| Dense | 0.766 | 50.0% | 4/4 |
-| Hybrid | 0.964 | 50.0% | 4/4 |
-| Hybrid + reranker | 1.000 | 50.0% | 4/4 |
+Reranking moved the suitable Spark job (`syn_job_073`) from second to first. Dense search left it outside the top five, so it was never assessed. All 24 runs had zero citation errors.
 
-## Reproduce the benchmark
+### Outputs by resume
 
-Prepare the job catalog, then run both splits from the project root.
+| Resume | Variant | Top five | Final recommendations |
+| --- | --- | --- | --- |
+| rag_evaluation | BM25 | syn_job_105, syn_job_109, syn_job_001, syn_job_136, syn_job_152 | syn_job_105, syn_job_109, syn_job_001, syn_job_136 |
+| rag_evaluation | Dense | syn_job_002, syn_job_132, syn_job_107, syn_job_105, syn_job_023 | syn_job_105 |
+| rag_evaluation | Hybrid | syn_job_105, syn_job_002, syn_job_109, syn_job_136, syn_job_107 | syn_job_105, syn_job_109, syn_job_136 |
+| rag_evaluation | Hybrid + reranker | syn_job_105, syn_job_109, syn_job_002, syn_job_107, syn_job_136 | syn_job_105, syn_job_109, syn_job_136 |
+| ml_platform | BM25 | syn_job_008, syn_job_140, syn_job_141, syn_job_067, syn_job_071 | syn_job_008, syn_job_140, syn_job_141, syn_job_067 |
+| ml_platform | Dense | syn_job_008, syn_job_140, syn_job_046, syn_job_044, syn_job_165 | syn_job_008, syn_job_140 |
+| ml_platform | Hybrid | syn_job_008, syn_job_140, syn_job_036, syn_job_034, syn_job_046 | syn_job_008, syn_job_140 |
+| ml_platform | Hybrid + reranker | syn_job_008, syn_job_140, syn_job_034, syn_job_036, syn_job_046 | syn_job_008, syn_job_140 |
+| fastapi_service | BM25 | syn_job_177, syn_job_062, syn_job_099, syn_job_197, syn_job_051 | syn_job_177 |
+| fastapi_service | Dense | syn_job_177, syn_job_183, syn_job_001, syn_job_180, syn_job_109 | syn_job_177 |
+| fastapi_service | Hybrid | syn_job_177, syn_job_062, syn_job_197, syn_job_180, syn_job_178 | syn_job_177, syn_job_178 |
+| fastapi_service | Hybrid + reranker | syn_job_177, syn_job_197, syn_job_178, syn_job_062, syn_job_180 | syn_job_177, syn_job_178 |
+| spark_data | BM25 | syn_job_073, syn_job_100, syn_job_006, syn_job_074, syn_job_211 | syn_job_073 |
+| spark_data | Dense | syn_job_074, syn_job_164, syn_job_075, syn_job_031, syn_job_077 | None |
+| spark_data | Hybrid | syn_job_074, syn_job_073, syn_job_077, syn_job_100, syn_job_164 | syn_job_073 |
+| spark_data | Hybrid + reranker | syn_job_073, syn_job_100, syn_job_077, syn_job_074, syn_job_164 | syn_job_073 |
+| playwright_qa | BM25 | syn_job_083, syn_job_218, syn_job_219, syn_job_067, syn_job_243 | syn_job_083 |
+| playwright_qa | Dense | syn_job_250, syn_job_083, syn_job_062, syn_job_167, syn_job_093 | syn_job_083 |
+| playwright_qa | Hybrid | syn_job_083, syn_job_250, syn_job_082, syn_job_093, syn_job_218 | syn_job_083 |
+| playwright_qa | Hybrid + reranker | syn_job_083, syn_job_218, syn_job_082, syn_job_093, syn_job_250 | syn_job_083 |
+| android_compose | BM25 | syn_job_078, syn_job_213, syn_job_217, syn_job_181, syn_job_079 | syn_job_078, syn_job_213 |
+| android_compose | Dense | syn_job_078, syn_job_181, syn_job_217, syn_job_186, syn_job_213 | syn_job_078, syn_job_213 |
+| android_compose | Hybrid | syn_job_078, syn_job_181, syn_job_217, syn_job_213, syn_job_186 | syn_job_078, syn_job_213 |
+| android_compose | Hybrid + reranker | syn_job_078, syn_job_213, syn_job_217, syn_job_181, syn_job_186 | syn_job_078, syn_job_213 |
+
+### Reproduce the benchmark
+
+After preparing the catalog and building the Qdrant index, run:
 
 ```sh
-python -m app.evaluation.benchmark --split dev
-python -m app.evaluation.benchmark --split heldout
+python -m app.evaluation.full_catalog collect
+python -m app.evaluation.full_catalog score
 ```
+
+The collection step saves the outputs under `artifacts/evaluation/`. If a future run returns a new pair, add its judgment before scoring.

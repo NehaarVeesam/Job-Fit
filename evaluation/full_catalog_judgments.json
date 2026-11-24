@@ -1,0 +1,230 @@
+{
+  "rag_evaluation": {
+    "syn_job_001": {
+      "grade": 1,
+      "reason": "The resume shows Python, LangChain, RAG, and vector databases, with no evidence for prompt engineering or FastAPI."
+    },
+    "syn_job_002": {
+      "grade": 1,
+      "reason": "RAG and LLM evaluation fit the role, but the resume shows three years against a five-year minimum and lacks parts of the stack."
+    },
+    "syn_job_023": {
+      "grade": 1,
+      "reason": "Hybrid search work transfers, but learning to rank, Elasticsearch, and the role's other search-ranking techniques are unsubstantiated."
+    },
+    "syn_job_105": {
+      "grade": 2,
+      "reason": "All six required skills are present, including hybrid search and LLM evaluation. The resume exceeds the two-year minimum."
+    },
+    "syn_job_107": {
+      "grade": 1,
+      "reason": "Python and LangChain fit, but prompt engineering, structured output, and FastAPI are absent."
+    },
+    "syn_job_109": {
+      "grade": 1,
+      "reason": "Python, LangChain, RAG, and vector databases match. FastAPI and prompt engineering are missing, as for the equivalent panel role."
+    },
+    "syn_job_132": {
+      "grade": 1,
+      "reason": "Python and LLM evaluation match. The resume does not establish annotation guidelines or statistics."
+    },
+    "syn_job_136": {
+      "grade": 1,
+      "reason": "Python, vector databases, and hybrid search fit. Embeddings and cross-encoder reranking are not explicit."
+    },
+    "syn_job_152": {
+      "grade": 1,
+      "reason": "RAG and evaluation overlap, but the resume lacks graph expertise and falls short of the experience minimum."
+    }
+  },
+  "ml_platform": {
+    "syn_job_008": {
+      "grade": 2,
+      "reason": "The resume confirms Python, Docker, Kubernetes, MLflow, CI/CD, and AWS, with four years of experience."
+    },
+    "syn_job_034": {
+      "grade": 1,
+      "reason": "Python and Kubernetes fit ML platform work. The resume falls short on experience and lacks Go, Kubeflow, and feature stores."
+    },
+    "syn_job_036": {
+      "grade": 0,
+      "reason": "Model monitoring overlaps, but the resume has no credit-risk modelling, XGBoost, or SHAP evidence."
+    },
+    "syn_job_044": {
+      "grade": 0,
+      "reason": "The resume covers ML infrastructure. It does not show bioinformatics workflows or Nextflow."
+    },
+    "syn_job_046": {
+      "grade": 0,
+      "reason": "Python overlaps, but the resume does not show SQL, dbt, or analytics data modelling."
+    },
+    "syn_job_067": {
+      "grade": 1,
+      "reason": "AWS, container orchestration, and CI/CD fit DevOps. Terraform and Linux are not supported by the resume."
+    },
+    "syn_job_071": {
+      "grade": 1,
+      "reason": "Docker and AWS fit some junior DevOps duties. Linux, Git, and Bash are missing."
+    },
+    "syn_job_140": {
+      "grade": 2,
+      "reason": "The resume supports all required platform skills, including model monitoring, and exceeds the experience minimum."
+    },
+    "syn_job_141": {
+      "grade": 1,
+      "reason": "Python, Docker, and CI/CD overlap, but the resume lacks Linux and Git evidence for this role."
+    },
+    "syn_job_165": {
+      "grade": 0,
+      "reason": "The resume does not show anomaly detection, time-series forecasting, or IoT sensor work."
+    }
+  },
+  "fastapi_service": {
+    "syn_job_001": {
+      "grade": 0,
+      "reason": "Python and FastAPI overlap, but the role centers on RAG, LangChain, and generative AI experience the resume does not show."
+    },
+    "syn_job_051": {
+      "grade": 1,
+      "reason": "Python, PostgreSQL, and REST APIs align. Django, Redis, and Celery are missing."
+    },
+    "syn_job_062": {
+      "grade": 1,
+      "reason": "Python, FastAPI, and PostgreSQL fit the backend half. React, TypeScript, Docker, and the third year are unsupported."
+    },
+    "syn_job_099": {
+      "grade": 1,
+      "reason": "Python and Git overlap, but the resume does not confirm the internship's six-month full-time requirement."
+    },
+    "syn_job_109": {
+      "grade": 0,
+      "reason": "The resume shows API development with Python and FastAPI but no generative AI, RAG, or LangChain work."
+    },
+    "syn_job_177": {
+      "grade": 2,
+      "reason": "The resume supports all required Python, FastAPI, PostgreSQL, REST API, and Git skills and exceeds the experience minimum."
+    },
+    "syn_job_178": {
+      "grade": 1,
+      "reason": "Python, REST APIs, and Git transfer. The resume shows FastAPI and PostgreSQL rather than Flask and MySQL."
+    },
+    "syn_job_180": {
+      "grade": 1,
+      "reason": "REST APIs and PostgreSQL transfer from the Python backend work. The resume gives no Go experience."
+    },
+    "syn_job_183": {
+      "grade": 1,
+      "reason": "The resume supports Python and REST APIs. Django, PostGIS, and Celery are absent."
+    },
+    "syn_job_197": {
+      "grade": 1,
+      "reason": "FastAPI and PostgreSQL fit the backend stack, but the resume falls short on years, frontend skills, and the location confirmation."
+    }
+  },
+  "spark_data": {
+    "syn_job_006": {
+      "grade": 0,
+      "reason": "Spark, SQL, and Python overlap, but fraud modelling and required experience are absent."
+    },
+    "syn_job_031": {
+      "grade": 0,
+      "reason": "Python overlaps, but pipeline work does not establish agentic workflows, tool calling, or prompt engineering."
+    },
+    "syn_job_073": {
+      "grade": 2,
+      "reason": "The resume covers Python, SQL, Spark, Airflow, data modelling, and AWS and exceeds the experience minimum."
+    },
+    "syn_job_074": {
+      "grade": 1,
+      "reason": "Spark, SQL, Python, and modelling overlap. The resume lacks Kafka and Databricks and has fewer than five years."
+    },
+    "syn_job_075": {
+      "grade": 1,
+      "reason": "Python, SQL, and Airflow fit, but Snowflake and dbt are missing and the location condition is unanswered."
+    },
+    "syn_job_077": {
+      "grade": 1,
+      "reason": "Pipeline work and Python and SQL support an adjacent associate role. The resume does not establish pandas."
+    },
+    "syn_job_100": {
+      "grade": 1,
+      "reason": "Spark and AWS pipeline work overlap, but the resume lacks lead-level experience, architecture ownership, and governance."
+    },
+    "syn_job_164": {
+      "grade": 0,
+      "reason": "Python and SQL overlap, but the resume lacks NLP, speech recognition, and text classification."
+    },
+    "syn_job_211": {
+      "grade": 1,
+      "reason": "Spark, AWS, and modelling fit the domain, but the resume does not show team leadership, governance, or eight years."
+    }
+  },
+  "playwright_qa": {
+    "syn_job_062": {
+      "grade": 0,
+      "reason": "TypeScript test automation does not establish React application or FastAPI development."
+    },
+    "syn_job_067": {
+      "grade": 0,
+      "reason": "Running CI for tests does not establish cloud infrastructure or container operations."
+    },
+    "syn_job_082": {
+      "grade": 1,
+      "reason": "Quality automation and CI/CD transfer, but the resume does not show the Java, Selenium, or REST Assured stack."
+    },
+    "syn_job_083": {
+      "grade": 2,
+      "reason": "Playwright, TypeScript, API testing, test planning, and GitHub Actions all match, with three years of QA experience."
+    },
+    "syn_job_093": {
+      "grade": 0,
+      "reason": "API testing in TypeScript does not establish GraphQL API design or Node.js service development."
+    },
+    "syn_job_167": {
+      "grade": 0,
+      "reason": "The resume describes QA work and a completed degree. It lacks LLM application experience and final-year eligibility."
+    },
+    "syn_job_218": {
+      "grade": 1,
+      "reason": "API testing, regression CI, and test planning transfer, but the resume does not show Python or Pytest."
+    },
+    "syn_job_219": {
+      "grade": 1,
+      "reason": "API testing and test planning fit QA work, but there is no mobile testing or Appium evidence."
+    },
+    "syn_job_243": {
+      "grade": 0,
+      "reason": "GitHub Actions regression runs do not establish platform engineering with Go, Kubernetes, and Terraform."
+    },
+    "syn_job_250": {
+      "grade": 0,
+      "reason": "The resume does not show technical writing or API documentation work."
+    }
+  },
+  "android_compose": {
+    "syn_job_078": {
+      "grade": 2,
+      "reason": "The resume covers Kotlin, Android SDK, Jetpack Compose, REST APIs, and MVVM and exceeds the experience minimum."
+    },
+    "syn_job_079": {
+      "grade": 0,
+      "reason": "The resume shows Android development and REST APIs. It lacks Swift, SwiftUI, and iOS SDK evidence."
+    },
+    "syn_job_181": {
+      "grade": 0,
+      "reason": "Kotlin and API integration overlap, but the work is mobile development and does not show Spring Boot backend services."
+    },
+    "syn_job_186": {
+      "grade": 0,
+      "reason": "Android app experience does not establish Java or Spring Boot backend development."
+    },
+    "syn_job_213": {
+      "grade": 1,
+      "reason": "Kotlin, Android SDK, and REST APIs fit the field app. Java and SQLite are missing."
+    },
+    "syn_job_217": {
+      "grade": 1,
+      "reason": "Kotlin and Android SDK overlap, but the required internship availability, Git, and object-oriented programming are not established."
+    }
+  }
+}

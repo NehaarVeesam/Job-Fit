@@ -9,7 +9,8 @@ from app.schemas import ParsedResume, ResumePage
 
 def extract_pdf_pages(pdf_path: Path) -> list[tuple[int, str]]:
     """Return the original page numbers and extracted text from a PDF."""
-    with pymupdf.open(str(pdf_path)) as document:
+    # Use a byte stream so a malformed upload cannot leave its file locked.
+    with pymupdf.open(stream=pdf_path.read_bytes(), filetype="pdf") as document:
         if not document.is_pdf:
             raise ValueError("Expected a PDF resume.")
 

@@ -1,0 +1,47 @@
+{
+  "top_k": 5,
+  "cases": [
+    {
+      "case_id": "rag_evaluation",
+      "resume_pages": [
+        "Spent three years improving RAG systems using Python, LangChain, and vector databases. Built hybrid search and tracked retrieval errors through LLM evaluation.\nProfessional experience: 3 years\nCompleted B.Tech in Computer Science"
+      ],
+      "expected_no_match": false
+    },
+    {
+      "case_id": "ml_platform",
+      "resume_pages": [
+        "Operated ML platforms for four years. Used Python, Docker, Kubernetes, and MLflow for model releases. Owned CI/CD, AWS deployments, and model monitoring.\nProfessional experience: 4 years\nCompleted B.Tech in Computer Science"
+      ],
+      "expected_no_match": false
+    },
+    {
+      "case_id": "fastapi_service",
+      "resume_pages": [
+        "Built Python services with FastAPI for two years. Designed REST APIs, migrated PostgreSQL tables, and reviewed changes in Git.\nProfessional experience: 2 years\nCompleted B.Tech in Computer Science"
+      ],
+      "expected_no_match": false
+    },
+    {
+      "case_id": "spark_data",
+      "resume_pages": [
+        "Built data pipelines for three years using Python, SQL, Apache Spark, Airflow, and AWS. Owned data modelling for warehouse tables.\nProfessional experience: 3 years\nCompleted B.Tech in Computer Science"
+      ],
+      "expected_no_match": false
+    },
+    {
+      "case_id": "playwright_qa",
+      "resume_pages": [
+        "Worked in QA automation for three years. Wrote Playwright and TypeScript suites, owned API testing and test planning, and ran regressions in GitHub Actions.\nProfessional experience: 3 years\nCompleted B.Tech in Computer Science"
+      ],
+      "expected_no_match": false
+    },
+    {
+      "case_id": "android_compose",
+      "resume_pages": [
+        "Built Android apps for three years using Kotlin, Android SDK, Jetpack Compose, REST APIs, and MVVM.\nProfessional experience: 3 years\nCompleted B.Tech in Computer Science"
+      ],
+      "expected_no_match": false
+    }
+  ]
+}

@@ -80,26 +80,28 @@ For the API, set `"use_qwen": true` inside `options`. Qwen selects evidence for 
 
 ## Test results
 
-| Evaluation | Test cases | Recorded output |
-| --- | --- | --- |
-| Matching and citation smoke tests | [Two synthetic resumes](evaluation/suite.json) and [five reference judgments](evaluation/judgments.jsonl) | All six case and retrieval mode combinations produced the expected outcome, with zero citation errors. [Case outputs](app/evaluation/results.md#smoke-test-outputs) |
-| Retrieval benchmark | [Twelve synthetic resumes and 204 graded pairs](evaluation/panel_benchmark.json) | [Development and held-out scores, with partial matches and a retrieval miss](app/evaluation/results.md#held-out-benchmark) |
+Six [synthetic resumes](evaluation/full_catalog_resumes.json) ran against all 250 job postings with BM25, dense, hybrid, and hybrid with reranking. The 24 runs returned 54 unique resume–job pairs. Each pair was graded once in the shared [ground truth](evaluation/full_catalog_judgments.json). [Per-resume outputs and scoring details](app/evaluation/results.md#full-catalog-benchmark)
 
-The held-out split uses eight synthetic resumes against a fixed 17-job panel.
+| Variant | nDCG@5 | Known suitable retrieved | Strict recommendation precision | Citation errors |
+| --- | ---: | ---: | ---: | ---: |
+| BM25 | 0.959 | 7/7 | 7/13 | 0 |
+| Dense | 0.683 | 6/7 | 6/7 | 0 |
+| Hybrid | 0.894 | 7/7 | 7/11 | 0 |
+| Hybrid + reranker | 0.934 | 7/7 | 7/11 | 0 |
 
-| Retrieval variant | Mean nDCG@5 | Strict accepted precision | Expected match outcomes |
-| --- | ---: | ---: | ---: |
-| BM25 | 1.000 | 72.7% | 8/8 |
-| Dense | 0.872 | 70.0% | 7/8 |
-| Hybrid | 0.962 | 72.7% | 8/8 |
-| Hybrid + reranker | 1.000 | 72.7% | 8/8 |
+Each run shortlists up to five jobs. JobFit checks those jobs for eligibility and skill coverage to produce its final recommendations.
 
-Run the smoke suite after building the local Qdrant index. The benchmark builds its own temporary index after catalog preparation.
+- **nDCG@5** measures how closely the shortlist order matches the ideal order from the ground truth.
+- **Known suitable retrieved** counts fully suitable jobs in the shortlist out of the seven fully suitable pairs in the ground truth.
+- **Strict recommendation precision** counts fully suitable jobs among the final recommendations.
+
+Reranking improved hybrid's nDCG@5 from 0.894 to 0.934. Both retrieved all seven fully suitable ground-truth pairs.
+
+After preparing the catalog and building the Qdrant index, run:
 
 ```sh
-python -m app.evaluation.runner --mode all
-python -m app.evaluation.benchmark --split dev
-python -m app.evaluation.benchmark --split heldout
+python -m app.evaluation.full_catalog collect
+python -m app.evaluation.full_catalog score
 ```
 
 ## Project structure

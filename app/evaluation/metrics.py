@@ -59,12 +59,12 @@ def evaluate_ranking(
         judged_ndcg=_dcg(grades) / ideal_gain if ideal_gain else None,
     )
 
-def panel_ndcg_at_k(
+def graded_ndcg_at_k(
     ranked_ids: Sequence[str],
     grades: Mapping[str, int],
     top_k: int,
 ) -> float | None:
-    """Compare the returned ranking with the ideal ranking on a labeled panel."""
+    """Compare the returned ranking with the ideal ranking for the judged jobs."""
     observed = [grades[job_id] for job_id in ranked_ids[:top_k]]
     ideal = sorted(grades.values(), reverse=True)[:top_k]
     ideal_gain = _dcg(ideal)
