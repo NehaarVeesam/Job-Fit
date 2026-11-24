@@ -1,0 +1,25 @@
+{
+  "top_k": 3,
+  "cases": [
+    {
+      "case_id": "rag_engineer",
+      "resume_pages": [
+        "Developed and deployed RAG services using Python, LangChain, and FastAPI over three years.\nIndexed documents in vector databases and used prompt engineering, hybrid search, and LLM evaluation.\nProfessional experience: 3 years\nCompleted B.Tech in Computer Science"
+      ],
+      "preferences": {
+        "target_role": "RAG Engineer"
+      },
+      "expected_no_match": false
+    },
+    {
+      "case_id": "pastry_chef",
+      "resume_pages": [
+        "Prepared breads, pastries, and desserts for a hotel bakery.\nManaged ingredient inventory and trained new kitchen staff."
+      ],
+      "preferences": {
+        "target_role": "Pastry Chef"
+      },
+      "expected_no_match": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{"case_id":"rag_engineer","job_id":"syn_job_001","relevance":2,"suitable":true,"reason":"The resume supports the required generative AI skills and the experience minimum."}
+{"case_id":"rag_engineer","job_id":"syn_job_105","relevance":2,"suitable":true,"reason":"The resume describes RAG, hybrid search, and LLM evaluation work."}
+{"case_id":"rag_engineer","job_id":"syn_job_109","relevance":2,"suitable":true,"reason":"The resume supports the job's generative AI skills, and the candidate supplied no city filter."}
+{"case_id":"rag_engineer","job_id":"syn_job_008","relevance":1,"suitable":false,"reason":"The work is adjacent, but the resume provides little evidence for the required MLOps stack."}
+{"case_id":"pastry_chef","job_id":"syn_job_008","relevance":0,"suitable":false,"reason":"The resume describes bakery work and gives no evidence for the MLOps role."}
